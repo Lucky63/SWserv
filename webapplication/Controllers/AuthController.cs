@@ -27,35 +27,10 @@ namespace webapplication.Controllers
         public IActionResult Login([FromBody]LoginModel user)
         {
 			User userdb = db.Users.FirstOrDefault(x => x.UserName == user.UserName);
-			if (user == null)
+			if (user == null || userdb==null)
 			{
 				return BadRequest("Invalid client request");
-			}
-
-			if (userdb == null)
-			{
-				db.Users.Add(new User { UserName=user.UserName, Password=user.Password});
-				db.SaveChanges();
-				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
-				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-
-				var claims = new List<Claim>
-				{
-					new Claim(ClaimTypes.Name, user.UserName),
-					new Claim(ClaimTypes.Role, "Manager")
-				};
-
-				var tokeOptions = new JwtSecurityToken(
-					issuer: "http://localhost:5000",
-					audience: "http://localhost:5000",
-					claims: claims,
-					expires: DateTime.Now.AddMinutes(5),
-					signingCredentials: signinCredentials
-				);
-
-				var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-				return Ok(new { Token = tokenString });
-			}
+			}			
 
 			if (user.UserName == userdb.UserName && user.Password == userdb.Password)
 			{
@@ -84,5 +59,45 @@ namespace webapplication.Controllers
                 return Unauthorized();
             }
         }
-    }
+
+
+		[HttpPost, Route("registr")]
+		public IActionResult Registr([FromBody]LoginModel user)
+		{
+			User userdb = db.Users.FirstOrDefault(x => x.UserName == user.UserName);
+			if (user == null)
+			{
+				return BadRequest("Invalid client request");
+			}
+
+			if (userdb == null)
+			{
+				db.Users.Add(new User { UserName = user.UserName, Password = user.Password });
+				db.SaveChanges();
+				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
+				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+
+				var claims = new List<Claim>
+				{
+					new Claim(ClaimTypes.Name, user.UserName),
+					new Claim(ClaimTypes.Role, "Manager")
+				};
+
+				var tokeOptions = new JwtSecurityToken(
+					issuer: "http://localhost:5000",
+					audience: "http://localhost:5000",
+					claims: claims,
+					expires: DateTime.Now.AddMinutes(5),
+					signingCredentials: signinCredentials
+				);
+
+				var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+				return Ok(new { Token = tokenString });
+			}
+			else
+			{
+				return Unauthorized();
+			}
+		}
+	}
 }
