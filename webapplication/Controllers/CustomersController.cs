@@ -19,7 +19,7 @@ namespace webapplication.Controllers
 		[HttpGet, Authorize(Roles = "Manager")]
 		public IEnumerable<string> Get()
 		{
-			return new string[] { $"Ваш логин: {User.Identity.Name}" };
+			return new string[] { $"{User.Identity.Name}" };
 
 		}
 
