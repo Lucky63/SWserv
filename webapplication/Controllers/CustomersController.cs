@@ -6,17 +6,27 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace webapplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        // GET api/values
-        [HttpGet, Authorize(Roles = "Manager")]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "John Doe", "Jane Doe" };
-        }
-    }
+
+		//User user = new User();
+		// GET api/values
+		[HttpGet, Authorize(Roles = "Manager")]
+		public IEnumerable<string> Get()
+		{
+			return new string[] { $"Ваш логин: {User.Identity.Name}" };
+
+		}
+
+		//[HttpGet, Authorize(Roles = "Manager")]
+		//public IActionResult Get()
+		//{
+		//	return Ok($"Ваш логин: {User.Identity.Name}");
+		//}
+	}
 }
