@@ -40,14 +40,10 @@ namespace webapplication.Controllers
 		[HttpPut, Route("edit")]
 		public IActionResult Edit([FromBody]User user)
 		{
-			User userdb = db.Users.FirstOrDefault(x => x.UserName == user.UserName);
+			User userdb = db.Users.FirstOrDefault(x => x.Id == user.Id);
 			userdb.UserName = user.UserName;
 			userdb.LastName = user.LastName;
-			userdb.Password = user.Password;
-			//if (user == null)
-			//{
-			//	return BadRequest("Invalid client request");
-			//}
+			userdb.Password = user.Password;			
 
 			if (user != null)
 			{
