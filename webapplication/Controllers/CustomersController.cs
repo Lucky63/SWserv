@@ -16,17 +16,17 @@ namespace webapplication.Controllers
 
 		//User user = new User();
 		// GET api/values
-		[HttpGet, Authorize(Roles = "Manager")]
-		public IEnumerable<string> Get()
-		{
-			return new string[] { $"{User.Identity.Name}" };
-
-		}
-
 		//[HttpGet, Authorize(Roles = "Manager")]
-		//public IActionResult Get()
+		//public IEnumerable<string> Get()
 		//{
-		//	return Ok($"Ваш логин: {User.Identity.Name}");
+		//	return new string[] { $"{User.Identity.Name}" };
+
 		//}
+
+		[HttpGet, Authorize(Roles = "Manager")]
+		public IActionResult Get()
+		{
+			return Ok(new string[] { $"{User.Identity.Name}" });
+		}
 	}
 }
