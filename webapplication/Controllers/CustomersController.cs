@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using webapplication.Models;
 
 namespace webapplication.Controllers
 {
@@ -14,19 +14,18 @@ namespace webapplication.Controllers
     public class CustomersController : ControllerBase
     {
 
-		//User user = new User();
-		// GET api/values
-		//[HttpGet, Authorize(Roles = "Manager")]
-		//public IEnumerable<string> Get()
-		//{
-		//	return new string[] { $"{User.Identity.Name}" };
+		DBUserContext db;
+		public CustomersController(DBUserContext context)
+		{
+			db = context;
+		}
 
-		//}
-
-		[HttpGet, Authorize(Roles = "Manager")]
+		[HttpGet, Route("getidenti"), Authorize(Roles = "Manager")]
 		public IActionResult Get()
 		{
-			return Ok(new string[] { $"{User.Identity.Name}" });
+			User userdb = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+			return Ok(userdb);
+			//return Ok(new string[] { $"{User.Identity.Name}" });
 		}
 	}
 }
