@@ -47,7 +47,7 @@ namespace webapplication.Controllers
 					issuer: "http://localhost:5000",
 					audience: "http://localhost:5000",
 					claims: claims,
-					expires: DateTime.Now.AddMinutes(5),
+					expires: DateTime.Now.AddMinutes(100),
 					signingCredentials: signinCredentials
 				);
 
@@ -87,7 +87,7 @@ namespace webapplication.Controllers
 					issuer: "http://localhost:5000",
 					audience: "http://localhost:5000",
 					claims: claims,
-					expires: DateTime.Now.AddMinutes(5),
+					expires: DateTime.Now.AddMinutes(100),
 					signingCredentials: signinCredentials
 				);
 

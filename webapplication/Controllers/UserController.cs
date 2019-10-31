@@ -42,8 +42,7 @@ namespace webapplication.Controllers
 		{
 			User userdb = db.Users.FirstOrDefault(x => x.Id == user.Id);
 			userdb.UserName = user.UserName;
-			userdb.LastName = user.LastName;
-			userdb.Password = user.Password;			
+			userdb.LastName = user.LastName;						
 
 			if (user != null)
 			{
@@ -62,7 +61,7 @@ namespace webapplication.Controllers
 					issuer: "http://localhost:5000",
 					audience: "http://localhost:5000",
 					claims: claims,
-					expires: DateTime.Now.AddMinutes(5),
+					expires: DateTime.Now.AddMinutes(100),
 					signingCredentials: signinCredentials
 				);
 
