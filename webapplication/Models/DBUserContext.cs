@@ -21,12 +21,12 @@ namespace webapplication.Models
 			modelBuilder.Entity<Friends>()
 				.HasOne(sc => sc.User)
 				.WithMany(s => s.UserFriends)
-				.HasForeignKey(sc => sc.UserId);
+				.HasForeignKey(sc => sc.FriendId);
 
 			modelBuilder.Entity<Friends>()
 				.HasOne(sc => sc.User)
 				.WithMany(c => c.UserFriends)
-				.HasForeignKey(sc => sc.FriendId);
+				.HasForeignKey(sc => sc.UserId);
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
