@@ -73,5 +73,13 @@ namespace webapplication.Controllers
 				return Unauthorized();
 			}
 		}
+
+
+		[HttpGet("[action]/{id}"), Route("getfriend")]
+		public IActionResult GetFriend(int id)
+		{
+			User user = db.Users.FirstOrDefault(x => x.Id == id);
+			return Ok(user);
+		}
 	}
 }

@@ -13,6 +13,21 @@ namespace webapplication.Models
 		{
 			Database.EnsureCreated();
 		}
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<Friends>()
+				.HasKey(t => new { t.UserId, t.FriendId });
+
+			modelBuilder.Entity<Friends>()
+				.HasOne(sc => sc.User)
+				.WithMany(s => s.UserFriends)
+				.HasForeignKey(sc => sc.UserId);
+
+			modelBuilder.Entity<Friends>()
+				.HasOne(sc => sc.User)
+				.WithMany(c => c.UserFriends)
+				.HasForeignKey(sc => sc.FriendId);
+		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
