@@ -24,8 +24,15 @@ namespace webapplication.Controllers
 		public IActionResult Get()
 		{
 			User userdb = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-			return Ok(userdb);
-			//return Ok(new string[] { $"{User.Identity.Name}" });
+			return Ok(userdb);			
+		}
+
+		[HttpGet, Route("getall")]
+		public IActionResult GetAll()
+		{
+			List<User> users = db.Users.ToList();
+			return Ok(users);
+			
 		}
 	}
 }
