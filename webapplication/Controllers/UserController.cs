@@ -92,5 +92,22 @@ namespace webapplication.Controllers
 			db.SaveChanges();
 			return Ok(user);
 		}
+
+		[HttpGet("[action]/{id}"), Route("deletefriend")]
+		public IActionResult Deletefriend(int id)
+		{
+			User user = db.Users.Include(x=>x.UserFriends).ThenInclude(x=>x.Friend).FirstOrDefault(x =>x.UserName== User.Identity.Name);
+			if (user.UserFriends.Count != 0)
+			{
+				var del = user.UserFriends.First(x => x.FriendId == id);
+				if (del != null)
+				{
+					db.Friendships.Remove(del);
+					db.SaveChanges();
+					return Ok();
+				}
+			}			
+			return Ok();
+		}
 	}
 }
