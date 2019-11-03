@@ -9,6 +9,8 @@ namespace webapplication.Models
 	public class DBUserContext : DbContext
 	{
 		public DbSet<User> Users { get; set; }
+		public DbSet<Friends> Friendships { get; set; }
+
 		public DBUserContext()
 		{
 			Database.EnsureCreated();
@@ -20,13 +22,13 @@ namespace webapplication.Models
 
 			modelBuilder.Entity<Friends>()
 				.HasOne(sc => sc.User)
-				.WithMany(s => s.UserFriends)
+				.WithMany(c => c.UserFriends)
 				.HasForeignKey(sc => sc.FriendId);
 
 			modelBuilder.Entity<Friends>()
-				.HasOne(sc => sc.User)
-				.WithMany(c => c.UserFriends)
-				.HasForeignKey(sc => sc.UserId);
+				.HasOne(sc => sc.Friend)
+				.WithMany(s => s.WhoAddMe)
+				.HasForeignKey(sc => sc.FriendId);
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

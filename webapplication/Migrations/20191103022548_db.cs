@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace webapplication.Migrations
 {
-    public partial class migdbtwo : Migration
+    public partial class db : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,33 +23,45 @@ namespace webapplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Friends",
+                name: "Friendships",
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
-                    FriendId = table.Column<int>(nullable: false)
+                    FriendId = table.Column<int>(nullable: false),
+                    UserId1 = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Friends", x => new { x.UserId, x.FriendId });
+                    table.PrimaryKey("PK_Friendships", x => new { x.UserId, x.FriendId });
                     table.ForeignKey(
-                        name: "FK_Friends_Users_FriendId",
+                        name: "FK_Friendships_Users_FriendId",
                         column: x => x.FriendId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Friendships_Users_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friends_FriendId",
-                table: "Friends",
+                name: "IX_Friendships_FriendId",
+                table: "Friendships",
                 column: "FriendId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Friendships_UserId1",
+                table: "Friendships",
+                column: "UserId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Friends");
+                name: "Friendships");
 
             migrationBuilder.DropTable(
                 name: "Users");

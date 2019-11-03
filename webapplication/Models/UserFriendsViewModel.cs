@@ -11,9 +11,9 @@ namespace webapplication.Models
 		{
 			UserId = friends.UserId;
 			FriendId = friends.FriendId;			
-			UserName = friends.User.UserName;
-			Password = friends.User.Password;
-			LastName = friends.User.LastName;
+			UserName = friends.Friend.UserName;
+			Password = friends.Friend.Password;
+			LastName = friends.Friend.LastName;
 			Id = friends.FriendId;
 		}
 		//public UserFriendsViewModel(User user)

@@ -80,7 +80,7 @@ namespace webapplication.Controllers
 		{
 			User user = db.Users.FirstOrDefault(x => x.Id == id);
 			User thisus = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-			thisus.UserFriends.Add(new Friends { FriendId = user.Id });
+			thisus.UserFriends.Add(new Friends {UserId=thisus.Id, FriendId = user.Id });
 			db.Update(thisus);
 			db.SaveChanges();
 			return Ok(user);
