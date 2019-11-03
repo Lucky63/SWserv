@@ -76,8 +76,8 @@ namespace webapplication.Controllers
 		}
 
 
-		[HttpGet("[action]/{id}"), Route("getfriend")]
-		public IActionResult GetFriend(int id)
+		[HttpGet("[action]/{id}"), Route("addfriend")]
+		public IActionResult AddFriend(int id)
 		{			
 			UserViewModel user = db.Users.Select(c => new UserViewModel
 			{
@@ -93,7 +93,7 @@ namespace webapplication.Controllers
 			return Ok(user);
 		}
 
-		[HttpGet("[action]/{id}"), Route("deletefriend")]
+		[HttpDelete("[action]/{id}"), Route("deletefriend")]
 		public IActionResult Deletefriend(int id)
 		{
 			User user = db.Users.Include(x=>x.UserFriends).ThenInclude(x=>x.Friend).FirstOrDefault(x =>x.UserName== User.Identity.Name);
