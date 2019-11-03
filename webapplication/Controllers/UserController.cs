@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -77,8 +78,14 @@ namespace webapplication.Controllers
 
 		[HttpGet("[action]/{id}"), Route("getfriend")]
 		public IActionResult GetFriend(int id)
-		{
-			User user = db.Users.FirstOrDefault(x => x.Id == id);
+		{			
+			UserViewModel user = db.Users.Select(c => new UserViewModel
+			{
+				Id = c.Id,
+				UserName = c.UserName,
+				Password = c.Password,
+				LastName = c.LastName				
+			}).FirstOrDefault(x => x.Id == id);			
 			User thisus = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 			thisus.UserFriends.Add(new Friends {UserId=thisus.Id, FriendId = user.Id });
 			db.Update(thisus);
