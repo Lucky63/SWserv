@@ -33,8 +33,6 @@ namespace webapplication.Controllers
 				Friends = c.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
 			}).ToList();
 			UserViewModel userdb = user.FirstOrDefault(x => x.UserName == User.Identity.Name);
-
-			//db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 			return Ok(userdb);			
 		}
 

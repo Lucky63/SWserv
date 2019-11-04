@@ -77,7 +77,7 @@ namespace webapplication.Controllers
 
 		//Получаю ИД друга
 		[HttpGet("[action]/{id}"), Route("getfriend")]
-		public IActionResult GetFriend(int id)
+		public void GetFriend(int id)
 		{			
 			UserViewModel user = db.Users.Select(c => new UserViewModel
 			{
@@ -86,12 +86,11 @@ namespace webapplication.Controllers
 				Password = c.Password,
 				LastName = c.LastName				
 			}).FirstOrDefault(x => x.Id == id);
-			AddFriend(user);
-			return Ok(user);
+			AddFriend(user);			
 		}
 		//Добавляю друга авторизованному пользователю
 		[HttpPost]
-		public IActionResult AddFriend(UserViewModel user)
+		public void AddFriend(UserViewModel user)
 		{
 			UserViewModel vmuser = db.Users.Select(c => new UserViewModel
 			{
@@ -105,7 +104,7 @@ namespace webapplication.Controllers
 			db.Update(thisus);
 			db.SaveChanges();
 			//FriendAddUser(user);
-			return Ok();
+			
 		}
 
 		//public void FriendAddUser(User user)
@@ -118,7 +117,7 @@ namespace webapplication.Controllers
 		//}
 
 		[HttpDelete("[action]/{id}"), Route("deletefriend")]
-		public IActionResult Deletefriend(int id)
+		public void Deletefriend(int id)
 		{
 			User user = db.Users.Include(x=>x.UserFriends).ThenInclude(x=>x.Friend).FirstOrDefault(x =>x.UserName== User.Identity.Name);
 			if (user.UserFriends.Count != 0)
@@ -127,11 +126,10 @@ namespace webapplication.Controllers
 				if (del != null)
 				{
 					db.Friendships.Remove(del);
-					db.SaveChanges();
-					return Ok();
+					db.SaveChanges();					
 				}
 			}			
-			return Ok();
+			
 		}
 	}
 }

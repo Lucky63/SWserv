@@ -60,7 +60,6 @@ namespace webapplication.Controllers
             }
         }
 
-
 		[HttpPost, Route("registr")]
 		public IActionResult Registr([FromBody]LoginModel user)
 		{
