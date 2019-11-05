@@ -75,46 +75,33 @@ namespace webapplication.Controllers
 			}
 		}
 
+		#region Добавление друзей
 		//Получаю ИД друга
 		[HttpGet("[action]/{id}"), Route("getfriend")]
 		public void GetFriend(int id)
 		{			
-			UserViewModel user = db.Users.Select(c => new UserViewModel
-			{
-				Id = c.Id,
-				UserName = c.UserName,
-				Password = c.Password,
-				LastName = c.LastName				
-			}).FirstOrDefault(x => x.Id == id);
-			AddFriend(user);			
+			User Friend = db.Users.FirstOrDefault(x => x.Id == id);
+			AddFriend(Friend);			
 		}
 		//Добавляю друга авторизованному пользователю
 		[HttpPost]
-		public void AddFriend(UserViewModel user)
-		{
-			UserViewModel vmuser = db.Users.Select(c => new UserViewModel
-			{
-				Id = c.Id,
-				UserName = c.UserName,
-				Password = c.Password,
-				LastName = c.LastName
-			}).FirstOrDefault(x => x.Id == user.Id);
-			User thisus = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-			thisus.UserFriends.Add(new Friends { UserId = thisus.Id, FriendId = user.Id });			
-			db.Update(thisus);
+		public void AddFriend(User Friend)
+		{			
+			User currentUser = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+			Friend.UserFriends.Add(new Friends { UserId = Friend.Id, FriendId = currentUser.Id });
+			db.Update(currentUser);
 			db.SaveChanges();
-			//FriendAddUser(user);
-			
+			FriendAddUser(Friend);
 		}
 
-		//public void FriendAddUser(User user)
-		//{
-		//	User thisUs = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-		//	user.UserFriends.Add(new Friends { UserId = user.Id, FriendId = thisUs.Id });
-		//	db.Update(user);
-		//	db.SaveChanges();
-
-		//}
+		public void FriendAddUser(User Friend)
+		{
+			User currentUser = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+			currentUser.UserFriends.Add(new Friends { UserId = currentUser.Id, FriendId = Friend.Id });			
+			db.Update(Friend);
+			db.SaveChanges();
+		}
+		#endregion
 
 		[HttpDelete("[action]/{id}"), Route("deletefriend")]
 		public void Deletefriend(int id)
