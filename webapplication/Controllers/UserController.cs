@@ -106,17 +106,20 @@ namespace webapplication.Controllers
 		[HttpDelete("[action]/{id}"), Route("deletefriend")]
 		public void Deletefriend(int id)
 		{
-			User user = db.Users.Include(x=>x.UserFriends).ThenInclude(x=>x.Friend).FirstOrDefault(x =>x.UserName== User.Identity.Name);
-			if (user.UserFriends.Count != 0)
+			User currentUser = db.Users.Include(x => x.UserFriends).ThenInclude(x => x.Friend).FirstOrDefault(x => x.UserName == User.Identity.Name);
+			if (currentUser.UserFriends.Count != 0)
 			{
-				var del = user.UserFriends.First(x => x.FriendId == id);
-				if (del != null)
+				var UserToBeDeleted = currentUser.UserFriends.First(x => x.FriendId == id);
+				if (UserToBeDeleted != null)
 				{
-					db.Friendships.Remove(del);
-					db.SaveChanges();					
+					db.Friendships.Remove(UserToBeDeleted);
+					db.SaveChanges();
+					var UserToBeDeleted2 = db.Users.Include(x => x.UserFriends).ThenInclude(x => x.Friend).FirstOrDefault(x => x.Id == UserToBeDeleted.FriendId);
+					var delete = UserToBeDeleted2.UserFriends.First(x => x.FriendId == currentUser.Id);
+					db.Friendships.Remove(delete);
+					db.SaveChanges();
 				}
-			}			
-			
+			}
 		}
 	}
 }

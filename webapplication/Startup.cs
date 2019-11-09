@@ -29,6 +29,19 @@ namespace webapplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddSignalR();
+			services.AddCors(options =>
+			{
+				options.AddPolicy("EnableCORS", builder =>
+				{
+					builder.					
+					AllowAnyOrigin().
+					AllowAnyHeader().
+					AllowAnyMethod().
+					WithOrigins("http://localhost:4200").
+					AllowCredentials();
+				});
+			});
 			services.AddScoped<DBUserContext>();
 
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,14 +59,8 @@ namespace webapplication
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
                 };
             });
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("EnableCORS", builder =>
-                {
-                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build();
-                });
-            });
+			
+			
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -69,12 +76,15 @@ namespace webapplication
             {
                 app.UseHsts();
             }
-
-            app.UseAuthentication();
-
-            app.UseCors("EnableCORS");
-
-            app.UseHttpsRedirection();
+			app.UseCors("EnableCORS");
+			app.UseSignalR(routes =>
+			{
+				routes.MapHub<ChatHub>("/chat");
+			});
+			app.UseAuthentication();
+			app.UseDefaultFiles();
+			app.UseStaticFiles();
+			app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
