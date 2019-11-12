@@ -58,7 +58,24 @@ namespace webapplication
                     ValidAudience = "http://localhost:5000",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
                 };
-            });
+				options.Events = new JwtBearerEvents
+				{
+					OnMessageReceived = context =>
+					{
+						var accessToken = context.Request.Query["access_token"];
+
+						// если запрос направлен хабу
+						var path = context.HttpContext.Request.Path;
+						if (!string.IsNullOrEmpty(accessToken) &&
+							 (path.StartsWithSegments("/chat")))
+						{
+							// получаем токен из строки запроса
+							context.Token = accessToken;
+						}
+						return Task.CompletedTask;
+					}
+				};
+			});
 			
 			
 
@@ -77,15 +94,16 @@ namespace webapplication
                 app.UseHsts();
             }
 			app.UseCors("EnableCORS");
+			app.UseAuthentication();
 			app.UseSignalR(routes =>
 			{
 				routes.MapHub<ChatHub>("/chat");
 			});
-			app.UseAuthentication();
+
+			app.UseHttpsRedirection();
 			app.UseDefaultFiles();
 			app.UseStaticFiles();
-			app.UseHttpsRedirection();
-            app.UseMvc();
+			app.UseMvc();
         }
     }
 }
