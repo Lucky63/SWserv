@@ -37,7 +37,13 @@ namespace webapplication.Controllers
 			return Ok(user);
 		}
 
-		
+		[HttpGet("[action]/{id}"), Route("getuserformessage")]
+		public IActionResult GetUserForMessage(int id)
+		{
+			var user = db.Users.FirstOrDefault(x => x.Id == id);
+			return Ok(user);
+		}
+
 		[HttpPut, Route("edit")]
 		public IActionResult Edit([FromBody]User user)
 		{
