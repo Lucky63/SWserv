@@ -10,6 +10,7 @@ namespace webapplication.Models
 	{
 		public DbSet<User> Users { get; set; }
 		public DbSet<Friends> Friendships { get; set; }
+		public DbSet<Message> Messages { get; set; }
 
 		public DBUserContext()
 		{

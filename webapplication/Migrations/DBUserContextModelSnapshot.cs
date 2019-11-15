@@ -36,6 +36,23 @@ namespace webapplication.Migrations
                     b.ToTable("Friendships");
                 });
 
+            modelBuilder.Entity("webapplication.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FriendId");
+
+                    b.Property<string>("SentMessage");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("webapplication.Models.User", b =>
                 {
                     b.Property<int>("Id")
