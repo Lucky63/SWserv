@@ -15,8 +15,8 @@ namespace webapplication
 			var userName = Context.User.Identity.Name;
 
 			if (Context.UserIdentifier != to) // если получатель и текущий пользователь не совпадают
-				await Clients.User(Context.UserIdentifier).SendAsync("Receive", name, message, userName);
-			await Clients.User(to).SendAsync("Receive", name, message, userName);
+				await Clients.User(userName).SendAsync("Receive", name, message);
+			await Clients.User(to).SendAsync("Receive", name, message);
 		}
 		
 	}

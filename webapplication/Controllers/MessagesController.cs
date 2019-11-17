@@ -27,8 +27,7 @@ namespace webapplication.Controllers
 		{
 			User currentUser = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 			User recipient = db.Users.FirstOrDefault(x => x.Id == id);
-			db.Messages.Add(new Message { UserId = currentUser.Id, FriendId = recipient.Id, SentMessage = message });
-			//db.Messages.Add(new Message { UserId = recipient.Id, FriendId = currentUser.Id, SentMessage = message });
+			db.Messages.Add(new Message { UserId = currentUser.Id, FriendId = recipient.Id, SentMessage = message });			
 			db.SaveChanges();			
 		}
 		[HttpGet("[action]/{id}"), Route("sevemessage")]
@@ -44,12 +43,12 @@ namespace webapplication.Controllers
 			{
 				if(i.UserId==id && i.FriendId == FriendId)
 				{
-					mesages.Add($"{username} {i.SentMessage}");
+					mesages.Add($"{username}: {i.SentMessage}");
 					
 				}
 				else if (i.FriendId == id && i.UserId == FriendId)
 				{
-					mesages.Add($"{friendname} {i.SentMessage}");
+					mesages.Add($"{friendname}: {i.SentMessage}");
 				}
 			}
 			return Ok(mesages);
