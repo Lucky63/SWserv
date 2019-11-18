@@ -30,12 +30,12 @@ namespace webapplication.Controllers
 			}
 		}
 
-		[HttpGet, Route("getuser")]
-		public IActionResult Get()
-		{
-			User user = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-			return Ok(user);
-		}
+		//[HttpGet, Route("getuser")]
+		//public IActionResult Get()
+		//{
+		//	User user = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+		//	return Ok(user);
+		//}
 
 		[HttpGet("[action]/{id}"), Route("getuserformessage")]
 		public IActionResult GetUserForMessage(int id)
