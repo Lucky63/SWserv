@@ -27,7 +27,7 @@ namespace webapplication.Controllers
 		{
 			User currentUser = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 			User recipient = db.Users.FirstOrDefault(x => x.Id == id);
-			db.Messages.Add(new Message { UserId = currentUser.Id, FriendId = recipient.Id, SentMessage = message });			
+			db.Messages.Add(new Message { UserId = currentUser.Id, FriendId = recipient.Id, SentMessage = message, dateTime = DateTime.Now });			
 			db.SaveChanges();			
 		}
 
@@ -39,24 +39,23 @@ namespace webapplication.Controllers
 			User User = db.Users.FirstOrDefault(x => x.Id == id);
 			string username = User.UserName;
 			User Friend = db.Users.FirstOrDefault(x => x.Id == FriendId);
-			string friendname = Friend.UserName;			
+			string friendname = Friend.UserName;
 
-			var usermessages = db.Messages.Where(x => x.UserId == id 
-				&& x.FriendId == FriendId 
-				|| x.UserId == FriendId 
-				&& x.FriendId == id)				
-				.ToList();
+			var usermessages = db.Messages
+			  .Where(x => (x.UserId == id && x.FriendId == FriendId) ||
+						  (x.UserId == FriendId && x.FriendId == id))
+			  .ToList();
 
 			foreach (var i in usermessages)
 			{
 				if (i.UserId == id && i.FriendId == FriendId)
 				{
-					mesages.Add($"{username}: {i.SentMessage}");
+					mesages.Add($"{i.dateTime}:{username}- {i.SentMessage}");
 
 				}
 				else if (i.FriendId == id && i.UserId == FriendId)
 				{
-					mesages.Add($"{friendname}: {i.SentMessage}");
+					mesages.Add($"{i.dateTime}:{friendname}- {i.SentMessage}");
 				}
 			}
 

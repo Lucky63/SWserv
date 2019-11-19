@@ -10,8 +10,8 @@ using webapplication.Models;
 namespace webapplication.Migrations
 {
     [DbContext(typeof(DBUserContext))]
-    [Migration("20191117092245_db")]
-    partial class db
+    [Migration("20191119072535_DB")]
+    partial class DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,8 @@ namespace webapplication.Migrations
                     b.Property<string>("SentMessage");
 
                     b.Property<int>("UserId");
+
+                    b.Property<DateTime>("dateTime");
 
                     b.HasKey("Id");
 

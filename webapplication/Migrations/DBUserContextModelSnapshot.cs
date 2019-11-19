@@ -48,6 +48,8 @@ namespace webapplication.Migrations
 
                     b.Property<int>("UserId");
 
+                    b.Property<DateTime>("dateTime");
+
                     b.HasKey("Id");
 
                     b.ToTable("Messages");
