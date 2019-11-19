@@ -30,27 +30,33 @@ namespace webapplication.Controllers
 			db.Messages.Add(new Message { UserId = currentUser.Id, FriendId = recipient.Id, SentMessage = message });			
 			db.SaveChanges();			
 		}
-		[HttpGet("[action]/{id}"), Route("sevemessage")]
-		[HttpGet("[action]/{id}/{friendid}"), Route("sevemessage")]
+
+		[HttpGet("[action]/{id}"), Route("getmessages")]
+		[HttpGet("[action]/{id}/{friendid}"), Route("getmessages")]
 		public IActionResult GetMessages(int id, int FriendId)
 		{
 			List<string> mesages = new List<string>();
 			User User = db.Users.FirstOrDefault(x => x.Id == id);
 			string username = User.UserName;
 			User Friend = db.Users.FirstOrDefault(x => x.Id == FriendId);
-			string friendname = Friend.UserName;
-			foreach (var i in db.Messages)
+			string friendname = Friend.UserName;			
+
+			var usermessages = db.Messages.Where(x => x.UserId == id || x.UserId == FriendId).ToList();
+
+			foreach (var i in usermessages)
 			{
-				if(i.UserId==id && i.FriendId == FriendId)
+				if (i.UserId == id)
 				{
 					mesages.Add($"{username}: {i.SentMessage}");
-					
+
 				}
-				else if (i.FriendId == id && i.UserId == FriendId)
+				else
 				{
 					mesages.Add($"{friendname}: {i.SentMessage}");
 				}
 			}
+
+
 			return Ok(mesages);
 		}
 
