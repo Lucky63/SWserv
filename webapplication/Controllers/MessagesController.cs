@@ -41,16 +41,20 @@ namespace webapplication.Controllers
 			User Friend = db.Users.FirstOrDefault(x => x.Id == FriendId);
 			string friendname = Friend.UserName;			
 
-			var usermessages = db.Messages.Where(x => x.UserId == id || x.UserId == FriendId).ToList();
+			var usermessages = db.Messages.Where(x => x.UserId == id 
+				&& x.FriendId == FriendId 
+				|| x.UserId == FriendId 
+				&& x.FriendId == id)				
+				.ToList();
 
 			foreach (var i in usermessages)
 			{
-				if (i.UserId == id)
+				if (i.UserId == id && i.FriendId == FriendId)
 				{
 					mesages.Add($"{username}: {i.SentMessage}");
 
 				}
-				else
+				else if (i.FriendId == id && i.UserId == FriendId)
 				{
 					mesages.Add($"{friendname}: {i.SentMessage}");
 				}

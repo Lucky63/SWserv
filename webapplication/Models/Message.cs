@@ -11,5 +11,6 @@ namespace webapplication.Models
 		public int UserId { get; set; }
 		public int FriendId { get; set; }
 		public string SentMessage { get; set; }
+
 	}
 }
