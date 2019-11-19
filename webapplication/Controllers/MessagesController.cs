@@ -27,8 +27,8 @@ namespace webapplication.Controllers
 		{
 			User currentUser = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 			User recipient = db.Users.FirstOrDefault(x => x.Id == id);
-			db.Messages.Add(new Message { UserId = currentUser.Id, FriendId = recipient.Id, SentMessage = message, dateTime = DateTime.Now });			
-			db.SaveChanges();			
+			db.Messages.Add(new Message { UserId = currentUser.Id, FriendId = recipient.Id, SentMessage = message, dateTime = DateTime.Now });
+			db.SaveChanges();
 		}
 
 		[HttpGet("[action]/{id}"), Route("getmessages")]
