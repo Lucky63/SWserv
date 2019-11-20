@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapplication.Models;
+using webapplication.Services;
 
 namespace webapplication.Controllers
 {
@@ -16,9 +17,11 @@ namespace webapplication.Controllers
     {
 
 		DBUserContext db;
-		public CustomersController(DBUserContext context)
+		IUserService userService;
+		public CustomersController(DBUserContext context, IUserService _userService)
 		{
 			db = context;
+			userService = _userService;
 		}
 
 		[HttpGet, Route("getidenti"), Authorize(Roles = "Manager")]
@@ -37,10 +40,10 @@ namespace webapplication.Controllers
 		}
 
 		[HttpGet, Route("getall")]
-		public IActionResult GetAll()
+		public async Task<List<User>> GetAll()
 		{
-			List<User> users = db.Users.ToList();
-			return Ok(users);
+			var users = userService.GetAll();
+			return await (users);
 			
 		}
 	}

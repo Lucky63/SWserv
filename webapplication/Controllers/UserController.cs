@@ -28,14 +28,7 @@ namespace webapplication.Controllers
 				db.Users.Add(new User { UserName = "Allan3", Password = "123" });
 				db.SaveChanges();
 			}
-		}
-
-		//[HttpGet, Route("getuser")]
-		//public IActionResult Get()
-		//{
-		//	User user = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-		//	return Ok(user);
-		//}
+		}		
 
 		[HttpGet("[action]/{id}"), Route("getuserformessage")]
 		public IActionResult GetUserForMessage(int id)

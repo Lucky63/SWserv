@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using webapplication.Models;
+using webapplication.Services;
 
 namespace webapplication
 {
@@ -30,6 +31,7 @@ namespace webapplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddTransient<IUserService, UserService>();
 			services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 			services.AddSignalR();
 			services.AddCors(options =>
