@@ -25,10 +25,10 @@ namespace webapplication.Services
 
 		public async Task<User> GetIdentity(string name)
 		{
-			return (await  db.Users.Include(x => x.UserFriends).ThenInclude(x => x.User).ToListAsync()).FirstOrDefault(x => x.UserName == name);
-
-			
-			
+			return await  db.Users
+				.Include(x => x.UserFriends)
+				.ThenInclude(x => x.Friend)
+				.FirstOrDefaultAsync(x => x.UserName == name);			
 		}		
 	}
 }
