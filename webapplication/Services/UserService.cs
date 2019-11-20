@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using webapplication.Controllers;
 using webapplication.Models;
 
 namespace webapplication.Services
@@ -10,9 +11,11 @@ namespace webapplication.Services
 	public class UserService : IUserService
 	{
 		DBUserContext db;
+		
 		public UserService(DBUserContext context)
 		{
 			db = context;
+			
 		}
 
 		public async Task<List<User>> GetAll()
@@ -20,9 +23,11 @@ namespace webapplication.Services
 			return await db.Users.ToListAsync();
 		}
 
-		public async Task<List<User>> GetIdentity()
+		public async Task<User> GetIdentity(string name)
 		{
-			return await db.Users.Include(x => x.UserFriends).ThenInclude(x => x.User).ToListAsync();
+			return (await  db.Users.Include(x => x.UserFriends).ThenInclude(x => x.User).ToListAsync()).FirstOrDefault(x => x.UserName == name);
+
+			
 			
 		}		
 	}

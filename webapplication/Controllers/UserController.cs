@@ -19,11 +19,11 @@ namespace webapplication.Controllers
 	public class UserController : ControllerBase
 	{
 		DBUserContext db;
-		IUserService userService;
-		public UserController(DBUserContext context, IUserService _userService)
+		IUserService _userService;
+		public UserController(DBUserContext context, IUserService userService)
 		{
 			db = context;
-			userService = _userService;
+			_userService = userService;
 			if (!db.Users.Any())
 			{
 				db.Users.Add(new User { UserName = "Allan1", Password = "123"});
@@ -128,24 +128,24 @@ namespace webapplication.Controllers
 	[HttpGet, Route("getidenti"), Authorize(Roles = "Manager")]
 		public async Task<UserViewModel> Get()
 		{
-			List<UserViewModel>users = (await userService.GetIdentity()).Select(c => new UserViewModel
+			string name = User.Identity.Name;
+			var user = await _userService.GetIdentity(name);
+			
+			var userdb = new UserViewModel()
 			{
-				Id = c.Id,
-				UserName = c.UserName,
-				Password = c.Password,
-				LastName = c.LastName,
-				Friends = c.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
-			}).ToList();
-			UserViewModel userdb = users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-			return userdb;
+				Id = user.Id,
+				UserName = user.UserName,
+				LastName = user.LastName,
+				Password = user.Password,
+				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
+			};
+			return  userdb;
 		}
 
 		[HttpGet, Route("getall")]
 		public async Task<List<User>> GetAll()
 		{
-			return await userService.GetAll();
-			 
-
+			return await _userService.GetAll();
 		}
 	}	
 }
