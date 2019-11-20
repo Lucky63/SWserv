@@ -109,9 +109,11 @@ namespace webapplication.Controllers
 		public void Deletefriend(int id)
 		{
 			User currentUser = db.Users.Include(x => x.UserFriends).ThenInclude(x => x.Friend).FirstOrDefault(x => x.UserName == User.Identity.Name);
+
 			if (currentUser.UserFriends.Count != 0)
 			{
 				var UserToBeDeleted = currentUser.UserFriends.First(x => x.FriendId == id);
+
 				if (UserToBeDeleted != null)
 				{
 					db.Friendships.Remove(UserToBeDeleted);
@@ -126,7 +128,7 @@ namespace webapplication.Controllers
 
 
 	[HttpGet, Route("getidenti"), Authorize(Roles = "Manager")]
-		public async Task<UserViewModel> Get()
+		public async Task<IActionResult> Get()
 		{
 			string name = User.Identity.Name;
 			var user = await _userService.GetIdentity(name);
@@ -139,7 +141,7 @@ namespace webapplication.Controllers
 				Password = user.Password,
 				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
 			};
-			return  userdb;
+			return Ok (userdb);
 		}
 
 		[HttpGet, Route("getall")]

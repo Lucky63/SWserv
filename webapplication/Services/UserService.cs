@@ -14,8 +14,7 @@ namespace webapplication.Services
 		
 		public UserService(DBUserContext context)
 		{
-			db = context;
-			
+			db = context;			
 		}
 
 		public async Task<List<User>> GetAll()

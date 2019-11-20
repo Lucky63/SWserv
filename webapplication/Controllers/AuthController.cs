@@ -16,7 +16,6 @@ namespace webapplication.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-
 		DBUserContext db;
 		public AuthController(DBUserContext context)
 		{

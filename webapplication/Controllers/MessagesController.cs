@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using webapplication.Models;
 
 namespace webapplication.Controllers
@@ -43,22 +38,19 @@ namespace webapplication.Controllers
 
 			var usermessages = db.Messages
 			  .Where(x => (x.UserId == id && x.FriendId == FriendId) ||
-						  (x.UserId == FriendId && x.FriendId == id))
-			  .ToList();
+						  (x.UserId == FriendId && x.FriendId == id)).ToList();
 
 			foreach (var i in usermessages)
 			{
 				if (i.UserId == id && i.FriendId == FriendId)
 				{
 					mesages.Add($"{i.dateTime}:{username}- {i.SentMessage}");
-
 				}
 				else if (i.FriendId == id && i.UserId == FriendId)
 				{
 					mesages.Add($"{i.dateTime}:{friendname}- {i.SentMessage}");
 				}
 			}
-
 
 			return Ok(mesages);
 		}
