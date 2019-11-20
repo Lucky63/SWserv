@@ -126,16 +126,9 @@ namespace webapplication.Controllers
 
 		[HttpGet, Route("getidenti"), Authorize(Roles = "Manager")]
 		public IActionResult Get()
-		{
-			List<UserViewModel> user = db.Users.Include(x => x.UserFriends).ThenInclude(x => x.User).ToList().Select(c => new UserViewModel
-			{
-				Id = c.Id,
-				UserName = c.UserName,
-				Password = c.Password,
-				LastName = c.LastName,
-				Friends = c.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
-			}).ToList();
-			UserViewModel userdb = user.FirstOrDefault(x => x.UserName == User.Identity.Name);
+		{			
+			UserViewModel userdb = userService.GetIdentity()
+				.FirstOrDefault(x => x.UserName == User.Identity.Name);
 			return Ok(userdb);
 		}
 
@@ -143,7 +136,7 @@ namespace webapplication.Controllers
 		public async Task<List<User>> GetAll()
 		{
 			var users = userService.GetAll();
-			return await (users);
+			return await users;
 
 		}
 	}	

@@ -9,5 +9,6 @@ namespace webapplication.Services
 	public interface IUserService
 	{
 		Task<List<User>> GetAll();
+		List<UserViewModel> GetIdentity();
 	}
 }
