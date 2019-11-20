@@ -20,20 +20,10 @@ namespace webapplication.Services
 			return await db.Users.ToListAsync();
 		}
 
-		public List<UserViewModel> GetIdentity()
+		public async Task<List<User>> GetIdentity()
 		{
-			List<UserViewModel> user = db.Users
-				.Include(x => x.UserFriends)
-				.ThenInclude(x => x.User).ToList()
-				.Select(c => new UserViewModel
-			{
-				Id = c.Id,
-				UserName = c.UserName,
-				Password = c.Password,
-				LastName = c.LastName,
-				Friends = c.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
-			}).ToList();
-			return user;
-		}
+			return await db.Users.Include(x => x.UserFriends).ThenInclude(x => x.User).ToListAsync();
+			
+		}		
 	}
 }

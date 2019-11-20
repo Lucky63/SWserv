@@ -124,19 +124,27 @@ namespace webapplication.Controllers
 			}
 		}
 
-		[HttpGet, Route("getidenti"), Authorize(Roles = "Manager")]
-		public IActionResult Get()
-		{			
-			UserViewModel userdb = userService.GetIdentity()
-				.FirstOrDefault(x => x.UserName == User.Identity.Name);
-			return Ok(userdb);
+
+	[HttpGet, Route("getidenti"), Authorize(Roles = "Manager")]
+		public async Task<UserViewModel> Get()
+		{
+			List<UserViewModel>users = (await userService.GetIdentity()).Select(c => new UserViewModel
+			{
+				Id = c.Id,
+				UserName = c.UserName,
+				Password = c.Password,
+				LastName = c.LastName,
+				Friends = c.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
+			}).ToList();
+			UserViewModel userdb = users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+			return userdb;
 		}
 
 		[HttpGet, Route("getall")]
 		public async Task<List<User>> GetAll()
 		{
-			var users = userService.GetAll();
-			return await users;
+			return await userService.GetAll();
+			 
 
 		}
 	}	
