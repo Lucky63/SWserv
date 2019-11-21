@@ -105,19 +105,19 @@ namespace webapplication.Controllers
 		}
 		#endregion
 
-		[HttpDelete("[action]/{id}"), Route("deletefriend")]
-		public async Task Deletefriend(int id)
+		[HttpDelete("[action]/{id}"), Route("deletefriendasync")]
+		public async Task DeleteFriendAsync(int id)
 		{
 			string IdentityUserName = User.Identity.Name;
-			await _userService.Deletefriend(IdentityUserName, id);
+			await _userService.DeleteFriendAsync(IdentityUserName, id);
 		}
 
 
-	[HttpGet, Route("getidenti"), Authorize(Roles = "Manager")]
-		public async Task<IActionResult> Get()
+	[HttpGet, Route("getidentityasync"), Authorize(Roles = "Manager")]
+		public async Task<IActionResult> GetIdentityAsync()
 		{
 			string name = User.Identity.Name;
-			var user = await _userService.GetIdentity(name);
+			var user = await _userService.GetIdentityAsync(name);
 			
 			var userdb = new UserViewModel()
 			{
@@ -130,10 +130,10 @@ namespace webapplication.Controllers
 			return Ok (userdb);
 		}
 
-		[HttpGet, Route("getall")]
-		public async Task<List<User>> GetAll()
+		[HttpGet, Route("getallasync")]
+		public async Task<List<User>> GetAllAsync()
 		{
-			return await _userService.GetAll();
+			return await _userService.GetAllAsync();
 		}
 	}	
 }

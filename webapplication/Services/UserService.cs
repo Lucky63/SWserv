@@ -17,7 +17,7 @@ namespace webapplication.Services
 			db = context;			
 		}
 
-		public async Task Deletefriend(string IdentityUserName, int id)
+		public async Task DeleteFriendAsync(string IdentityUserName, int id)
 		{
 			User currentUser = await db.Users.Include(x => x.UserFriends).ThenInclude(x => x.Friend).FirstOrDefaultAsync(x => x.UserName == IdentityUserName);
 			if (currentUser.UserFriends.Count != 0)
@@ -36,12 +36,12 @@ namespace webapplication.Services
 			}			
 		}
 
-		public async Task<List<User>> GetAll()
+		public async Task<List<User>> GetAllAsync()
 		{
 			return await db.Users.ToListAsync();
 		}
 
-		public async Task<User> GetIdentity(string name)
+		public async Task<User> GetIdentityAsync(string name)
 		{
 			return await  db.Users
 				.Include(x => x.UserFriends)

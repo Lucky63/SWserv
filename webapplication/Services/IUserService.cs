@@ -8,8 +8,8 @@ namespace webapplication.Services
 {
 	public interface IUserService
 	{
-		Task<List<User>> GetAll();
-		Task<User> GetIdentity(string name);
-		Task Deletefriend(string IdentityUserName, int id);
+		Task<List<User>> GetAllAsync();
+		Task<User> GetIdentityAsync(string name);
+		Task DeleteFriendAsync(string IdentityUserName, int id);
 	}
 }
