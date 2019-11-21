@@ -10,5 +10,6 @@ namespace webapplication.Services
 	{
 		Task<List<User>> GetAll();
 		Task<User> GetIdentity(string name);
+		Task Deletefriend(string IdentityUserName, int id);
 	}
 }

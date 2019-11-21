@@ -17,6 +17,25 @@ namespace webapplication.Services
 			db = context;			
 		}
 
+		public async Task Deletefriend(string IdentityUserName, int id)
+		{
+			User currentUser = await db.Users.Include(x => x.UserFriends).ThenInclude(x => x.Friend).FirstOrDefaultAsync(x => x.UserName == IdentityUserName);
+			if (currentUser.UserFriends.Count != 0)
+			{
+				var UserToBeDeleted = currentUser.UserFriends.First(x => x.FriendId == id);
+
+				if (UserToBeDeleted != null)
+				{
+					db.Friendships.Remove(UserToBeDeleted);
+					db.SaveChanges();
+					var UserToBeDeleted2 = await db.Users.Include(x => x.UserFriends).ThenInclude(x => x.Friend).FirstOrDefaultAsync(x => x.Id == UserToBeDeleted.FriendId);
+					var delete = UserToBeDeleted2.UserFriends.First(x => x.FriendId == currentUser.Id);
+					db.Friendships.Remove(delete);
+					db.SaveChanges();
+				}
+			}			
+		}
+
 		public async Task<List<User>> GetAll()
 		{
 			return await db.Users.ToListAsync();

@@ -10,8 +10,8 @@ using webapplication.Models;
 namespace webapplication.Migrations
 {
     [DbContext(typeof(DBUserContext))]
-    [Migration("20191119072535_DB")]
-    partial class DB
+    [Migration("20191121083301_D")]
+    partial class D
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
