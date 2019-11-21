@@ -20,10 +20,12 @@ namespace webapplication.Controllers
 	{
 		DBUserContext db;
 		IUserService _userService;
-		public UserController(DBUserContext context, IUserService userService)
+		IFriendService _friendService;
+		public UserController(DBUserContext context, IUserService userService, IFriendService friendService)
 		{
 			db = context;
 			_userService = userService;
+			_friendService = friendService;
 			if (!db.Users.Any())
 			{
 				db.Users.Add(new User { UserName = "Allan1", Password = "123"});
@@ -79,10 +81,10 @@ namespace webapplication.Controllers
 
 		#region Добавление друзей
 		//Получаю ИД друга
-		[HttpGet("[action]/{id}"), Route("getfriend")]
-		public void GetFriend(int id)
+		[HttpGet("[action]/{id}"), Route("addfriendasync")]
+		public async Task AddFriendAsync(int id)
 		{			
-			User Friend = db.Users.FirstOrDefault(x => x.Id == id);
+			User Friend = await _friendService.AddFriendAsync(id);
 			AddFriend(Friend);			
 		}
 		//Добавляю друга авторизованному пользователю

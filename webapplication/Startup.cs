@@ -26,6 +26,9 @@ namespace webapplication
         public void ConfigureServices(IServiceCollection services)
         {
 			services.AddTransient<IUserService, UserService>();
+
+			services.AddTransient<IFriendService, FriendService>();
+
 			services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 			services.AddSignalR();
 
