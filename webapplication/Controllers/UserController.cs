@@ -85,25 +85,21 @@ namespace webapplication.Controllers
 		public async Task AddFriendAsync(int id)
 		{			
 			User Friend = await _friendService.AddFriendAsync(id);
-			AddFriend(Friend);			
+			await AddUserToFriendAsync(Friend);			
 		}
 		//Добавляю друга авторизованному пользователю
 		[HttpPost]
-		public void AddFriend(User Friend)
-		{			
-			User currentUser = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-			Friend.UserFriends.Add(new Friends { UserId = Friend.Id, FriendId = currentUser.Id });
-			db.Update(currentUser);
-			db.SaveChanges();
-			FriendAddUser(Friend);
+		public async Task AddUserToFriendAsync(User Friend)
+		{
+			string UserIdentityName = User.Identity.Name;
+			User currentFriend = await _friendService.AddUserToFriendAsync(UserIdentityName, Friend);
+			await AddFriendToUserAsync(currentFriend);
 		}
 
-		public void FriendAddUser(User Friend)
+		public async Task AddFriendToUserAsync(User Friend)
 		{
-			User currentUser = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-			currentUser.UserFriends.Add(new Friends { UserId = currentUser.Id, FriendId = Friend.Id });			
-			db.Update(Friend);
-			db.SaveChanges();
+			string UserIdentityName = User.Identity.Name;
+			await _friendService.AddFriendToUserAsync(UserIdentityName, Friend);			
 		}
 		#endregion
 
