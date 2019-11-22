@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using webapplication.Models;
+using webapplication.Services;
 
 namespace webapplication.Controllers
 {
@@ -17,15 +18,18 @@ namespace webapplication.Controllers
     public class AuthController : ControllerBase
     {
 		DBUserContext db;
-		public AuthController(DBUserContext context)
+		IAuthService _authService;
+		public AuthController(DBUserContext context, IAuthService authService)
 		{
-			db = context;			
+			db = context;
+			_authService = authService;
 		}
 		// GET api/values
-		[HttpPost, Route("login")]
-        public IActionResult Login([FromBody]LoginModel user)
+		[HttpPost, Route("loginasync")]
+        public async Task <IActionResult> LoginAsync([FromBody]LoginModel user)
         {
-			User userdb = db.Users.FirstOrDefault(x => x.UserName == user.UserName);
+			
+			User userdb = await _authService.LoginAsync(user.UserName);
 			if (user == null || userdb==null)
 			{
 				return BadRequest("Invalid client request");
@@ -59,10 +63,10 @@ namespace webapplication.Controllers
             }
         }
 
-		[HttpPost, Route("registr")]
-		public IActionResult Registr([FromBody]LoginModel user)
+		[HttpPost, Route("registrationasync")]
+		public async Task<IActionResult> RegistrationAsync([FromBody]LoginModel user)
 		{
-			User userdb = db.Users.FirstOrDefault(x => x.UserName == user.UserName);
+			User userdb = await _authService.RegistrationAsync(user.UserName);
 			if (user == null)
 			{
 				return BadRequest("Invalid client request");
@@ -70,8 +74,7 @@ namespace webapplication.Controllers
 
 			if (userdb == null)
 			{
-				db.Users.Add(new User { UserName = user.UserName, Password = user.Password });
-				db.SaveChanges();
+				await _authService.RegistrationAsyncSave(user.UserName, user.Password);
 				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
 				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
