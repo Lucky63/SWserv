@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using webapplication.Models;
+using webapplication.Services;
 
 namespace webapplication.Controllers
 {
@@ -11,48 +13,26 @@ namespace webapplication.Controllers
 	public class MessagesController: Controller
 	{
 		DBUserContext db;
-		public MessagesController(DBUserContext context)
+		IMessageService _messageService;
+		public MessagesController(DBUserContext context, IMessageService messageService)
 		{
 			db = context;
+			_messageService = messageService;
 		}
 
-		[HttpGet("[action]/{id}"), Route("sevemessage")]
-		[HttpGet("[action]/{id}/{message}"), Route("sevemessage")]
-		public void SeveMessage(int id, string message)
+		[HttpGet("[action]/{id}"), Route("sevemessageasync")]
+		[HttpGet("[action]/{id}/{message}"), Route("sevemessageasync")]
+		public async Task SeveMessageAsync(int id, string message)
 		{
-			User currentUser = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
-			User recipient = db.Users.FirstOrDefault(x => x.Id == id);
-			db.Messages.Add(new Message { UserId = currentUser.Id, FriendId = recipient.Id, SentMessage = message, dateTime = DateTime.Now });
-			db.SaveChanges();
+			string currentUserName = User.Identity.Name;
+			await _messageService.SeveMessageAsync(currentUserName, id, message);			
 		}
 
-		[HttpGet("[action]/{id}"), Route("getmessages")]
-		[HttpGet("[action]/{id}/{friendid}"), Route("getmessages")]
-		public IActionResult GetMessages(int id, int FriendId)
+		[HttpGet("[action]/{id}"), Route("getmessagesasync")]
+		[HttpGet("[action]/{id}/{friendid}"), Route("getmessagesasync")]
+		public async Task <List<string>> GetMessagesAsync(int id, int FriendId)
 		{
-			List<string> mesages = new List<string>();
-			User User = db.Users.FirstOrDefault(x => x.Id == id);
-			string username = User.UserName;
-			User Friend = db.Users.FirstOrDefault(x => x.Id == FriendId);
-			string friendname = Friend.UserName;
-
-			var usermessages = db.Messages
-			  .Where(x => (x.UserId == id && x.FriendId == FriendId) ||
-						  (x.UserId == FriendId && x.FriendId == id)).ToList();
-
-			foreach (var i in usermessages)
-			{
-				if (i.UserId == id && i.FriendId == FriendId)
-				{
-					mesages.Add($"{i.dateTime}:{username}- {i.SentMessage}");
-				}
-				else if (i.FriendId == id && i.UserId == FriendId)
-				{
-					mesages.Add($"{i.dateTime}:{friendname}- {i.SentMessage}");
-				}
-			}
-
-			return Ok(mesages);
+			return await _messageService.GetMessagesAsync(id, FriendId);			
 		}
 
 	}
