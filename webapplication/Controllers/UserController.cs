@@ -35,10 +35,10 @@ namespace webapplication.Controllers
 			}
 		}		
 
-		[HttpGet("[action]/{id}"), Route("getuserformessage")]
-		public IActionResult GetUserForMessage(int id)
+		[HttpGet("[action]/{id}"), Route("getuserformessageasync")]
+		public async Task<IActionResult>GetUserForMessageAsync(int id)
 		{
-			var user = db.Users.FirstOrDefault(x => x.Id == id);
+			var user = await _userService.GetUserForMessageAsync(id);
 			return Ok(user);
 		}
 

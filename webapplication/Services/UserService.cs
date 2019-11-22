@@ -47,6 +47,11 @@ namespace webapplication.Services
 				.Include(x => x.UserFriends)
 				.ThenInclude(x => x.Friend)
 				.FirstOrDefaultAsync(x => x.UserName == name);			
-		}		
+		}
+
+		public async Task<User> GetUserForMessageAsync(int id)
+		{
+			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
+		}
 	}
 }
