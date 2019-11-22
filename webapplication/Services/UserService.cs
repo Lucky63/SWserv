@@ -36,6 +36,17 @@ namespace webapplication.Services
 			}			
 		}
 
+		public async Task<User> EditAsync(User user)
+		{
+			return await db.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+		}
+
+		public async Task EditSaveAsync(User userdb)
+		{
+			db.Update(userdb);
+			await db.SaveChangesAsync();
+		}
+
 		public async Task<List<User>> GetAllAsync()
 		{
 			return await db.Users.ToListAsync();

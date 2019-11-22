@@ -42,17 +42,16 @@ namespace webapplication.Controllers
 			return Ok(user);
 		}
 
-		[HttpPut, Route("edit")]
-		public IActionResult Edit([FromBody]User user)
+		[HttpPut, Route("editasync")]
+		public async Task <IActionResult>EditAsync([FromBody]User user)
 		{
-			User userdb = db.Users.FirstOrDefault(x => x.Id == user.Id);
+			User userdb = await _userService.EditAsync(user);
 			userdb.UserName = user.UserName;
 			userdb.LastName = user.LastName;						
 
 			if (user != null)
 			{
-				db.Update(userdb);
-				db.SaveChanges();
+				await _userService.EditSaveAsync(userdb);
 				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
 				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
@@ -79,11 +78,12 @@ namespace webapplication.Controllers
 			}
 		}
 
-		#region Добавление друзей
+		
 		//Получаю ИД друга
 		[HttpGet("[action]/{id}"), Route("addfriendasync")]
 		public async Task AddFriendAsync(int id)
-		{			
+		#region Добавление друзей
+		{
 			User Friend = await _friendService.AddFriendAsync(id);
 			await AddUserToFriendAsync(Friend);			
 		}
