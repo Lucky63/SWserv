@@ -11,6 +11,7 @@ namespace webapplication.Models
 		public DbSet<User> Users { get; set; }
 		public DbSet<Friends> Friendships { get; set; }
 		public DbSet<Message> Messages { get; set; }
+		public DbSet<FileModel> Files { get; set; }
 
 		public DBUserContext()
 		{
@@ -24,7 +25,7 @@ namespace webapplication.Models
 			modelBuilder.Entity<Friends>()
 				.HasOne(sc => sc.User)
 				.WithMany(c => c.UserFriends)
-				.HasForeignKey(sc => sc.FriendId);
+				.HasForeignKey(sc => sc.UserId);
 
 			modelBuilder.Entity<Friends>()
 				.HasOne(sc => sc.Friend)
