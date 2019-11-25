@@ -36,7 +36,8 @@ namespace webapplication.Controllers
 				FileModel file = new FileModel { Name = files.FileName, Path = path };
 				db.Files.Add(file);
 				db.SaveChanges();
-			
 		}
+
+
 	}
 }
