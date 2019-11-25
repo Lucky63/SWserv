@@ -23,18 +23,17 @@ namespace webapplication.Controllers
 			_appEnvironment = appEnvironment;
 		}
 
-		[HttpPost("[action]/{formData}"), Route("addfile")]
-		public async Task AddFile(IFormFile formData)
-		{
-			
+		[HttpPost("[action]"), Route("addfile")]
+		public async Task AddFile([FromForm]IFormFile files)
+		{			
 				// путь к папке Files
-				string path = "/Files/" + formData.FileName;
+				string path = "/Files/" + files.FileName;
 				// сохраняем файл в папку Files в каталоге wwwroot
 				using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
 				{
-					await formData.CopyToAsync(fileStream);
+					await files.CopyToAsync(fileStream);
 				}
-				FileModel file = new FileModel { Name = formData.FileName, Path = path };
+				FileModel file = new FileModel { Name = files.FileName, Path = path };
 				db.Files.Add(file);
 				db.SaveChanges();
 			
