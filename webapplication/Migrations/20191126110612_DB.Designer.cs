@@ -10,7 +10,7 @@ using webapplication.Models;
 namespace webapplication.Migrations
 {
     [DbContext(typeof(DBUserContext))]
-    [Migration("20191125042930_DB")]
+    [Migration("20191126110612_DB")]
     partial class DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +77,8 @@ namespace webapplication.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AvatarImgPath");
 
                     b.Property<string>("LastName");
 

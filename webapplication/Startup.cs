@@ -1,12 +1,15 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using webapplication.Models;
 using webapplication.Services;
@@ -41,9 +44,9 @@ namespace webapplication
 					builder.					
 					AllowAnyOrigin().
 					AllowAnyHeader().
-					AllowAnyMethod().
-					WithOrigins("http://localhost:4200").
-					AllowCredentials();
+					AllowAnyMethod().					
+					AllowCredentials().
+					WithOrigins("http://localhost:4200");
 				});
 			});
 
@@ -97,7 +100,7 @@ namespace webapplication
                 app.UseHsts();
             }
 
-			app.UseCors("EnableCORS");
+			
 			app.UseAuthentication();
 
 			app.UseSignalR(routes =>
@@ -106,8 +109,14 @@ namespace webapplication
 			});
 
 			app.UseHttpsRedirection();
+			app.UseCors("EnableCORS");
 			app.UseDefaultFiles();
 			app.UseStaticFiles();
+			app.UseStaticFiles(new StaticFileOptions()
+			{
+				FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+				RequestPath = new PathString("/Resources")
+			});
 			app.UseMvc();
         }
     }

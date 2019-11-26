@@ -47,7 +47,8 @@ namespace webapplication.Controllers
 		{
 			User userdb = await _userService.EditAsync(user);
 			userdb.UserName = user.UserName;
-			userdb.LastName = user.LastName;						
+			userdb.LastName = user.LastName;
+			userdb.AvatarImgPath = user.AvatarImgPath;
 
 			if (user != null)
 			{
@@ -123,6 +124,7 @@ namespace webapplication.Controllers
 				UserName = user.UserName,
 				LastName = user.LastName,
 				Password = user.Password,
+				AvatarImgPath=user.AvatarImgPath,
 				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
 			};
 			return Ok (userdb);

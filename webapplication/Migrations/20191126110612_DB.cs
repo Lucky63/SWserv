@@ -46,7 +46,8 @@ namespace webapplication.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserName = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    AvatarImgPath = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
