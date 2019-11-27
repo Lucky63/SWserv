@@ -41,12 +41,12 @@ namespace webapplication
 			{
 				options.AddPolicy("EnableCORS", builder =>
 				{
-					builder.					
+					builder.
 					AllowAnyOrigin().
 					AllowAnyHeader().
-					AllowAnyMethod().					
-					AllowCredentials().
-					WithOrigins("http://localhost:4200");
+					AllowAnyMethod().
+					WithOrigins("http://localhost:4200").
+					AllowCredentials();
 				});
 			});
 
@@ -99,17 +99,14 @@ namespace webapplication
             {
                 app.UseHsts();
             }
-
-			
+			app.UseCors("EnableCORS");
 			app.UseAuthentication();
-
 			app.UseSignalR(routes =>
 			{
 				routes.MapHub<ChatHub>("/chat");
 			});
 
-			app.UseHttpsRedirection();
-			app.UseCors("EnableCORS");
+			app.UseHttpsRedirection();			
 			app.UseDefaultFiles();
 			app.UseStaticFiles();
 			app.UseStaticFiles(new StaticFileOptions()
