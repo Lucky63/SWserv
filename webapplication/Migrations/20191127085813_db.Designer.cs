@@ -10,7 +10,7 @@ using webapplication.Models;
 namespace webapplication.Migrations
 {
     [DbContext(typeof(DBUserContext))]
-    [Migration("20191127061220_db")]
+    [Migration("20191127085813_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,6 +72,23 @@ namespace webapplication.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("webapplication.Models.Photos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("PhotoPath");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Photos");
+                });
+
             modelBuilder.Entity("webapplication.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -101,6 +118,14 @@ namespace webapplication.Migrations
                     b.HasOne("webapplication.Models.User", "User")
                         .WithMany("UserFriends")
                         .HasForeignKey("UserId1");
+                });
+
+            modelBuilder.Entity("webapplication.Models.Photos", b =>
+                {
+                    b.HasOne("webapplication.Models.User", "User")
+                        .WithMany("Photos")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

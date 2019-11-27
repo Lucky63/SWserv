@@ -125,6 +125,7 @@ namespace webapplication.Controllers
 				LastName = user.LastName,
 				Password = user.Password,
 				AvatarImgPath=user.AvatarImgPath,
+				Photos=user.Photos.Select(x => new PhotosViewModel(x)).ToList(),
 				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
 			};
 			return Ok (userdb);

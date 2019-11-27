@@ -12,6 +12,7 @@ namespace webapplication.Models
 		public string Password { get; set; }
 		public string LastName { get; set; }
 		public string AvatarImgPath { get; set; }
+		public List<PhotosViewModel> Photos { get; set; }
 		public List<UserFriendsViewModel> Friends { get; set; }
 	}
 }

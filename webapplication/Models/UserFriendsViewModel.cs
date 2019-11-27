@@ -15,6 +15,7 @@ namespace webapplication.Models
 			Password = friends.Friend.Password;
 			LastName = friends.Friend.LastName;
 			AvatarImgPath = friends.Friend.AvatarImgPath;
+			
 			Id = friends.FriendId;
 		}		
 		public UserFriendsViewModel()
@@ -28,5 +29,6 @@ namespace webapplication.Models
 		public string Password { get; set; }
 		public string LastName { get; set; }
 		public string AvatarImgPath { get; set; }
+		public List<PhotosViewModel> Photos { get; set; }
 	}
 }

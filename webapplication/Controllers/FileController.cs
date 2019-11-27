@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +14,6 @@ namespace webapplication.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-
 	public class FileController : ControllerBase
 	{
 		DBUserContext db;
@@ -72,6 +72,32 @@ namespace webapplication.Controllers
 				return StatusCode(500, "Internal server error");
 			}
 		}
+
+		[HttpPost("[action]/{id}"), Route("UploadPhoto")]
+		public async Task UploadPhoto(int id)
+		{			
+				var file = Request.Form.Files[0];
+				var folderName = Path.Combine("Resources", "Photos");
+				var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+				
+					var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+					var fullPath = Path.Combine(pathToSave, fileName);
+					var dbPath = Path.Combine(folderName, fileName);
+					
+					using (var stream = new FileStream(fullPath, FileMode.Create))
+					{
+						file.CopyTo(stream);
+					}
+			db.Photos.Add(new Photos { PhotoPath = dbPath, UserId = id });
+			await db.SaveChangesAsync();
+		}
+
+		//[HttpPost]
+		//public async Task SavePhotos (int id, string dbPath)
+		//{
+			
+		//}
 
 	}
 }

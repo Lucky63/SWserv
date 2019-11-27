@@ -57,6 +57,7 @@ namespace webapplication.Services
 			return await  db.Users
 				.Include(x => x.UserFriends)
 				.ThenInclude(x => x.Friend)
+				.Include(x=>x.Photos)
 				.FirstOrDefaultAsync(x => x.UserName == name);			
 		}
 
