@@ -23,22 +23,7 @@ namespace webapplication.Controllers
 		{
 			db = context;
 			_appEnvironment = appEnvironment;
-		}
-
-		[HttpPost("[action]"), Route("addfile")]
-		public async Task AddFile([FromForm]IFormFile files)
-		{			
-				// путь к папке Files
-				string path = "/Files/" + files.FileName;
-				// сохраняем файл в папку Files в каталоге wwwroot
-				using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-				{
-					await files.CopyToAsync(fileStream);
-				}
-				FileModel file = new FileModel { Name = files.FileName, Path = path };
-				db.Files.Add(file);
-				db.SaveChanges();
-		}
+		}	
 
 		[HttpPost("[action]"), Route("Upload")]
 		public IActionResult Upload()
@@ -93,11 +78,14 @@ namespace webapplication.Controllers
 			await db.SaveChangesAsync();
 		}
 
-		//[HttpPost]
-		//public async Task SavePhotos (int id, string dbPath)
-		//{
-			
-		//}
-
+		[HttpDelete("[action]/{id}"), Route("DeletePhotoAsync")]
+		public async Task DeletePhotoAsync(int id)
+		{
+			var currentPhoto = await db.Photos.FirstOrDefaultAsync(x => x.Id == id);
+			string pathOfFile = currentPhoto.PhotoPath;
+			System.IO.File.Delete(pathOfFile);//Удаляю сам файл из папки в файловой системе
+			db.Remove(currentPhoto);
+			await db.SaveChangesAsync();
+		}
 	}
 }
