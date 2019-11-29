@@ -48,6 +48,8 @@ namespace webapplication.Controllers
 			User userdb = await _userService.EditAsync(user);
 			userdb.UserName = user.UserName;
 			userdb.LastName = user.LastName;
+			userdb.Age = user.Age;
+			userdb.City = user.City;
 			userdb.AvatarImgPath = user.AvatarImgPath;
 
 			if (user != null)
@@ -124,7 +126,9 @@ namespace webapplication.Controllers
 				UserName = user.UserName,
 				LastName = user.LastName,
 				Password = user.Password,
-				AvatarImgPath=user.AvatarImgPath,
+				Age = user.Age,
+				City = user.City,
+				AvatarImgPath =user.AvatarImgPath,
 				Photos=user.Photos.Select(x => new PhotosViewModel(x)).ToList(),
 				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
 			};

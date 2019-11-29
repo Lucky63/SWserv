@@ -93,7 +93,11 @@ namespace webapplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Age");
+
                     b.Property<string>("AvatarImgPath");
+
+                    b.Property<string>("City");
 
                     b.Property<string>("LastName");
 

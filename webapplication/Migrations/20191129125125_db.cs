@@ -47,6 +47,8 @@ namespace webapplication.Migrations
                     UserName = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
+                    Age = table.Column<int>(nullable: false),
+                    City = table.Column<string>(nullable: true),
                     AvatarImgPath = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
