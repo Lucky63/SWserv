@@ -33,6 +33,7 @@ namespace webapplication
 			services.AddTransient<IFriendService, FriendService>();
 			services.AddTransient<IMessageService, MessageService>();
 			services.AddTransient<IAuthService, AuthService>();
+			services.AddTransient<IFileService, FileService>();
 
 			services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 			services.AddSignalR();

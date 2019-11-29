@@ -9,20 +9,19 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using webapplication.Models;
+using webapplication.Services;
 
 namespace webapplication.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
 	public class FileController : ControllerBase
-	{
-		DBUserContext db;
-		IHostingEnvironment _appEnvironment;
+	{			
+		IFileService _fileService;
 
-		public FileController(DBUserContext context, IHostingEnvironment appEnvironment)
-		{
-			db = context;
-			_appEnvironment = appEnvironment;
+		public FileController(IFileService fileService)
+		{			
+			_fileService = fileService;
 		}	
 
 		[HttpPost("[action]"), Route("Upload")]
@@ -58,8 +57,8 @@ namespace webapplication.Controllers
 			}
 		}
 
-		[HttpPost("[action]/{id}"), Route("UploadPhoto")]
-		public async Task UploadPhoto(int id)
+		[HttpPost("[action]/{id}"), Route("UploadPhotoAsync")]
+		public async Task UploadPhotoAsync(int id)
 		{			
 				var file = Request.Form.Files[0];
 				var folderName = Path.Combine("Resources", "Photos");
@@ -74,18 +73,13 @@ namespace webapplication.Controllers
 					{
 						file.CopyTo(stream);
 					}
-			db.Photos.Add(new Photos { PhotoPath = dbPath, UserId = id });
-			await db.SaveChangesAsync();
+			await _fileService.SavePhotoAsync(dbPath, id);
 		}
 
 		[HttpDelete("[action]/{id}"), Route("DeletePhotoAsync")]
 		public async Task DeletePhotoAsync(int id)
 		{
-			var currentPhoto = await db.Photos.FirstOrDefaultAsync(x => x.Id == id);
-			string pathOfFile = currentPhoto.PhotoPath;
-			System.IO.File.Delete(pathOfFile);//Удаляю сам файл из папки в файловой системе
-			db.Remove(currentPhoto);
-			await db.SaveChangesAsync();
+			await _fileService.DeletePhotoAsync(id);
 		}
 	}
 }
