@@ -12,5 +12,6 @@ namespace webapplication.Services
 		Task SavePhotoAsync(string dbPath, int id);
 		Task DeletePhotoAsync(int id);
 		Task<string> Upload(IFormFile file);
+		Task<string> UploadPhotoAsync(IFormFile file);
 	}
 }

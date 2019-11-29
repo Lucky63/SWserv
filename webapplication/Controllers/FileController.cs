@@ -41,20 +41,11 @@ namespace webapplication.Controllers
 
 		[HttpPost("[action]/{id}"), Route("UploadPhotoAsync")]
 		public async Task UploadPhotoAsync(int id)
-		{			
-				var file = Request.Form.Files[0];
-				var folderName = Path.Combine("Resources", "Photos");
-				var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-
+		{
+			var file = Request.Form.Files[0];
+			
+			var dbPath = _fileService.UploadPhotoAsync(file).Result;
 				
-					var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-					var fullPath = Path.Combine(pathToSave, fileName);
-					var dbPath = Path.Combine(folderName, fileName);
-					
-					using (var stream = new FileStream(fullPath, FileMode.Create))
-					{
-						file.CopyTo(stream);
-					}
 			await _fileService.SavePhotoAsync(dbPath, id);
 		}
 

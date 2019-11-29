@@ -55,5 +55,22 @@ namespace webapplication.Services
 				
 				
 		}
+
+		public async Task<string> UploadPhotoAsync(IFormFile file)
+		{
+			var folderName = Path.Combine("Resources", "Photos");
+			var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+
+			var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+			var fullPath = Path.Combine(pathToSave, fileName);
+			var dbPath = Path.Combine(folderName, fileName);
+
+			using (var stream = new FileStream(fullPath, FileMode.Create))
+			{
+				file.CopyTo(stream);
+			}
+			return dbPath;
+		}
 	}
 }
