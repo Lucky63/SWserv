@@ -10,7 +10,7 @@ using webapplication.Models;
 namespace webapplication.Migrations
 {
     [DbContext(typeof(DBUserContext))]
-    [Migration("20191129125125_db")]
+    [Migration("20191201150154_db")]
     partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

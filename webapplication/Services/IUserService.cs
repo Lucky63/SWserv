@@ -14,5 +14,6 @@ namespace webapplication.Services
 		Task<User> GetUserForMessageAsync(int id);
 		Task <User>EditAsync(User user);
 		Task EditSaveAsync(User userdb);
+		Task<User> GetUserForProfileAsync(int id);
 	}
 }

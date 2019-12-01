@@ -140,5 +140,25 @@ namespace webapplication.Controllers
 		{
 			return await _userService.GetAllAsync();
 		}
+
+		[HttpGet("[action]/{id}"), Route("GetUserForProfileAsync")]
+		public async Task<IActionResult> GetUserForProfileAsync(int id)
+		{
+			var user = await _userService.GetUserForProfileAsync(id);
+
+			var userdb = new UserViewModel()
+			{
+				Id = user.Id,
+				UserName = user.UserName,
+				LastName = user.LastName,
+				Password = user.Password,
+				Age = user.Age,
+				City = user.City,
+				AvatarImgPath = user.AvatarImgPath,
+				Photos = user.Photos.Select(x => new PhotosViewModel(x)).ToList(),
+				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
+			};
+			return Ok(userdb);
+		}
 	}	
 }
