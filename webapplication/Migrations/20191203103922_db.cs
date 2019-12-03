@@ -39,6 +39,21 @@ namespace webapplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tapes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<int>(nullable: false),
+                    FriendId = table.Column<int>(nullable: false),
+                    Message = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tapes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -130,6 +145,9 @@ namespace webapplication.Migrations
 
             migrationBuilder.DropTable(
                 name: "Photos");
+
+            migrationBuilder.DropTable(
+                name: "Tapes");
 
             migrationBuilder.DropTable(
                 name: "Users");

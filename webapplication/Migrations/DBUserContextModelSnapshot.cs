@@ -87,6 +87,23 @@ namespace webapplication.Migrations
                     b.ToTable("Photos");
                 });
 
+            modelBuilder.Entity("webapplication.Models.Tape", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FriendId");
+
+                    b.Property<string>("Message");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tapes");
+                });
+
             modelBuilder.Entity("webapplication.Models.User", b =>
                 {
                     b.Property<int>("Id")

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using webapplication.Models;
 using webapplication.Services;
 
@@ -35,5 +36,23 @@ namespace webapplication.Controllers
 			return await _messageService.GetMessagesAsync(id, FriendId);			
 		}
 
+		
+		[HttpPost("[action]/{id}"), Route("SaveMessageForTapeAsync")]
+		[HttpPost("[action]/{id}/{message}"), Route("SaveMessageForTapeAsync")]
+		public async Task SaveMessageForTapeAsync(int id, string message)
+		{
+			var currentUser = await db.Users.Include(x=>x.UserFriends).ThenInclude(x=>x.Friend).FirstOrDefaultAsync(x=>x.Id == id);
+			if(currentUser != null)
+			{
+				foreach (var i in currentUser.UserFriends)
+				{
+					db.Tapes.Add(new Tape { UserId = currentUser.Id, FriendId = i.FriendId, Message = message });
+					await db.SaveChangesAsync();
+				}
+			}
+			
+
+
+		}
 	}
 }
