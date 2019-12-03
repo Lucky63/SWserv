@@ -50,8 +50,36 @@ namespace webapplication.Controllers
 					await db.SaveChangesAsync();
 				}
 			}
-			
 
+		}
+
+		[HttpGet("[action]/{id}"), Route("GetMessagesFromTapes")]		
+		public async Task<List<string>> GetMessagesFromTapes(int id)
+		{
+			List<string> mesages = new List<string>();
+			User User = await db.Users.FirstOrDefaultAsync(x => x.Id == id);
+			string username = User.UserName;			
+
+			var usermessages = db.Tapes
+			  .Where(x => ( x.FriendId == id)||
+						  (x.UserId ==  id)).ToList();
+
+			foreach (var i in usermessages)
+			{
+				if (i.UserId == id)
+				{
+					var sentUser = db.Users.FirstOrDefault(x => x.Id == id);
+					mesages.Add($"{sentUser.UserName}- {i.Message}");
+				}
+				if (i.FriendId == id)
+				{
+					var sentUser = db.Users.FirstOrDefault(x => x.Id == i.UserId);
+					mesages.Add($"{sentUser.UserName}- {i.Message}");
+				}
+				
+			}
+
+			return mesages;
 
 		}
 	}
