@@ -177,18 +177,17 @@ namespace webapplication.Controllers
 		}
 
 		[HttpGet("[action]/{id}"), Route("GetAllPostsAsync")]
-		public async Task <List<UserPost>> GetAllPostsAsync(int id)		
+		public async Task <List<UserPostViewModel>> GetAllPostsAsync(int id)		
 		{
-			List<UserPost> posts = new List<UserPost>();			
+			List<UserPostViewModel> posts = new List<UserPostViewModel>();			
 			User currentUser = await db.Users.Include(x => x.UserFriends).ThenInclude(x=>x.Friend).Include(x => x.UserPosts).FirstOrDefaultAsync(x => x.Id == id);
 			foreach(var i in currentUser.UserFriends)
 			{
-				var friendsPost = await db.UserPosts.Where(x => x.UserId == i.FriendId).ToListAsync(); ;
+				var friendsPost = await db.UserPosts.Where(x => x.UserId == i.FriendId).Select(x=> new UserPostViewModel(x)).ToListAsync(); ;
 				posts.AddRange(friendsPost);
 			}
 			//Нужно перевести список в тип вьюмодели
-			return posts;
-			
+			return posts;	
 
 		}
 	}	
