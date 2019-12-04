@@ -34,5 +34,6 @@ namespace webapplication.Models
 		public string City { get; set; }
 		public string AvatarImgPath { get; set; }
 		public List<PhotosViewModel> Photos { get; set; }
+		public List<UserPostViewModel> UserPosts { get; set; }
 	}
 }

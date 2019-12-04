@@ -16,5 +16,6 @@ namespace webapplication.Models
 		public string AvatarImgPath { get; set; }
 		public List<PhotosViewModel> Photos { get; set; }
 		public List<UserFriendsViewModel> Friends { get; set; }
+		public List<UserPostViewModel> UserPosts { get; set; }
 	}
 }

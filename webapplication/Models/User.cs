@@ -23,6 +23,7 @@ namespace webapplication.Models
 
 
 		public string AvatarImgPath { get; set; }
+		public List<UserPost> UserPosts { get; set; }
 		public List<Photos> Photos { get; set; }
 		public List<Friends> UserFriends { get; set; }
 		public List<Friends> WhoAddMe { get; set; }

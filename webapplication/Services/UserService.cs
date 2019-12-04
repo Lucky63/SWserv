@@ -58,6 +58,7 @@ namespace webapplication.Services
 				.Include(x => x.UserFriends)
 				.ThenInclude(x => x.Friend)
 				.Include(x=>x.Photos)
+				.Include(x => x.UserPosts)
 				.FirstOrDefaultAsync(x => x.UserName == name);			
 		}
 
@@ -72,6 +73,7 @@ namespace webapplication.Services
 				.Include(x => x.UserFriends)
 				.ThenInclude(x => x.Friend)
 				.Include(x => x.Photos)
+				.Include(x => x.UserPosts)
 				.FirstOrDefaultAsync(x => x.Id == id);
 		}
 	}

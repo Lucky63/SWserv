@@ -130,7 +130,8 @@ namespace webapplication.Controllers
 				City = user.City,
 				AvatarImgPath =user.AvatarImgPath,
 				Photos=user.Photos.Select(x => new PhotosViewModel(x)).ToList(),
-				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
+				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList(),
+				UserPosts = user.UserPosts.Select(x => new UserPostViewModel(x)).ToList()
 			};
 			return Ok (userdb);
 		}
@@ -156,7 +157,8 @@ namespace webapplication.Controllers
 				City = user.City,
 				AvatarImgPath = user.AvatarImgPath,
 				Photos = user.Photos.Select(x => new PhotosViewModel(x)).ToList(),
-				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()
+				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList(),
+				UserPosts = user.UserPosts.Select(x => new UserPostViewModel(x)).ToList()
 			};
 			return Ok(userdb);
 		}

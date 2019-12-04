@@ -14,6 +14,7 @@ namespace webapplication.Models
 		public DbSet<FileModel> Files { get; set; }
 		public DbSet<Photos> Photos { get; set; }
 		public DbSet<Tape>	Tapes { get; set; }
+		public DbSet<UserPost> UserPosts { get; set; }
 
 		public DBUserContext()
 		{

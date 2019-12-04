@@ -127,6 +127,25 @@ namespace webapplication.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("webapplication.Models.UserPost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Post");
+
+                    b.Property<DateTime>("TimeOfPublication");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPosts");
+                });
+
             modelBuilder.Entity("webapplication.Models.Friends", b =>
                 {
                     b.HasOne("webapplication.Models.User", "Friend")
@@ -143,6 +162,14 @@ namespace webapplication.Migrations
                 {
                     b.HasOne("webapplication.Models.User", "User")
                         .WithMany("Photos")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("webapplication.Models.UserPost", b =>
+                {
+                    b.HasOne("webapplication.Models.User", "User")
+                        .WithMany("UserPosts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
