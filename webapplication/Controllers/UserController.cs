@@ -170,7 +170,10 @@ namespace webapplication.Controllers
 			var currentUser = await db.Users.Include(x => x.UserPosts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
 			if (currentUser != null)
 			{
-				currentUser.UserPosts.Add(new UserPost { Post = post, TimeOfPublication = DateTime.Now, User=currentUser });
+				DateTime now = DateTime.Now;
+				var time = now.ToString("T");
+				currentUser.UserPosts
+					.Add(new UserPost { AuthorPost=currentUser.UserName, Post = post, TimeOfPublication = DateTime.Now, User=currentUser });
 				db.Update(currentUser);
 				await db.SaveChangesAsync();
 			}
@@ -186,7 +189,7 @@ namespace webapplication.Controllers
 				var friendsPost = await db.UserPosts.Where(x => x.UserId == i.FriendId).Select(x=> new UserPostViewModel(x)).ToListAsync(); ;
 				posts.AddRange(friendsPost);
 			}
-			//Нужно перевести список в тип вьюмодели
+			
 			return posts;	
 
 		}

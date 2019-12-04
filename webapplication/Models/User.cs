@@ -10,6 +10,7 @@ namespace webapplication.Models
 		public User()
 		{
 			UserFriends = new List<Friends>();
+			UserPosts = new List<UserPost>();
 		}
 		public int Id { get; set; }
 		public string UserName { get; set; }

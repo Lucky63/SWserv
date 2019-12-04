@@ -122,6 +122,7 @@ namespace webapplication.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AuthorPost = table.Column<string>(nullable: true),
                     Post = table.Column<string>(nullable: true),
                     TimeOfPublication = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false)

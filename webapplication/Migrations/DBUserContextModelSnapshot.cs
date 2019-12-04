@@ -133,6 +133,8 @@ namespace webapplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AuthorPost");
+
                     b.Property<string>("Post");
 
                     b.Property<DateTime>("TimeOfPublication");

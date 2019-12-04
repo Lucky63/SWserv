@@ -12,8 +12,10 @@ namespace webapplication.Models
 			Id = userPost.Id;
 			Post = userPost.Post;
 			TimeOfPublication = userPost.TimeOfPublication;
+			AuthorPost = userPost.AuthorPost;
 		}
 		public int Id { get; set; }
+		public string AuthorPost { get; set; }
 		public string Post { get; set; }
 		public DateTime TimeOfPublication { get; set; }
 	}

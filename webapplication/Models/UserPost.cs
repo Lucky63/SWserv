@@ -8,6 +8,7 @@ namespace webapplication.Models
 	public class UserPost
 	{
 		public int Id { get; set; }		
+		public string AuthorPost { get; set; }
 		public string Post { get; set; }
 		public DateTime TimeOfPublication { get; set; }
 
