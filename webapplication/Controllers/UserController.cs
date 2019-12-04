@@ -162,5 +162,19 @@ namespace webapplication.Controllers
 			};
 			return Ok(userdb);
 		}
+
+		[HttpPost("[action]/{id}"), Route("SaveUserPostAsync")]
+		[HttpPost("[action]/{id}/{post}"), Route("SaveUserPostAsync")]
+		public async Task SaveUserPostAsync(int id, string post)
+		{
+			var currentUser = await db.Users.Include(x => x.UserPosts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+			if (currentUser != null)
+			{
+				currentUser.UserPosts.Add(new UserPost { Post = post, TimeOfPublication = DateTime.Now, User=currentUser });
+				db.Update(currentUser);
+				await db.SaveChangesAsync();
+			}
+
+		}
 	}	
 }
