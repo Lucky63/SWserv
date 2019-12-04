@@ -174,6 +174,21 @@ namespace webapplication.Controllers
 				db.Update(currentUser);
 				await db.SaveChangesAsync();
 			}
+		}
+
+		[HttpGet("[action]/{id}"), Route("GetAllPostsAsync")]
+		public async Task <List<UserPost>> GetAllPostsAsync(int id)		
+		{
+			List<UserPost> posts = new List<UserPost>();			
+			User currentUser = await db.Users.Include(x => x.UserFriends).ThenInclude(x=>x.Friend).Include(x => x.UserPosts).FirstOrDefaultAsync(x => x.Id == id);
+			foreach(var i in currentUser.UserFriends)
+			{
+				var friendsPost = await db.UserPosts.Where(x => x.UserId == i.FriendId).ToListAsync(); ;
+				posts.AddRange(friendsPost);
+			}
+			//Нужно перевести список в тип вьюмодели
+			return posts;
+			
 
 		}
 	}	
