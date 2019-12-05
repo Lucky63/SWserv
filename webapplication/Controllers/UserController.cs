@@ -169,9 +169,7 @@ namespace webapplication.Controllers
 		{
 			var currentUser = await db.Users.Include(x => x.UserPosts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
 			if (currentUser != null)
-			{
-				DateTime now = DateTime.Now;
-				var time = now.ToString("T");
+			{				
 				currentUser.UserPosts
 					.Add(new UserPost { AuthorPost=currentUser.UserName, Post = post, TimeOfPublication = DateTime.Now, User=currentUser });
 				db.Update(currentUser);
@@ -179,18 +177,50 @@ namespace webapplication.Controllers
 			}
 		}
 
-		[HttpGet("[action]/{id}"), Route("GetAllPostsAsync")]
-		public async Task <List<UserPostViewModel>> GetAllPostsAsync(int id)		
-		{
-			List<UserPostViewModel> posts = new List<UserPostViewModel>();			
-			User currentUser = await db.Users.Include(x => x.UserFriends).ThenInclude(x=>x.Friend).Include(x => x.UserPosts).FirstOrDefaultAsync(x => x.Id == id);
-			foreach(var i in currentUser.UserFriends)
+		
+		[HttpGet("[action]/{page}"), Route("GetAllPostsAsync")]
+		[HttpGet("[action]/{page}/{size}"), Route("GetAllPostsAsync")]
+		public async Task <PostsViewModel> GetAllPostsAsync(int page, int size)		
+		{						
+			var currentUser = await db.Users							
+				.Include(x => x.UserFriends)
+				.ThenInclude(x=>x.Friend)
+				.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+
+			var posts = db.UserPosts.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUser.Id))
+				.OrderByDescending(s => s.TimeOfPublication)
+				.Skip((page - 1) * size)
+				.Take(size)
+				.Select(x => new UserPostViewModel(x)).ToList();
+
+			var totalPagecount = new List<int>();
+			var totalPage = new List<int>();
+
+			foreach (var i in currentUser.UserFriends)
 			{
-				var friendsPost = await db.UserPosts.Where(x => x.UserId == i.FriendId).Select(x=> new UserPostViewModel(x)).ToListAsync(); ;
-				posts.AddRange(friendsPost);
+				var count = db.UserPosts
+					.Where(x => x.UserId == i.FriendId).Count();
+
+				var res = Math.Ceiling(count / (double)size);
+
+				for (var g = 1; g <= res; g++)
+				{
+					totalPage.Add(g);
+				}
 			}
+			for (var i =1; i<= totalPage.Count; i++)
+			{
+				totalPagecount.Add(i);
+			}
+
+			var postsViewModel = new PostsViewModel
+			{
+				userPostViewModels = posts,
+				TotalPage = totalPagecount
+			};
 			
-			return posts;	
+			
+			return postsViewModel;	
 
 		}
 	}	
