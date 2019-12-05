@@ -27,7 +27,8 @@ namespace webapplication.Services
 
 		public async Task RegistrationAsyncSave(string userName, string password)
 		{
-			_db.Users.Add(new User { UserName = userName, Password = password });
+			const string anonim = @"Resources\Images\AnonimPage.jpg";
+			_db.Users.Add(new User { UserName = userName, Password = password, AvatarImgPath= anonim });
 			await _db.SaveChangesAsync();
 		}
 	}
