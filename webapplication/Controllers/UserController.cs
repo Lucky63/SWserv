@@ -191,23 +191,14 @@ namespace webapplication.Controllers
 				.OrderByDescending(s => s.TimeOfPublication)
 				.Skip((page - 1) * size)
 				.Take(size)
-				.Select(x => new UserPostViewModel(x)).ToList();
-
-			var totalPage = new List<int>();
+				.Select(x => new UserPostViewModel(x)).ToList();			
 			
 			var count = db.UserPosts.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUser.Id)).Count();
-
-			var res = Math.Ceiling(count / (double)size);
-
-			for (var g = 1; g <= res; g++)
-			{
-				totalPage.Add(g);
-			}			
-
+			
 			var postsViewModel = new PostsViewModel
 			{
 				userPostViewModels = posts,
-				TotalPage = totalPage
+				Count = count
 			};			
 			
 			return postsViewModel;	

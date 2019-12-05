@@ -8,6 +8,6 @@ namespace webapplication.Models
 	public class PostsViewModel
 	{
 		public List<UserPostViewModel> userPostViewModels { get; set; }
-		public List<int> TotalPage { get; set; }
+		public int Count { get; set; }
 	}
 }
