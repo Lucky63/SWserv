@@ -163,11 +163,11 @@ namespace webapplication.Controllers
 			return Ok(userdb);
 		}
 
-		[HttpPost("[action]/{id}")]
-		[HttpPost("[action]/{id}/{post}")]
-		public async Task SaveUserPost(int id, string post)
+		
+		[HttpGet("[action]/{post}")]
+		public async Task SaveUserPost(string post)
 		{
-			var currentUser = await db.Users.Include(x => x.UserPosts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
+			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
 			if (currentUser != null)
 			{				
 				currentUser.UserPosts
