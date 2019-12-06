@@ -35,6 +35,7 @@ namespace webapplication
 			services.AddTransient<IAuthService, AuthService>();
 			services.AddTransient<IFileService, FileService>();
 
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 			services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 			services.AddSignalR();
 

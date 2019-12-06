@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -21,11 +22,13 @@ namespace webapplication.Controllers
 		DBUserContext db;
 		IUserService _userService;
 		IFriendService _friendService;
-		public UserController(DBUserContext context, IUserService userService, IFriendService friendService)
+		IHttpContextAccessor _httpContextAccessor;
+		public UserController(DBUserContext context, IUserService userService, IFriendService friendService, IHttpContextAccessor httpContextAccessor)
 		{
 			db = context;
 			_userService = userService;
 			_friendService = friendService;
+			_httpContextAccessor = httpContextAccessor;
 			if (!db.Users.Any())
 			{
 				db.Users.Add(new User { UserName = "Allan1", Password = "123"});
@@ -164,14 +167,14 @@ namespace webapplication.Controllers
 		}
 
 		
-		[HttpGet("[action]/{post}")]
-		public async Task SaveUserPost(string post)
+		[HttpPost("[action]")]
+		public async Task SaveUserPost([FromBody] PostModel postText)
 		{
-			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
 			if (currentUser != null)
 			{				
 				currentUser.UserPosts
-					.Add(new UserPost { AuthorPost=currentUser.UserName, Post = post, TimeOfPublication = DateTime.Now, User=currentUser });
+					.Add(new UserPost { AuthorPost=currentUser.UserName, Post = postText.Text, TimeOfPublication = DateTime.Now, User=currentUser });
 				db.Update(currentUser);
 				await db.SaveChangesAsync();
 			}
