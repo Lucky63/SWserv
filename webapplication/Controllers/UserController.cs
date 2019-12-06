@@ -35,15 +35,15 @@ namespace webapplication.Controllers
 			}
 		}		
 
-		[HttpGet("[action]/{id}"), Route("getuserformessageasync")]
-		public async Task<IActionResult>GetUserForMessageAsync(int id)
+		[HttpGet("[action]/{id}")]
+		public async Task<IActionResult>GetUserForMessage(int id)
 		{
 			var user = await _userService.GetUserForMessageAsync(id);
 			return Ok(user);
 		}
 
-		[HttpPut, Route("editasync")]
-		public async Task <IActionResult>EditAsync([FromBody]User user)
+		[HttpPut, Route("edit")]
+		public async Task <IActionResult>Edit([FromBody]User user)
 		{
 			User userdb = await _userService.EditAsync(user);
 			userdb.UserName = user.UserName;
@@ -83,8 +83,8 @@ namespace webapplication.Controllers
 
 		
 		//Получаю ИД друга
-		[HttpGet("[action]/{id}"), Route("addfriendasync")]
-		public async Task AddFriendAsync(int id)
+		[HttpGet("[action]/{id}")]
+		public async Task AddFriend(int id)
 		#region Добавление друзей
 		{
 			User Friend = await _friendService.AddFriendAsync(id);
@@ -106,16 +106,16 @@ namespace webapplication.Controllers
 		}
 		#endregion
 
-		[HttpDelete("[action]/{id}"), Route("deletefriendasync")]
-		public async Task DeleteFriendAsync(int id)
+		[HttpDelete("[action]/{id}")]
+		public async Task DeleteFriend(int id)
 		{
 			string IdentityUserName = User.Identity.Name;
 			await _userService.DeleteFriendAsync(IdentityUserName, id);
 		}
 
 
-	[HttpGet, Route("getidentityasync"), Authorize(Roles = "Manager")]
-		public async Task<IActionResult> GetIdentityAsync()
+	[HttpGet("[action]"), Authorize(Roles = "Manager")]
+		public async Task<IActionResult> GetIdentity()
 		{
 			string name = User.Identity.Name;
 			var user = await _userService.GetIdentityAsync(name);
@@ -136,14 +136,14 @@ namespace webapplication.Controllers
 			return Ok (userdb);
 		}
 
-		[HttpGet, Route("getallasync")]
-		public async Task<List<User>> GetAllAsync()
+		[HttpGet("[action]")]
+		public async Task<List<User>> GetAll()
 		{
 			return await _userService.GetAllAsync();
 		}
 
-		[HttpGet("[action]/{id}"), Route("GetUserForProfileAsync")]
-		public async Task<IActionResult> GetUserForProfileAsync(int id)
+		[HttpGet("[action]/{id}")]
+		public async Task<IActionResult> GetUserForProfile(int id)
 		{
 			var user = await _userService.GetUserForProfileAsync(id);
 
@@ -163,9 +163,9 @@ namespace webapplication.Controllers
 			return Ok(userdb);
 		}
 
-		[HttpPost("[action]/{id}"), Route("SaveUserPostAsync")]
-		[HttpPost("[action]/{id}/{post}"), Route("SaveUserPostAsync")]
-		public async Task SaveUserPostAsync(int id, string post)
+		[HttpPost("[action]/{id}")]
+		[HttpPost("[action]/{id}/{post}")]
+		public async Task SaveUserPost(int id, string post)
 		{
 			var currentUser = await db.Users.Include(x => x.UserPosts).ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
 			if (currentUser != null)
@@ -178,22 +178,24 @@ namespace webapplication.Controllers
 		}
 
 		
-		[HttpGet("[action]/{page}"), Route("GetAllPostsAsync")]
-		[HttpGet("[action]/{page}/{size}"), Route("GetAllPostsAsync")]
-		public async Task <PostsViewModel> GetAllPostsAsync(int page, int size)		
-		{						
-			var currentUser = await db.Users							
-				.Include(x => x.UserFriends)
-				.ThenInclude(x=>x.Friend)
-				.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+		[HttpGet("[action]/{page}")]
+		[HttpGet("[action]/{page}/{size}")]
+		public async Task <PostsViewModel> GetAllPosts(int page, int size)		
+		{
+			var currentUserId = await db.Users
+				.Where(x => x.UserName == User.Identity.Name)
+				.Select(x=> x.Id)
+				.FirstOrDefaultAsync();
 
-			var posts = db.UserPosts.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUser.Id))
+			var posts = db.UserPosts
+				.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUserId))
 				.OrderByDescending(s => s.TimeOfPublication)
 				.Skip((page - 1) * size)
 				.Take(size)
 				.Select(x => new UserPostViewModel(x)).ToList();			
 			
-			var count = db.UserPosts.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUser.Id)).Count();
+			var count = db.UserPosts
+				.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUserId)).Count();
 			
 			var postsViewModel = new PostsViewModel
 			{
