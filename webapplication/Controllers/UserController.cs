@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using webapplication.Models;
+using webapplication.Models.Data;
 using webapplication.Services;
 
 namespace webapplication.Controllers
@@ -170,25 +171,44 @@ namespace webapplication.Controllers
 		public async Task <PostsViewModel> GetAllPosts(int page, int size)		
 		{		
 			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-			var posts = await db.UserPosts
+			
+			if (currentUserId != 0)
+			{
+				var posts = await db.UserPosts
 				.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUserId))
 				.OrderByDescending(s => s.TimeOfPublication)
 				.Skip((page - 1) * size)
 				.Take(size)
-				.Select(x => new UserPostViewModel(x)).ToListAsync();			
-			
-			var count = db.UserPosts
-				.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUserId)).Count();
-			
-			var postsViewModel = new PostsViewModel
-			{
-				userPostViewModels = posts,
-				Count = count
-			};			
-			
-			return postsViewModel;	
+				.Select(x => new UserPostViewModel(x)).ToListAsync();
 
+				var count = db.UserPosts
+					.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUserId)).Count();
+
+				var postsViewModel = new PostsViewModel
+				{
+					userPostViewModels = posts,
+					Count = count
+				};
+				//await TestLikeBD();
+				return postsViewModel;
+			}
+			else
+			{
+				return new PostsViewModel();
+			}
+		}
+
+		[HttpGet("[action]")]
+		public async Task TestLikeBD()
+		{
+			var us = await db.Users.Include(x => x.LikePhotos).FirstOrDefaultAsync(x => x.Id == 1);
+			var usp = await db.Users.Include(x=>x.Photos).FirstOrDefaultAsync(x => x.Id == 2);
+
+			var tt = usp.Photos.Where(x => x.Id == 3).FirstOrDefault();
+
+			us.LikePhotos.Add(new LikePhoto { PhotoId = tt.Id, UserId = us.Id });
+			db.Update(us);
+			db.SaveChanges();
 		}
 	}	
 }

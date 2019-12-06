@@ -32,7 +32,7 @@ namespace webapplication.Services
 
 		public async Task SavePhotoAsync(string dbPath, int id)
 		{
-			_db.Photos.Add(new Photos { PhotoPath = dbPath, UserId = id });
+			_db.Photos.Add(new Photo { PhotoPath = dbPath, UserId = id });
 			await _db.SaveChangesAsync();
 		}
 

@@ -10,8 +10,8 @@ using webapplication.Models;
 namespace webapplication.Migrations
 {
     [DbContext(typeof(DBUserContext))]
-    [Migration("20191204145932_db")]
-    partial class db
+    [Migration("20191206175140_Add")]
+    partial class Add
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,7 +72,7 @@ namespace webapplication.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("webapplication.Models.Photos", b =>
+            modelBuilder.Entity("webapplication.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -162,7 +162,7 @@ namespace webapplication.Migrations
                         .HasForeignKey("UserId1");
                 });
 
-            modelBuilder.Entity("webapplication.Models.Photos", b =>
+            modelBuilder.Entity("webapplication.Models.Photo", b =>
                 {
                     b.HasOne("webapplication.Models.User", "User")
                         .WithMany("Photos")

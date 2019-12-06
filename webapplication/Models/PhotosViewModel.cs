@@ -7,7 +7,7 @@ namespace webapplication.Models
 {
 	public class PhotosViewModel
 	{
-		public PhotosViewModel(Photos photos)
+		public PhotosViewModel(Photo photos)
 		{
 			id = photos.Id;
 			path = photos.PhotoPath;
