@@ -43,7 +43,8 @@ namespace webapplication.Controllers
 				var claims = new List<Claim>
 				{
 					new Claim(ClaimTypes.Name, user.UserName),
-					new Claim(ClaimTypes.Role, "Manager")
+					new Claim(ClaimTypes.Role, "Manager"),
+					new Claim(ClaimTypes.NameIdentifier, userdb.Id.ToString())
 				};
 
 				var tokeOptions = new JwtSecurityToken(

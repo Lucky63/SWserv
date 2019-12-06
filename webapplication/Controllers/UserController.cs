@@ -87,27 +87,11 @@ namespace webapplication.Controllers
 		
 		//Получаю ИД друга
 		[HttpGet("[action]/{id}")]
-		public async Task AddFriend(int id)
-		#region Добавление друзей
-		{
-			User Friend = await _friendService.AddFriendAsync(id);
-			await AddUserToFriendAsync(Friend);			
-		}
-		//Добавляю друга авторизованному пользователю
-		[HttpPost]
-		public async Task AddUserToFriendAsync(User Friend)
+		public async Task AddFriend(int id)		
 		{
 			string UserIdentityName = User.Identity.Name;
-			User currentFriend = await _friendService.AddUserToFriendAsync(UserIdentityName, Friend);
-			await AddFriendToUserAsync(currentFriend);
-		}
-
-		public async Task AddFriendToUserAsync(User Friend)
-		{
-			string UserIdentityName = User.Identity.Name;
-			await _friendService.AddFriendToUserAsync(UserIdentityName, Friend);			
-		}
-		#endregion
+			await _friendService.AddFriendAsync(id, UserIdentityName);
+		}		
 
 		[HttpDelete("[action]/{id}")]
 		public async Task DeleteFriend(int id)
@@ -170,7 +154,7 @@ namespace webapplication.Controllers
 		[HttpPost("[action]")]
 		public async Task SaveUserPost([FromBody] PostModel postText)
 		{
-			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
+			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
 			if (currentUser != null)
 			{				
 				currentUser.UserPosts
@@ -184,18 +168,15 @@ namespace webapplication.Controllers
 		[HttpGet("[action]/{page}")]
 		[HttpGet("[action]/{page}/{size}")]
 		public async Task <PostsViewModel> GetAllPosts(int page, int size)		
-		{
-			var currentUserId = await db.Users
-				.Where(x => x.UserName == User.Identity.Name)
-				.Select(x=> x.Id)
-				.FirstOrDefaultAsync();
+		{		
+			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-			var posts = db.UserPosts
+			var posts = await db.UserPosts
 				.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUserId))
 				.OrderByDescending(s => s.TimeOfPublication)
 				.Skip((page - 1) * size)
 				.Take(size)
-				.Select(x => new UserPostViewModel(x)).ToList();			
+				.Select(x => new UserPostViewModel(x)).ToListAsync();			
 			
 			var count = db.UserPosts
 				.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUserId)).Count();
