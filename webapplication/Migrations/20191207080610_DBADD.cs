@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace webapplication.Migrations
 {
-    public partial class Add : Migration
+    public partial class DBADD : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

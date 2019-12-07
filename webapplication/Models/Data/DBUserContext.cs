@@ -16,7 +16,7 @@ namespace webapplication.Models
 		public DbSet<Photo> Photos { get; set; }
 		public DbSet<Tape>	Tapes { get; set; }
 		public DbSet<UserPost> UserPosts { get; set; }
-		//public DbSet<LikePhoto> LikePhotos { get; set; }
+		public DbSet<LikePhoto> LikePhotos { get; set; }
 
 		public DBUserContext()
 		{

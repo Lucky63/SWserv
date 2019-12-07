@@ -198,17 +198,29 @@ namespace webapplication.Controllers
 			}
 		}
 
-		[HttpGet("[action]")]
-		public async Task TestLikeBD()
-		{
-			var us = await db.Users.Include(x => x.LikePhotos).FirstOrDefaultAsync(x => x.Id == 1);
-			var usp = await db.Users.Include(x=>x.Photos).FirstOrDefaultAsync(x => x.Id == 2);
+		[HttpPost("[action]")]
+		public async Task SaveLike([FromBody]LikeModel likeModel)
+		{			
+			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-			var tt = usp.Photos.Where(x => x.Id == 3).FirstOrDefault();
+			if(currentUserId != 0 && likeModel.LikeId != 0)
+			{
+				var likeForData = await db.LikePhotos
+					.Where(x => x.UserId == currentUserId && x.PhotoId == likeModel.LikeId)
+					.Select(x => x.PhotoId).FirstOrDefaultAsync();
 
-			us.LikePhotos.Add(new LikePhoto { PhotoId = tt.Id, UserId = us.Id });
-			db.Update(us);
-			db.SaveChanges();
+				if (likeForData == 0)
+				{
+					await db.LikePhotos.AddAsync(new LikePhoto { PhotoId = likeModel.LikeId, UserId = currentUserId });
+				}
+				else
+				{
+					db.LikePhotos.Remove(new LikePhoto { UserId = currentUserId, PhotoId = likeModel.LikeId });
+				}
+
+				await db.SaveChangesAsync();
+			}
+			
 		}
 	}	
 }
