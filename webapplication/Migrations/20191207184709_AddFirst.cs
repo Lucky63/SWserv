@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace webapplication.Migrations
 {
-    public partial class DBADD : Migration
+    public partial class AddFirst : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,8 +76,7 @@ namespace webapplication.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
-                    FriendId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<int>(nullable: true)
+                    FriendId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,8 +88,8 @@ namespace webapplication.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Friendships_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Friendships_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -138,15 +137,39 @@ namespace webapplication.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "LikePhotos",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(nullable: false),
+                    PhotoId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LikePhotos", x => new { x.UserId, x.PhotoId });
+                    table.ForeignKey(
+                        name: "FK_LikePhotos_Photos_PhotoId",
+                        column: x => x.PhotoId,
+                        principalTable: "Photos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LikePhotos_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Friendships_FriendId",
                 table: "Friendships",
                 column: "FriendId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friendships_UserId1",
-                table: "Friendships",
-                column: "UserId1");
+                name: "IX_LikePhotos_PhotoId",
+                table: "LikePhotos",
+                column: "PhotoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_UserId",
@@ -168,16 +191,19 @@ namespace webapplication.Migrations
                 name: "Friendships");
 
             migrationBuilder.DropTable(
-                name: "Messages");
+                name: "LikePhotos");
 
             migrationBuilder.DropTable(
-                name: "Photos");
+                name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "Tapes");
 
             migrationBuilder.DropTable(
                 name: "UserPosts");
+
+            migrationBuilder.DropTable(
+                name: "Photos");
 
             migrationBuilder.DropTable(
                 name: "Users");

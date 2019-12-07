@@ -24,38 +24,48 @@ namespace webapplication.Models
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			//foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+			//{
+			//	relationship.DeleteBehavior = DeleteBehavior.Restrict;
+			//}
+
 			modelBuilder.Entity<Friends>()
 				.HasKey(t => new { t.UserId, t.FriendId });
 
 			modelBuilder.Entity<Friends>()
 				.HasOne(sc => sc.User)
 				.WithMany(c => c.UserFriends)
-				.HasForeignKey(sc => sc.UserId);
+				.HasForeignKey(sc => sc.UserId)
+				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<Friends>()
 				.HasOne(sc => sc.Friend)
 				.WithMany(s => s.WhoAddMe)
 				.HasForeignKey(sc => sc.FriendId);
+				
 
 			modelBuilder.Entity<LikePhoto>()
 				.HasKey(t => new { t.UserId, t.PhotoId });
 
 			modelBuilder.Entity<LikePhoto>()
-				.HasOne(sc => sc.User)
-				.WithMany(s => s.LikePhotos)
-				.HasForeignKey(sc => sc.UserId);
-
-			modelBuilder.Entity<LikePhoto>()
 				.HasOne(sc => sc.Photo)
 				.WithMany(c => c.LikePhotos)
-				.HasForeignKey(sc => sc.PhotoId);
+				.HasForeignKey(sc => sc.PhotoId);				
+
+			modelBuilder.Entity<LikePhoto>()
+				.HasOne(sc => sc.User)
+				.WithMany(s => s.LikePhotos)
+				.HasForeignKey(sc => sc.UserId)
+				.OnDelete(DeleteBehavior.Restrict); 
+
+			
 		}
 
 
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=SocNW;Trusted_Connection=True;");
+			optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=SNTestDB;Trusted_Connection=True;");
 		}
 	}
 }

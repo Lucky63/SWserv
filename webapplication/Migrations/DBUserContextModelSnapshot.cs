@@ -19,6 +19,19 @@ namespace webapplication.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("webapplication.Models.Data.LikePhoto", b =>
+                {
+                    b.Property<int?>("UserId");
+
+                    b.Property<int?>("PhotoId");
+
+                    b.HasKey("UserId", "PhotoId");
+
+                    b.HasIndex("PhotoId");
+
+                    b.ToTable("LikePhotos");
+                });
+
             modelBuilder.Entity("webapplication.Models.FileModel", b =>
                 {
                     b.Property<int>("Id")
@@ -40,13 +53,9 @@ namespace webapplication.Migrations
 
                     b.Property<int>("FriendId");
 
-                    b.Property<int?>("UserId1");
-
                     b.HasKey("UserId", "FriendId");
 
                     b.HasIndex("FriendId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Friendships");
                 });
@@ -148,6 +157,19 @@ namespace webapplication.Migrations
                     b.ToTable("UserPosts");
                 });
 
+            modelBuilder.Entity("webapplication.Models.Data.LikePhoto", b =>
+                {
+                    b.HasOne("webapplication.Models.Photo", "Photo")
+                        .WithMany("LikePhotos")
+                        .HasForeignKey("PhotoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("webapplication.Models.User", "User")
+                        .WithMany("LikePhotos")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("webapplication.Models.Friends", b =>
                 {
                     b.HasOne("webapplication.Models.User", "Friend")
@@ -157,7 +179,8 @@ namespace webapplication.Migrations
 
                     b.HasOne("webapplication.Models.User", "User")
                         .WithMany("UserFriends")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("webapplication.Models.Photo", b =>
