@@ -188,8 +188,7 @@ namespace webapplication.Controllers
 				{
 					userPostViewModels = posts,
 					Count = count
-				};
-				//await TestLikeBD();
+				};				
 				return postsViewModel;
 			}
 			else
@@ -199,27 +198,27 @@ namespace webapplication.Controllers
 		}
 
 		[HttpPost("[action]")]
-		public async Task SaveLike([FromBody]LikeModel likeModel)
+		public async Task LikePhoto([FromBody]int likeid)
 		{			
 			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);			
 
-			if (currentUserId != 0 && likeModel.LikeId != 0)
+			if (currentUserId != 0 && likeid != 0)
 			{
-				var likeCounter = db.LikePhotos.Where(x => x.PhotoId == likeModel.LikeId).Count();
-				var photoForLike = await db.Photos.FirstOrDefaultAsync(x => x.Id == likeModel.LikeId);
+				var likeCounter = db.LikePhotos.Where(x => x.PhotoId == likeid).Count();
+				var photoForLike = await db.Photos.FirstOrDefaultAsync(x => x.Id == likeid);
 
 				var likeForData = await db.LikePhotos
-					.Where(x => x.UserId == currentUserId && x.PhotoId == likeModel.LikeId)
+					.Where(x => x.UserId == currentUserId && x.PhotoId == likeid)
 					.Select(x => x.PhotoId).FirstOrDefaultAsync();
 
 				if (likeForData == 0)
 				{
-					await db.LikePhotos.AddAsync(new LikePhoto { PhotoId = likeModel.LikeId, UserId = currentUserId });
+					await db.LikePhotos.AddAsync(new LikePhoto { PhotoId = likeid, UserId = currentUserId });
 					photoForLike.LikeCounter = likeCounter + 1;
 				}
 				else
 				{
-					db.LikePhotos.Remove(new LikePhoto { UserId = currentUserId, PhotoId = likeModel.LikeId });
+					db.LikePhotos.Remove(new LikePhoto { UserId = currentUserId, PhotoId = likeid });
 					photoForLike.LikeCounter = likeCounter - 1;					
 				}
 				db.Update(photoForLike);
