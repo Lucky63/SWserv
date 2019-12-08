@@ -201,10 +201,13 @@ namespace webapplication.Controllers
 		[HttpPost("[action]")]
 		public async Task SaveLike([FromBody]LikeModel likeModel)
 		{			
-			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);			
 
-			if(currentUserId != 0 && likeModel.LikeId != 0)
+			if (currentUserId != 0 && likeModel.LikeId != 0)
 			{
+				var likeCounter = db.LikePhotos.Where(x => x.PhotoId == likeModel.LikeId).Count();
+				var photoForLike = await db.Photos.FirstOrDefaultAsync(x => x.Id == likeModel.LikeId);
+
 				var likeForData = await db.LikePhotos
 					.Where(x => x.UserId == currentUserId && x.PhotoId == likeModel.LikeId)
 					.Select(x => x.PhotoId).FirstOrDefaultAsync();
@@ -212,12 +215,14 @@ namespace webapplication.Controllers
 				if (likeForData == 0)
 				{
 					await db.LikePhotos.AddAsync(new LikePhoto { PhotoId = likeModel.LikeId, UserId = currentUserId });
+					photoForLike.LikeCounter = likeCounter + 1;
 				}
 				else
 				{
 					db.LikePhotos.Remove(new LikePhoto { UserId = currentUserId, PhotoId = likeModel.LikeId });
+					photoForLike.LikeCounter = likeCounter - 1;					
 				}
-
+				db.Update(photoForLike);
 				await db.SaveChangesAsync();
 			}
 			

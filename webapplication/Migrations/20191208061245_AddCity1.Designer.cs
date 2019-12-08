@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webapplication.Models;
 
 namespace webapplication.Migrations
 {
     [DbContext(typeof(DBUserContext))]
-    partial class DBUserContextModelSnapshot : ModelSnapshot
+    [Migration("20191208061245_AddCity1")]
+    partial class AddCity1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,8 +87,6 @@ namespace webapplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("LikeCounter");
-
                     b.Property<string>("PhotoPath");
 
                     b.Property<int>("UserId");
@@ -126,6 +126,8 @@ namespace webapplication.Migrations
                     b.Property<string>("AvatarImgPath");
 
                     b.Property<string>("City");
+
+                    b.Property<string>("City1");
 
                     b.Property<string>("LastName");
 

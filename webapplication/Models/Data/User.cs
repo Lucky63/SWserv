@@ -21,10 +21,6 @@ namespace webapplication.Models
 		public int Age { get; set; }
 		public string City { get; set; }
 
-
-
-
-
 		public string AvatarImgPath { get; set; }
 		public List<UserPost> UserPosts { get; set; }
 		public List<Photo> Photos { get; set; }
