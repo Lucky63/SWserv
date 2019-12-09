@@ -6,20 +6,11 @@ using webapplication.Models.Data;
 
 namespace webapplication.Models
 {
-	public class Photo
-	{
-		public Photo()
-		{			
-			LikePhotos = new List<LikePhoto>();
-		}
-		
-
-		public int Id { get; set; }
+	public class Photo : PostAndPhoto
+	{		
 		public string PhotoPath { get; set; }
 		public int LikeCounter { get; set; }
-
-		public int UserId { get; set; }
-		public User User { get; set; }
-		public List<LikePhoto> LikePhotos { get; set; }
+		
+		
 	}
 }

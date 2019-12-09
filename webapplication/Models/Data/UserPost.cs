@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using webapplication.Models.Data;
 
 namespace webapplication.Models
 {
-	public class UserPost
+	public class UserPost : PostAndPhoto
 	{
-		public int Id { get; set; }		
+			
 		public string AuthorPost { get; set; }
 		public string Post { get; set; }
 		public DateTime TimeOfPublication { get; set; }
-
-		public int UserId { get; set; }
-		public User User { get; set; }
+		
 	}
 }

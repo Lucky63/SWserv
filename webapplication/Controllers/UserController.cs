@@ -204,21 +204,21 @@ namespace webapplication.Controllers
 
 			if (currentUserId != 0 && likeid != 0)
 			{
-				var likeCounter = db.LikePhotos.Where(x => x.PhotoId == likeid).Count();
+				var likeCounter = db.LikePhotos.Where(x => x.PostAndPhotoId == likeid).Count();
 				var photoForLike = await db.Photos.FirstOrDefaultAsync(x => x.Id == likeid);
 
 				var likeForData = await db.LikePhotos
-					.Where(x => x.UserId == currentUserId && x.PhotoId == likeid)
-					.Select(x => x.PhotoId).FirstOrDefaultAsync();
+					.Where(x => x.UserId == currentUserId && x.PostAndPhotoId == likeid)
+					.Select(x => x.PostAndPhotoId).FirstOrDefaultAsync();
 
 				if (likeForData == 0)
 				{
-					await db.LikePhotos.AddAsync(new LikePhoto { PhotoId = likeid, UserId = currentUserId });
+					await db.LikePhotos.AddAsync(new LikePhoto { PostAndPhotoId = likeid, UserId = currentUserId });
 					photoForLike.LikeCounter = likeCounter + 1;
 				}
 				else
 				{
-					db.LikePhotos.Remove(new LikePhoto { UserId = currentUserId, PhotoId = likeid });
+					db.LikePhotos.Remove(new LikePhoto { UserId = currentUserId, PostAndPhotoId = likeid });
 					photoForLike.LikeCounter = likeCounter - 1;					
 				}
 				db.Update(photoForLike);

@@ -14,7 +14,7 @@ namespace webapplication.Models
 		public DbSet<Message> Messages { get; set; }
 		public DbSet<FileModel> Files { get; set; }
 		public DbSet<Photo> Photos { get; set; }
-		public DbSet<Tape>	Tapes { get; set; }
+		public DbSet<PostAndPhoto> PostAndPhotos { get; set; }
 		public DbSet<UserPost> UserPosts { get; set; }
 		public DbSet<LikePhoto> LikePhotos { get; set; }
 
@@ -24,10 +24,10 @@ namespace webapplication.Models
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			//foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-			//{
-			//	relationship.DeleteBehavior = DeleteBehavior.Restrict;
-			//}
+			foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+			{
+				relationship.DeleteBehavior = DeleteBehavior.Restrict;
+			}
 
 			modelBuilder.Entity<Friends>()
 				.HasKey(t => new { t.UserId, t.FriendId });
@@ -45,12 +45,12 @@ namespace webapplication.Models
 				
 
 			modelBuilder.Entity<LikePhoto>()
-				.HasKey(t => new { t.UserId, t.PhotoId });
+				.HasKey(t => new { t.UserId, t.PostAndPhotoId });
 
 			modelBuilder.Entity<LikePhoto>()
-				.HasOne(sc => sc.Photo)
+				.HasOne(sc => sc.PostAndPhoto)
 				.WithMany(c => c.LikePhotos)
-				.HasForeignKey(sc => sc.PhotoId);				
+				.HasForeignKey(sc => sc.PostAndPhotoId);				
 
 			modelBuilder.Entity<LikePhoto>()
 				.HasOne(sc => sc.User)

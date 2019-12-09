@@ -6,11 +6,11 @@ namespace webapplication.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "LikeCounter",
-                table: "Photos",
-                nullable: false,
-                defaultValue: 0);
+            //migrationBuilder.AddColumn<int>(
+            //    name: "LikeCounter",
+            //    table: "Photos",
+            //    nullable: false,
+            //    defaultValue: 0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
