@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace webapplication.Models.Data
 {
-	public class LikePhoto
+	public class Like
 	{
 		public int UserId { get; set; }
 		public User User { get; set; }

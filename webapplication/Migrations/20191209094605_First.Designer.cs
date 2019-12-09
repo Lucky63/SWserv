@@ -10,8 +10,8 @@ using webapplication.Models;
 namespace webapplication.Migrations
 {
     [DbContext(typeof(DBUserContext))]
-    [Migration("20191208063928_AddCity3")]
-    partial class AddCity3
+    [Migration("20191209094605_First")]
+    partial class First
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,17 +21,41 @@ namespace webapplication.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("webapplication.Models.Data.LikePhoto", b =>
+            modelBuilder.Entity("webapplication.Models.Data.Like", b =>
                 {
                     b.Property<int>("UserId");
 
-                    b.Property<int>("PhotoId");
+                    b.Property<int>("PostAndPhotoId");
 
-                    b.HasKey("UserId", "PhotoId");
+                    b.HasKey("UserId", "PostAndPhotoId");
 
-                    b.HasIndex("PhotoId");
+                    b.HasIndex("PostAndPhotoId");
 
-                    b.ToTable("LikePhotos");
+                    b.ToTable("Likes");
+                });
+
+            modelBuilder.Entity("webapplication.Models.Data.PostAndPhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuthorPost");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<int>("LikeCounter");
+
+                    b.Property<DateTime>("TimeOfPublication");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PostAndPhotos");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("PostAndPhoto");
                 });
 
             modelBuilder.Entity("webapplication.Models.FileModel", b =>
@@ -81,40 +105,6 @@ namespace webapplication.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("webapplication.Models.Photo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("PhotoPath");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Photos");
-                });
-
-            modelBuilder.Entity("webapplication.Models.Tape", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("FriendId");
-
-                    b.Property<string>("Message");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tapes");
-                });
-
             modelBuilder.Entity("webapplication.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -127,12 +117,6 @@ namespace webapplication.Migrations
 
                     b.Property<string>("City");
 
-                    b.Property<string>("City1");
-
-                    b.Property<string>("City2");
-
-                    b.Property<string>("City3");
-
                     b.Property<string>("LastName");
 
                     b.Property<string>("Password");
@@ -144,36 +128,38 @@ namespace webapplication.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("webapplication.Models.UserPost", b =>
+            modelBuilder.Entity("webapplication.Models.Photo", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.HasBaseType("webapplication.Models.Data.PostAndPhoto");
 
-                    b.Property<string>("AuthorPost");
-
-                    b.Property<string>("Post");
-
-                    b.Property<DateTime>("TimeOfPublication");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
+                    b.Property<string>("PhotoPath");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserPosts");
+                    b.HasDiscriminator().HasValue("Photo");
                 });
 
-            modelBuilder.Entity("webapplication.Models.Data.LikePhoto", b =>
+            modelBuilder.Entity("webapplication.Models.UserPost", b =>
                 {
-                    b.HasOne("webapplication.Models.Photo", "Photo")
-                        .WithMany("LikePhotos")
-                        .HasForeignKey("PhotoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasBaseType("webapplication.Models.Data.PostAndPhoto");
+
+                    b.Property<string>("Post");
+
+                    b.HasIndex("UserId")
+                        .HasName("IX_PostAndPhotos_UserId1");
+
+                    b.HasDiscriminator().HasValue("UserPost");
+                });
+
+            modelBuilder.Entity("webapplication.Models.Data.Like", b =>
+                {
+                    b.HasOne("webapplication.Models.Data.PostAndPhoto", "PostAndPhoto")
+                        .WithMany("Likes")
+                        .HasForeignKey("PostAndPhotoId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("webapplication.Models.User", "User")
-                        .WithMany("LikePhotos")
+                        .WithMany("Likes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
@@ -196,7 +182,7 @@ namespace webapplication.Migrations
                     b.HasOne("webapplication.Models.User", "User")
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("webapplication.Models.UserPost", b =>
@@ -204,7 +190,8 @@ namespace webapplication.Migrations
                     b.HasOne("webapplication.Models.User", "User")
                         .WithMany("UserPosts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_PostAndPhotos_Users_UserId1")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

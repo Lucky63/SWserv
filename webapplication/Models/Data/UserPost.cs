@@ -9,9 +9,9 @@ namespace webapplication.Models
 	public class UserPost : PostAndPhoto
 	{
 			
-		public string AuthorPost { get; set; }
+		
 		public string Post { get; set; }
-		public DateTime TimeOfPublication { get; set; }
+		
 		
 	}
 }

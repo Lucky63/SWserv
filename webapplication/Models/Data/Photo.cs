@@ -8,9 +8,7 @@ namespace webapplication.Models
 {
 	public class Photo : PostAndPhoto
 	{		
-		public string PhotoPath { get; set; }
-		public int LikeCounter { get; set; }
-		
+		public string PhotoPath { get; set; }	
 		
 	}
 }

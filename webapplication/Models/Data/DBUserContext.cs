@@ -16,7 +16,7 @@ namespace webapplication.Models
 		public DbSet<Photo> Photos { get; set; }
 		public DbSet<PostAndPhoto> PostAndPhotos { get; set; }
 		public DbSet<UserPost> UserPosts { get; set; }
-		public DbSet<LikePhoto> LikePhotos { get; set; }
+		public DbSet<Like> Likes { get; set; }
 
 		public DBUserContext()
 		{
@@ -44,17 +44,17 @@ namespace webapplication.Models
 				.HasForeignKey(sc => sc.FriendId);
 				
 
-			modelBuilder.Entity<LikePhoto>()
+			modelBuilder.Entity<Like>()
 				.HasKey(t => new { t.UserId, t.PostAndPhotoId });
 
-			modelBuilder.Entity<LikePhoto>()
+			modelBuilder.Entity<Like>()
 				.HasOne(sc => sc.PostAndPhoto)
-				.WithMany(c => c.LikePhotos)
+				.WithMany(c => c.Likes)
 				.HasForeignKey(sc => sc.PostAndPhotoId);				
 
-			modelBuilder.Entity<LikePhoto>()
+			modelBuilder.Entity<Like>()
 				.HasOne(sc => sc.User)
-				.WithMany(s => s.LikePhotos)
+				.WithMany(s => s.Likes)
 				.HasForeignKey(sc => sc.UserId)
 				.OnDelete(DeleteBehavior.Restrict); 
 

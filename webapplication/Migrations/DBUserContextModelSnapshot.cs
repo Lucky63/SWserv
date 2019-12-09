@@ -19,7 +19,7 @@ namespace webapplication.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("webapplication.Models.Data.LikePhoto", b =>
+            modelBuilder.Entity("webapplication.Models.Data.Like", b =>
                 {
                     b.Property<int>("UserId");
 
@@ -29,7 +29,7 @@ namespace webapplication.Migrations
 
                     b.HasIndex("PostAndPhotoId");
 
-                    b.ToTable("LikePhotos");
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("webapplication.Models.Data.PostAndPhoto", b =>
@@ -38,8 +38,14 @@ namespace webapplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AuthorPost");
+
                     b.Property<string>("Discriminator")
                         .IsRequired();
+
+                    b.Property<int>("LikeCounter");
+
+                    b.Property<DateTime>("TimeOfPublication");
 
                     b.Property<int>("UserId");
 
@@ -124,8 +130,6 @@ namespace webapplication.Migrations
                 {
                     b.HasBaseType("webapplication.Models.Data.PostAndPhoto");
 
-                    b.Property<int>("LikeCounter");
-
                     b.Property<string>("PhotoPath");
 
                     b.HasIndex("UserId");
@@ -137,11 +141,7 @@ namespace webapplication.Migrations
                 {
                     b.HasBaseType("webapplication.Models.Data.PostAndPhoto");
 
-                    b.Property<string>("AuthorPost");
-
                     b.Property<string>("Post");
-
-                    b.Property<DateTime>("TimeOfPublication");
 
                     b.HasIndex("UserId")
                         .HasName("IX_PostAndPhotos_UserId1");
@@ -149,15 +149,15 @@ namespace webapplication.Migrations
                     b.HasDiscriminator().HasValue("UserPost");
                 });
 
-            modelBuilder.Entity("webapplication.Models.Data.LikePhoto", b =>
+            modelBuilder.Entity("webapplication.Models.Data.Like", b =>
                 {
                     b.HasOne("webapplication.Models.Data.PostAndPhoto", "PostAndPhoto")
-                        .WithMany("LikePhotos")
+                        .WithMany("Likes")
                         .HasForeignKey("PostAndPhotoId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("webapplication.Models.User", "User")
-                        .WithMany("LikePhotos")
+                        .WithMany("Likes")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
