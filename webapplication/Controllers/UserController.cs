@@ -116,10 +116,8 @@ namespace webapplication.Controllers
 				Password = user.Password,
 				Age = user.Age,
 				City = user.City,
-				AvatarImgPath =user.AvatarImgPath,
-				Photos=user.Photos.Select(x => new PhotosViewModel(x)).ToList(),
-				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList(),
-				UserPosts = user.UserPosts.Select(x => new UserPostViewModel(x)).ToList()
+				AvatarImgPath =user.AvatarImgPath,				
+				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()				
 			};
 			return Ok (userdb);
 		}
@@ -225,6 +223,25 @@ namespace webapplication.Controllers
 				await db.SaveChangesAsync();
 			}
 			
+		}
+
+		[HttpGet("[action]/{page}/{size}"), Authorize(Roles = "Manager")]
+		public async Task<GetPhotosViewModel> GetPhotosIdentityUser(int page=1, int size=5)
+		{
+			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			var photos = await db.Photos.Where(x => x.UserId == currentUserId).Skip((page - 1) * size)
+				.Take(size).ToListAsync();
+
+			var count = db.Photos
+					.Where(p => p.UserId==currentUserId).Count();
+
+			var album = new GetPhotosViewModel
+			{
+				photos = photos,
+				Count=count
+			};
+
+			return album;
 		}
 	}	
 }

@@ -24,6 +24,21 @@ namespace webapplication.Controllers
 			_fileService = fileService;
 		}
 
+		[HttpPost("[action]"), Route("Upload")]
+		public IActionResult Upload()
+		{
+			var file = Request.Form.Files[0];
+			if (file.Length > 0)
+			{
+				var dbPath = _fileService.Upload(file).Result;
+				return Ok(new { dbPath });
+			}
+			else
+			{
+				return BadRequest();
+			}
+		}
+
 		[HttpPost("[action]/{id}"), Route("UploadPhotoAsync")]
 		public async Task UploadPhotoAsync(int id)
 		{

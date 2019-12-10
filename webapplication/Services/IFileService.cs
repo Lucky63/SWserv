@@ -10,7 +10,9 @@ namespace webapplication.Services
 	public interface IFileService
 	{
 		Task SavePhotoAsync(string dbPath, int id);
-		Task DeletePhotoAsync(int id);		
+		Task DeletePhotoAsync(int id);			
+		Task<string> Upload(IFormFile file);
 		Task<string> UploadPhotoAsync(IFormFile file);
+	
 	}
 }
