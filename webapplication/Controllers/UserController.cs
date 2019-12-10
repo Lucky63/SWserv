@@ -225,10 +225,10 @@ namespace webapplication.Controllers
 			
 		}
 
-		[HttpGet("[action]/{page}/{size}"), Authorize(Roles = "Manager")]
-		public async Task<GetPhotosViewModel> GetPhotosIdentityUser(int page=1, int size=5)
+		[HttpGet("[action]/{id}/{page}/{size}"), Authorize(Roles = "Manager")]
+		public async Task<GetPhotosViewModel> GetUserPhotos(int id, int page=1, int size=5)
 		{
-			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			int currentUserId = await db.Users.Where(x=>x.Id==id).Select(x=>x.Id).FirstOrDefaultAsync();
 			var photos = await db.Photos.Where(x => x.UserId == currentUserId).Skip((page - 1) * size)
 				.Take(size).ToListAsync();
 
@@ -242,6 +242,12 @@ namespace webapplication.Controllers
 			};
 
 			return album;
+		}
+
+		[HttpGet("[action]"), Authorize(Roles = "Manager")]
+		public async Task<int> GetIdentityUserId()
+		{
+			return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 		}
 	}	
 }
