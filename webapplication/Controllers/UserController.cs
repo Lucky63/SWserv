@@ -186,7 +186,8 @@ namespace webapplication.Controllers
 				{
 					userPostViewModels = posts,
 					Count = count
-				};				
+				};
+				
 				return postsViewModel;
 			}
 			else
@@ -248,6 +249,32 @@ namespace webapplication.Controllers
 		public async Task<int> GetIdentityUserId()
 		{
 			return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+		}
+
+		[HttpGet("[action]"), Authorize(Roles = "Manager")]
+		public async Task <GetUserFriendsViewModel> GetFriends(int id, int page, int size)
+		{
+			var friends = db.Friendships.Where(x => x.UserId == id).Select(x=>x.FriendId)
+				.Skip((page - 1) * size)
+				.Take(size)
+				.ToList();
+			var friendsList = new List<User>();
+
+			foreach(var i in friends)
+			{
+				var n3 =  db.Users.FirstOrDefault(x => x.Id == i);
+				friendsList.Add(n3);
+			}
+			var count = db.Friendships.Where(x => x.UserId == id).Select(x => x.FriendId)
+				.Count();
+			var list = new GetUserFriendsViewModel
+			{
+				friends = friendsList,
+				Count = count
+			};
+
+			return list;
+
 		}
 	}	
 }
