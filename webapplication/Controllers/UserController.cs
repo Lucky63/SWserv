@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using webapplication.Models;
 using webapplication.Models.Data;
 using webapplication.Services;
+using Z.EntityFramework.Plus;
 
 namespace webapplication.Controllers
 {
@@ -187,7 +188,7 @@ namespace webapplication.Controllers
 					userPostViewModels = posts,
 					Count = count
 				};
-				
+				GetFriends(1, 1, 5);
 				return postsViewModel;
 			}
 			else
@@ -254,17 +255,9 @@ namespace webapplication.Controllers
 		[HttpGet("[action]"), Authorize(Roles = "Manager")]
 		public async Task <GetUserFriendsViewModel> GetFriends(int id, int page, int size)
 		{
-			var friends = db.Friendships.Where(x => x.UserId == id).Select(x=>x.FriendId)
-				.Skip((page - 1) * size)
-				.Take(size)
-				.ToList();
-			var friendsList = new List<User>();
-
-			foreach(var i in friends)
-			{
-				var n3 =  db.Users.FirstOrDefault(x => x.Id == i);
-				friendsList.Add(n3);
-			}
+			var friendsList = db.Users.Where(x => x.UserFriends.Any(z => z.FriendId == id)).Skip((page - 1) * size)
+				.Take(size).ToList();
+		
 			var count = db.Friendships.Where(x => x.UserId == id).Select(x => x.FriendId)
 				.Count();
 			var list = new GetUserFriendsViewModel
