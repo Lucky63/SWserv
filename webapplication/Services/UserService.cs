@@ -56,7 +56,7 @@ namespace webapplication.Services
 				Count=count
 			};
 			return getUsers;
-		}
+		}		
 
 		public async Task<User> GetIdentityAsync(string name)///////////////////////FINISH
 		{
@@ -68,7 +68,7 @@ namespace webapplication.Services
 			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
 		}
 
-		public async Task SaveUserPostAsync(string name, PostModel postText)
+		public async Task SaveUserPostAsync(string name, PostModel postText)///////////////////////FINISH
 		{
 			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == name);
 			if (currentUser != null)
@@ -79,5 +79,34 @@ namespace webapplication.Services
 				await db.SaveChangesAsync();
 			}
 		}
+
+		public async Task<PostsViewModel> GetAllPostsAsync(int id, int page, int size)///////////////////////FINISH
+		{
+			if (id != 0)
+			{
+				var posts = await db.UserPosts
+				.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == id))
+				.OrderByDescending(s => s.TimeOfPublication)
+				.Skip((page - 1) * size)
+				.Take(size)
+				.Select(x => new UserPostViewModel(x)).ToListAsync();
+
+				var count = db.UserPosts
+					.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == id)).Count();
+
+				var postsViewModel = new PostsViewModel
+				{
+					userPostViewModels = posts,
+					Count = count
+				};
+
+				return postsViewModel;
+			}
+			else
+			{
+				return new PostsViewModel();
+			}
+		}
+
 	}
 }

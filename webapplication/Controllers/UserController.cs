@@ -150,7 +150,7 @@ namespace webapplication.Controllers
 
 		
 		[HttpPost("[action]")]
-		public async Task SaveUserPost([FromBody] PostModel postText)
+		public async Task SaveUserPost([FromBody] PostModel postText)///////////////////////FINISH
 		{
 			var name = User.Identity.Name;
 			await _userService.SaveUserPostAsync(name, postText);
@@ -159,34 +159,10 @@ namespace webapplication.Controllers
 		
 		[HttpGet("[action]/{page}")]
 		[HttpGet("[action]/{page}/{size}")]
-		public async Task <PostsViewModel> GetAllPosts(int page, int size)		
+		public async Task <PostsViewModel> GetAllPosts(int page, int size)///////////////////////FINISH
 		{		
 			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			
-			if (currentUserId != 0)
-			{
-				var posts = await db.UserPosts
-				.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUserId))
-				.OrderByDescending(s => s.TimeOfPublication)
-				.Skip((page - 1) * size)
-				.Take(size)
-				.Select(x => new UserPostViewModel(x)).ToListAsync();
-
-				var count = db.UserPosts
-					.Where(p => p.User.UserFriends.Any(f => f.Friend.Id == currentUserId)).Count();
-
-				var postsViewModel = new PostsViewModel
-				{
-					userPostViewModels = posts,
-					Count = count
-				};
-				
-				return postsViewModel;
-			}
-			else
-			{
-				return new PostsViewModel();
-			}
+			return await _userService.GetAllPostsAsync(currentUserId, page, size);			
 		}
 
 		[HttpPost("[action]")]

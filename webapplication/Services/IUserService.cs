@@ -15,6 +15,7 @@ namespace webapplication.Services
 		Task <User>EditAsync(User user);
 		Task EditSaveAsync(User userdb);
 		Task SaveUserPostAsync(string name, PostModel postText);
+		Task<PostsViewModel> GetAllPostsAsync(int id, int page, int size);
 
 
 	}
