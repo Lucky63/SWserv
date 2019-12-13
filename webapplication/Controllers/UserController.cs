@@ -123,10 +123,11 @@ namespace webapplication.Controllers
 			return Ok (userdb);
 		}
 
-		[HttpGet("[action]")]
-		public async Task<List<User>> GetAll()
+		[HttpGet("[action]/{page}/{size}")]
+		public async Task<GetUserFriendsViewModel> GetAll(int page, int size)
 		{
-			return await _userService.GetAllAsync();
+			var allUsers=  await _userService.GetAllAsync(page, size);			
+			return allUsers;
 		}
 
 		[HttpGet("[action]/{id}")]

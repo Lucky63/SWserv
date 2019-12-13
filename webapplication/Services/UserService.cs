@@ -43,9 +43,19 @@ namespace webapplication.Services
 			await db.SaveChangesAsync();
 		}
 
-		public async Task<List<User>> GetAllAsync()
+		public async Task<GetUserFriendsViewModel> GetAllAsync(int page, int size)
 		{
-			return await db.Users.ToListAsync();
+			var allUsers = await db.Users
+				.Skip((page - 1) * size)
+				.Take(size)
+				.ToListAsync();
+			var count = db.Users.Count();
+			var getUsers = new GetUserFriendsViewModel
+			{
+				friends = allUsers,
+				Count=count
+			};
+			return getUsers;
 		}
 
 		public async Task<User> GetIdentityAsync(string name)///////////////////////FINISH

@@ -8,7 +8,7 @@ namespace webapplication.Services
 {
 	public interface IUserService
 	{
-		Task<List<User>> GetAllAsync();
+		Task<GetUserFriendsViewModel> GetAllAsync(int page, int size);
 		Task<User> GetIdentityAsync(string name);
 		Task DeleteFriendAsync(int currentUserId, int id);
 		Task<User> GetUserForAsync(int id);
