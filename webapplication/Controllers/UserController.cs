@@ -48,7 +48,7 @@ namespace webapplication.Controllers
 		}
 
 		[HttpPut, Route("edit")]
-		public async Task <IActionResult>Edit([FromBody]User user)
+		public async Task <IActionResult>Edit([FromBody]User user)///////////////////////FINISH
 		{
 			User userdb = await _userService.EditAsync(user);
 			userdb.UserName = user.UserName;
@@ -95,11 +95,11 @@ namespace webapplication.Controllers
 			await _friendService.AddFriendAsync(id, UserIdentityName);
 		}		
 
-		[HttpDelete("[action]/{id}")]
+		[HttpDelete("[action]/{id}")]///////////////////////FINISH
 		public async Task DeleteFriend(int id)
 		{
-			string IdentityUserName = User.Identity.Name;
-			await _userService.DeleteFriendAsync(IdentityUserName, id);
+			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);			
+			await _userService.DeleteFriendAsync(currentUserId, id);
 		}
 
 

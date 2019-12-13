@@ -17,31 +17,27 @@ namespace webapplication.Services
 			db = context;			
 		}
 
-		public async Task DeleteFriendAsync(string IdentityUserName, int id)
+		public async Task DeleteFriendAsync(int currentUserId, int id)///////////////////////FINISH
 		{
-			User currentUser = await db.Users.Include(x => x.UserFriends).ThenInclude(x => x.Friend).FirstOrDefaultAsync(x => x.UserName == IdentityUserName);
-			if (currentUser.UserFriends.Count != 0)
+			if (currentUserId != 0 && id !=0)
 			{
-				var UserToBeDeleted = currentUser.UserFriends.First(x => x.FriendId == id);
-
+				var UserToBeDeleted = await db.Friendships.FirstOrDefaultAsync(x => x.FriendId == id);
+				var delete = await db.Friendships.FirstOrDefaultAsync(x => x.FriendId == currentUserId);
 				if (UserToBeDeleted != null)
 				{
-					db.Friendships.Remove(UserToBeDeleted);
-					db.SaveChanges();
-					var UserToBeDeleted2 = await db.Users.Include(x => x.UserFriends).ThenInclude(x => x.Friend).FirstOrDefaultAsync(x => x.Id == UserToBeDeleted.FriendId);
-					var delete = UserToBeDeleted2.UserFriends.First(x => x.FriendId == currentUser.Id);
-					db.Friendships.Remove(delete);
-					db.SaveChanges();
+					db.Friendships.Remove(UserToBeDeleted);					
+					db.Friendships.Remove(delete);					
 				}
-			}			
+				await db.SaveChangesAsync();
+			}
 		}
 
-		public async Task<User> EditAsync(User user)
+		public async Task<User> EditAsync(User user)///////////////////////FINISH
 		{
 			return await db.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
 		}
 
-		public async Task EditSaveAsync(User userdb)
+		public async Task EditSaveAsync(User userdb)///////////////////////FINISH
 		{
 			db.Update(userdb);
 			await db.SaveChangesAsync();
@@ -54,10 +50,7 @@ namespace webapplication.Services
 
 		public async Task<User> GetIdentityAsync(string name)
 		{
-			return await  db.Users
-				.Include(x => x.UserFriends)
-				.ThenInclude(x => x.Friend)				
-				.FirstOrDefaultAsync(x => x.UserName == name);			
+			return await  db.Users.FirstOrDefaultAsync(x => x.UserName == name);			
 		}
 
 		public async Task<User> GetUserForMessageAsync(int id)

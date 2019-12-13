@@ -10,7 +10,7 @@ namespace webapplication.Services
 	{
 		Task<List<User>> GetAllAsync();
 		Task<User> GetIdentityAsync(string name);
-		Task DeleteFriendAsync(string IdentityUserName, int id);
+		Task DeleteFriendAsync(int currentUserId, int id);
 		Task<User> GetUserForMessageAsync(int id);
 		Task <User>EditAsync(User user);
 		Task EditSaveAsync(User userdb);
