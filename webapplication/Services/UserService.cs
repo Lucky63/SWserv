@@ -134,5 +134,22 @@ namespace webapplication.Services
 				await db.SaveChangesAsync();
 			}
 		}
+
+		public async Task<GetPhotosViewModel> GetUserPhotosAsync(int id, int page = 1, int size = 5)///////////////////////FINISH
+		{			
+			var photos = await db.Photos.Where(x => x.UserId == id).Skip((page - 1) * size)
+				.Take(size).ToListAsync();
+
+			var count = db.Photos
+					.Where(p => p.UserId == id).Count();
+
+			var album = new GetPhotosViewModel
+			{
+				photos = photos,
+				Count = count
+			};
+
+			return album;
+		}
 	}
 }

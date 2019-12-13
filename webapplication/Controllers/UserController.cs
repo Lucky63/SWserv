@@ -173,22 +173,9 @@ namespace webapplication.Controllers
 		}
 
 		[HttpGet("[action]/{id}/{page}/{size}"), Authorize(Roles = "Manager")]
-		public async Task<GetPhotosViewModel> GetUserPhotos(int id, int page=1, int size=5)
+		public async Task<GetPhotosViewModel> GetUserPhotos(int id, int page=1, int size=5)///////////////////////FINISH
 		{
-			int currentUserId = await db.Users.Where(x=>x.Id==id).Select(x=>x.Id).FirstOrDefaultAsync();
-			var photos = await db.Photos.Where(x => x.UserId == currentUserId).Skip((page - 1) * size)
-				.Take(size).ToListAsync();
-
-			var count = db.Photos
-					.Where(p => p.UserId==currentUserId).Count();
-
-			var album = new GetPhotosViewModel
-			{
-				photos = photos,
-				Count=count
-			};
-
-			return album;
+			return await _userService.GetUserPhotosAsync(id, page, size);			
 		}
 
 		[HttpGet("[action]"), Authorize(Roles = "Manager")]
