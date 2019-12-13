@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using webapplication.Controllers;
 using webapplication.Models;
+using webapplication.Models.Data;
 
 namespace webapplication.Services
 {
@@ -108,5 +109,30 @@ namespace webapplication.Services
 			}
 		}
 
+		public async Task LikeAsync(int id, int likeid)///////////////////////FINISH
+		{
+			if (id != 0 && likeid != 0)
+			{
+				var likeCounter = db.Likes.Where(x => x.PostAndPhotoId == likeid).Count();
+				var postForLike = await db.PostAndPhotos.FirstOrDefaultAsync(x => x.Id == likeid);
+
+				var likeForData = await db.Likes
+					.Where(x => x.UserId == id && x.PostAndPhotoId == likeid)
+					.Select(x => x.PostAndPhotoId).FirstOrDefaultAsync();
+
+				if (likeForData == 0)
+				{
+					await db.Likes.AddAsync(new Like { PostAndPhotoId = likeid, UserId = id });
+					postForLike.LikeCounter = likeCounter + 1;
+				}
+				else
+				{
+					db.Likes.Remove(new Like { UserId = id, PostAndPhotoId = likeid });
+					postForLike.LikeCounter = likeCounter - 1;
+				}
+				db.Update(postForLike);
+				await db.SaveChangesAsync();
+			}
+		}
 	}
 }
