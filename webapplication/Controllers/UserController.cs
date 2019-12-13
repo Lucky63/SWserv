@@ -41,14 +41,14 @@ namespace webapplication.Controllers
 		}		
 
 		[HttpGet("[action]/{id}")]
-		public async Task<IActionResult>GetUserForMessage(int id)///////////////////////FINISH
+		public async Task<IActionResult>GetUserForMessage(int id)
 		{
 			var user = await _userService.GetUserForAsync(id);
 			return Ok(user);
 		}
 
 		[HttpPut, Route("edit")]
-		public async Task <IActionResult>Edit([FromBody]User user)///////////////////////FINISH
+		public async Task <IActionResult>Edit([FromBody]User user)
 		{
 			User userdb = await _userService.EditAsync(user);
 			userdb.UserName = user.UserName;
@@ -89,14 +89,14 @@ namespace webapplication.Controllers
 		
 		//Получаю ИД друга
 		[HttpGet("[action]/{id}")]
-		public async Task AddFriend(int id)///////////////////////FINISH		
+		public async Task AddFriend(int id)
 		{
 			string UserIdentityName = User.Identity.Name;
 			await _friendService.AddFriendAsync(id, UserIdentityName);
 		}		
 
 		[HttpDelete("[action]/{id}")]
-		public async Task DeleteFriend(int id)///////////////////////FINISH
+		public async Task DeleteFriend(int id)
 		{
 			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);			
 			await _userService.DeleteFriendAsync(currentUserId, id);
@@ -104,7 +104,7 @@ namespace webapplication.Controllers
 
 
 	[HttpGet("[action]"), Authorize(Roles = "Manager")]
-		public async Task<IActionResult> GetIdentity()///////////////////////FINISH
+		public async Task<IActionResult> GetIdentity()
 		{
 			string name = User.Identity.Name;
 			var user = await _userService.GetIdentityAsync(name);
@@ -124,14 +124,14 @@ namespace webapplication.Controllers
 		}
 
 		[HttpGet("[action]/{page}/{size}")]
-		public async Task<GetUserFriendsViewModel> GetAll(int page, int size)///////////////////////FINISH
+		public async Task<GetUserFriendsViewModel> GetAll(int page, int size)
 		{
 			var allUsers=  await _userService.GetAllAsync(page, size);			
 			return allUsers;
 		}
 
 		[HttpGet("[action]/{id}")]
-		public async Task<IActionResult> GetUserForProfile(int id)///////////////////////FINISH
+		public async Task<IActionResult> GetUserForProfile(int id)
 		{
 			var user = await _userService.GetUserForAsync(id);
 
@@ -150,7 +150,7 @@ namespace webapplication.Controllers
 
 		
 		[HttpPost("[action]")]
-		public async Task SaveUserPost([FromBody] PostModel postText)///////////////////////FINISH
+		public async Task SaveUserPost([FromBody] PostModel postText)
 		{
 			var name = User.Identity.Name;
 			await _userService.SaveUserPostAsync(name, postText);
@@ -159,33 +159,33 @@ namespace webapplication.Controllers
 		
 		[HttpGet("[action]/{page}")]
 		[HttpGet("[action]/{page}/{size}")]
-		public async Task <PostsViewModel> GetAllPosts(int page, int size)///////////////////////FINISH
+		public async Task <PostsViewModel> GetAllPosts(int page, int size)
 		{		
 			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 			return await _userService.GetAllPostsAsync(currentUserId, page, size);			
 		}
 
 		[HttpPost("[action]")]
-		public async Task Like([FromBody]int likeid)///////////////////////FINISH
+		public async Task Like([FromBody]int likeid)
 		{			
 			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 			await _userService.LikeAsync(currentUserId, likeid);			
 		}
 
 		[HttpGet("[action]/{id}/{page}/{size}"), Authorize(Roles = "Manager")]
-		public async Task<GetPhotosViewModel> GetUserPhotos(int id, int page=1, int size=5)///////////////////////FINISH
+		public async Task<GetPhotosViewModel> GetUserPhotos(int id, int page=1, int size=5)
 		{
 			return await _userService.GetUserPhotosAsync(id, page, size);			
 		}
 
 		[HttpGet("[action]"), Authorize(Roles = "Manager")]
-		public async Task<int> GetIdentityUserId()///////////////////////FINISH
+		public async Task<int> GetIdentityUserId()
 		{
 			return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 		}
 
 		[HttpGet("[action]/{id}/{page}/{size}"), Authorize(Roles = "Manager")]
-		public async Task <GetUserFriendsViewModel> GetFriends(int id, int page, int size)///////////////////////FINISH
+		public async Task <GetUserFriendsViewModel> GetFriends(int id, int page, int size)
 		{
 			return await _userService.GetFriendsAsync(id, page, size);	
 		}

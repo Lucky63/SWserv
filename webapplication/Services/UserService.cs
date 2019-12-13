@@ -18,7 +18,7 @@ namespace webapplication.Services
 			db = context;			
 		}
 
-		public async Task DeleteFriendAsync(int currentUserId, int id)///////////////////////FINISH
+		public async Task DeleteFriendAsync(int currentUserId, int id)
 		{
 			if (currentUserId != 0 && id !=0)
 			{
@@ -33,18 +33,18 @@ namespace webapplication.Services
 			}
 		}
 
-		public async Task<User> EditAsync(User user)///////////////////////FINISH
+		public async Task<User> EditAsync(User user)
 		{
 			return await db.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
 		}
 
-		public async Task EditSaveAsync(User userdb)///////////////////////FINISH
+		public async Task EditSaveAsync(User userdb)
 		{
 			db.Update(userdb);
 			await db.SaveChangesAsync();
 		}
 
-		public async Task<GetUserFriendsViewModel> GetAllAsync(int page, int size)///////////////////////FINISH
+		public async Task<GetUserFriendsViewModel> GetAllAsync(int page, int size)
 		{
 			var allUsers = await db.Users
 				.Skip((page - 1) * size)
@@ -59,17 +59,17 @@ namespace webapplication.Services
 			return getUsers;
 		}		
 
-		public async Task<User> GetIdentityAsync(string name)///////////////////////FINISH
+		public async Task<User> GetIdentityAsync(string name)
 		{
 			return await  db.Users.FirstOrDefaultAsync(x => x.UserName == name);			
 		}
 
-		public async Task<User> GetUserForAsync(int id)///////////////////////FINISH
+		public async Task<User> GetUserForAsync(int id)
 		{
 			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
 		}
 
-		public async Task SaveUserPostAsync(string name, PostModel postText)///////////////////////FINISH
+		public async Task SaveUserPostAsync(string name, PostModel postText)
 		{
 			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == name);
 			if (currentUser != null)
@@ -81,7 +81,7 @@ namespace webapplication.Services
 			}
 		}
 
-		public async Task<PostsViewModel> GetAllPostsAsync(int id, int page, int size)///////////////////////FINISH
+		public async Task<PostsViewModel> GetAllPostsAsync(int id, int page, int size)
 		{
 			if (id != 0)
 			{
@@ -109,7 +109,7 @@ namespace webapplication.Services
 			}
 		}
 
-		public async Task LikeAsync(int id, int likeid)///////////////////////FINISH
+		public async Task LikeAsync(int id, int likeid)
 		{
 			if (id != 0 && likeid != 0)
 			{
@@ -135,7 +135,7 @@ namespace webapplication.Services
 			}
 		}
 
-		public async Task<GetPhotosViewModel> GetUserPhotosAsync(int id, int page = 1, int size = 5)///////////////////////FINISH
+		public async Task<GetPhotosViewModel> GetUserPhotosAsync(int id, int page = 1, int size = 5)
 		{			
 			var photos = await db.Photos.Where(x => x.UserId == id).Skip((page - 1) * size)
 				.Take(size).ToListAsync();
@@ -152,7 +152,7 @@ namespace webapplication.Services
 			return album;
 		}
 
-		public async Task<GetUserFriendsViewModel> GetFriendsAsync(int id, int page, int size)///////////////////////FINISH
+		public async Task<GetUserFriendsViewModel> GetFriendsAsync(int id, int page, int size)
 		{
 			var friendsList = await db.Users.Where(x => x.UserFriends.Any(z => z.FriendId == id)).Skip((page - 1) * size)
 				.Take(size).ToListAsync();
