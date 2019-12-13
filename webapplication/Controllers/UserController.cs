@@ -179,27 +179,15 @@ namespace webapplication.Controllers
 		}
 
 		[HttpGet("[action]"), Authorize(Roles = "Manager")]
-		public async Task<int> GetIdentityUserId()
+		public async Task<int> GetIdentityUserId()///////////////////////FINISH
 		{
 			return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 		}
 
 		[HttpGet("[action]/{id}/{page}/{size}"), Authorize(Roles = "Manager")]
-		public async Task <GetUserFriendsViewModel> GetFriends(int id, int page, int size)
+		public async Task <GetUserFriendsViewModel> GetFriends(int id, int page, int size)///////////////////////FINISH
 		{
-			var friendsList = await db.Users.Where(x => x.UserFriends.Any(z => z.FriendId == id)).Skip((page - 1) * size)
-				.Take(size).ToListAsync();
-		
-			var count = db.Friendships.Where(x => x.UserId == id).Select(x => x.FriendId)
-				.Count();
-			var list = new GetUserFriendsViewModel
-			{
-				friends = friendsList,
-				Count = count
-			};
-
-			return list;
-
+			return await _userService.GetFriendsAsync(id, page, size);	
 		}
 	}	
 }

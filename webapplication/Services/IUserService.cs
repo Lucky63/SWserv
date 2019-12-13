@@ -18,6 +18,7 @@ namespace webapplication.Services
 		Task<PostsViewModel> GetAllPostsAsync(int id, int page, int size);
 		Task LikeAsync(int id, int likeid);
 		Task<GetPhotosViewModel> GetUserPhotosAsync(int id, int page = 1, int size = 5);
+		Task<GetUserFriendsViewModel> GetFriendsAsync(int id, int page, int size);
 
 
 	}

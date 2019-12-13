@@ -151,5 +151,22 @@ namespace webapplication.Services
 
 			return album;
 		}
+
+		public async Task<GetUserFriendsViewModel> GetFriendsAsync(int id, int page, int size)///////////////////////FINISH
+		{
+			var friendsList = await db.Users.Where(x => x.UserFriends.Any(z => z.FriendId == id)).Skip((page - 1) * size)
+				.Take(size).ToListAsync();
+
+			var count = db.Friendships.Where(x => x.UserId == id).Select(x => x.FriendId)
+				.Count();
+
+			var list = new GetUserFriendsViewModel
+			{
+				friends = friendsList,
+				Count = count
+			};
+
+			return list;
+		}
 	}
 }
