@@ -53,14 +53,11 @@ namespace webapplication.Services
 			return await  db.Users.FirstOrDefaultAsync(x => x.UserName == name);			
 		}
 
-		public async Task<User> GetUserForMessageAsync(int id)///////////////////////FINISH
+		public async Task<User> GetUserForAsync(int id)///////////////////////FINISH
 		{
-			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
+			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);///////////////////////FINISH
 		}
 
-		public async Task<User> GetUserForProfileAsync(int id)
-		{
-			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
-		}
+		
 	}
 }

@@ -11,9 +11,9 @@ namespace webapplication.Services
 		Task<List<User>> GetAllAsync();
 		Task<User> GetIdentityAsync(string name);
 		Task DeleteFriendAsync(int currentUserId, int id);
-		Task<User> GetUserForMessageAsync(int id);
+		Task<User> GetUserForAsync(int id);
 		Task <User>EditAsync(User user);
 		Task EditSaveAsync(User userdb);
-		Task<User> GetUserForProfileAsync(int id);
+		
 	}
 }

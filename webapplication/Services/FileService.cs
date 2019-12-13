@@ -21,7 +21,7 @@ namespace webapplication.Services
 			_db = context;
 		}
 
-		public async Task DeletePhotoAsync(int id)
+		public async Task DeletePhotoAsync(int id)///////////////////////FINISH
 		{
 			var currentPhoto = await _db.Photos.FirstOrDefaultAsync(x => x.Id == id);
 			string pathOfFile = currentPhoto.PhotoPath;
@@ -30,14 +30,14 @@ namespace webapplication.Services
 			await _db.SaveChangesAsync();
 		}
 
-		public async Task SavePhotoAsync(string dbPath, int id)
+		public async Task SavePhotoAsync(string dbPath, int id)///////////////////////FINISH
 		{
 			var currentUserName = await _db.Users.Where(x => x.Id == id).Select(x => x.UserName).FirstOrDefaultAsync();
 			_db.Photos.Add(new Photo { PhotoPath = dbPath, UserId = id, AuthorPost= currentUserName, TimeOfPublication = DateTime.Now });
 			await _db.SaveChangesAsync();
 		}
 
-		public async Task<string> Upload(IFormFile file)
+		public async Task<string> Upload(IFormFile file)///////////////////////FINISH
 		{
 
 			var folderName = Path.Combine("Resources", "Images");
@@ -57,7 +57,7 @@ namespace webapplication.Services
 
 		}
 
-		public async Task<string> UploadPhotoAsync(IFormFile file)
+		public async Task<string> UploadPhotoAsync(IFormFile file)///////////////////////FINISH
 		{
 			var folderName = Path.Combine("Resources", "Photos");
 			var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);

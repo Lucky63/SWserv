@@ -43,7 +43,7 @@ namespace webapplication.Controllers
 		[HttpGet("[action]/{id}")]
 		public async Task<IActionResult>GetUserForMessage(int id)///////////////////////FINISH
 		{
-			var user = await _userService.GetUserForMessageAsync(id);
+			var user = await _userService.GetUserForAsync(id);
 			return Ok(user);
 		}
 
@@ -95,8 +95,8 @@ namespace webapplication.Controllers
 			await _friendService.AddFriendAsync(id, UserIdentityName);
 		}		
 
-		[HttpDelete("[action]/{id}")]///////////////////////FINISH
-		public async Task DeleteFriend(int id)
+		[HttpDelete("[action]/{id}")]
+		public async Task DeleteFriend(int id)///////////////////////FINISH
 		{
 			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);			
 			await _userService.DeleteFriendAsync(currentUserId, id);
@@ -130,9 +130,9 @@ namespace webapplication.Controllers
 		}
 
 		[HttpGet("[action]/{id}")]
-		public async Task<IActionResult> GetUserForProfile(int id)
+		public async Task<IActionResult> GetUserForProfile(int id)///////////////////////FINISH
 		{
-			var user = await _userService.GetUserForProfileAsync(id);
+			var user = await _userService.GetUserForAsync(id);
 
 			var userdb = new UserViewModel()
 			{

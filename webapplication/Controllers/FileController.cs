@@ -25,7 +25,7 @@ namespace webapplication.Controllers
 		}
 
 		[HttpPost("[action]"), Route("Upload")]
-		public IActionResult Upload()
+		public IActionResult Upload()///////////////////////FINISH
 		{
 			var file = Request.Form.Files[0];
 			if (file.Length > 0)
@@ -40,7 +40,7 @@ namespace webapplication.Controllers
 		}
 
 		[HttpPost("[action]/{id}"), Route("UploadPhotoAsync")]
-		public async Task UploadPhotoAsync(int id)
+		public async Task UploadPhotoAsync(int id)///////////////////////FINISH
 		{
 			var file = Request.Form.Files[0];
 			
@@ -50,7 +50,7 @@ namespace webapplication.Controllers
 		}
 
 		[HttpDelete("[action]/{id}"), Route("DeletePhotoAsync")]
-		public async Task DeletePhotoAsync(int id)
+		public async Task DeletePhotoAsync(int id)///////////////////////FINISH
 		{
 			await _fileService.DeletePhotoAsync(id);
 		}
