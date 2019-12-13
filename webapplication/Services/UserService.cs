@@ -60,12 +60,7 @@ namespace webapplication.Services
 
 		public async Task<User> GetUserForProfileAsync(int id)
 		{
-			return await db.Users
-				.Include(x => x.UserFriends)
-				.ThenInclude(x => x.Friend)
-				.Include(x => x.Photos)
-				.Include(x => x.UserPosts)
-				.FirstOrDefaultAsync(x => x.Id == id);
+			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
 		}
 	}
 }

@@ -142,10 +142,7 @@ namespace webapplication.Controllers
 				Password = user.Password,
 				Age = user.Age,
 				City = user.City,
-				AvatarImgPath = user.AvatarImgPath,
-				Photos = user.Photos.Select(x => new PhotosViewModel(x)).ToList(),
-				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList(),
-				UserPosts = user.UserPosts.Select(x => new UserPostViewModel(x)).ToList()
+				AvatarImgPath = user.AvatarImgPath,				
 			};
 			return Ok(userdb);
 		}

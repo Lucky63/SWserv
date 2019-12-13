@@ -32,7 +32,8 @@ namespace webapplication.Services
 
 		public async Task SavePhotoAsync(string dbPath, int id)
 		{
-			_db.Photos.Add(new Photo { PhotoPath = dbPath, UserId = id });
+			var currentUserName = await _db.Users.Where(x => x.Id == id).Select(x => x.UserName).FirstOrDefaultAsync();
+			_db.Photos.Add(new Photo { PhotoPath = dbPath, UserId = id, AuthorPost= currentUserName, TimeOfPublication = DateTime.Now });
 			await _db.SaveChangesAsync();
 		}
 
