@@ -43,7 +43,7 @@ namespace webapplication.Services
 			await db.SaveChangesAsync();
 		}
 
-		public async Task<GetUserFriendsViewModel> GetAllAsync(int page, int size)
+		public async Task<GetUserFriendsViewModel> GetAllAsync(int page, int size)///////////////////////FINISH
 		{
 			var allUsers = await db.Users
 				.Skip((page - 1) * size)
@@ -65,9 +65,19 @@ namespace webapplication.Services
 
 		public async Task<User> GetUserForAsync(int id)///////////////////////FINISH
 		{
-			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);///////////////////////FINISH
+			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
 		}
 
-		
+		public async Task SaveUserPostAsync(string name, PostModel postText)
+		{
+			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == name);
+			if (currentUser != null)
+			{
+				currentUser.UserPosts
+					.Add(new UserPost { AuthorPost = currentUser.UserName, Post = postText.Text, TimeOfPublication = DateTime.Now, User = currentUser });
+				db.Update(currentUser);
+				await db.SaveChangesAsync();
+			}
+		}
 	}
 }

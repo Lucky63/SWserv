@@ -124,7 +124,7 @@ namespace webapplication.Controllers
 		}
 
 		[HttpGet("[action]/{page}/{size}")]
-		public async Task<GetUserFriendsViewModel> GetAll(int page, int size)
+		public async Task<GetUserFriendsViewModel> GetAll(int page, int size)///////////////////////FINISH
 		{
 			var allUsers=  await _userService.GetAllAsync(page, size);			
 			return allUsers;
@@ -152,14 +152,8 @@ namespace webapplication.Controllers
 		[HttpPost("[action]")]
 		public async Task SaveUserPost([FromBody] PostModel postText)
 		{
-			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
-			if (currentUser != null)
-			{				
-				currentUser.UserPosts
-					.Add(new UserPost { AuthorPost=currentUser.UserName, Post = postText.Text, TimeOfPublication = DateTime.Now, User=currentUser });
-				db.Update(currentUser);
-				await db.SaveChangesAsync();
-			}
+			var name = User.Identity.Name;
+			await _userService.SaveUserPostAsync(name, postText);
 		}
 
 		
