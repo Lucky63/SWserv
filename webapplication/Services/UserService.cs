@@ -48,12 +48,12 @@ namespace webapplication.Services
 			return await db.Users.ToListAsync();
 		}
 
-		public async Task<User> GetIdentityAsync(string name)
+		public async Task<User> GetIdentityAsync(string name)///////////////////////FINISH
 		{
 			return await  db.Users.FirstOrDefaultAsync(x => x.UserName == name);			
 		}
 
-		public async Task<User> GetUserForMessageAsync(int id)
+		public async Task<User> GetUserForMessageAsync(int id)///////////////////////FINISH
 		{
 			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
 		}

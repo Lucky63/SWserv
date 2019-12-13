@@ -41,7 +41,7 @@ namespace webapplication.Controllers
 		}		
 
 		[HttpGet("[action]/{id}")]
-		public async Task<IActionResult>GetUserForMessage(int id)
+		public async Task<IActionResult>GetUserForMessage(int id)///////////////////////FINISH
 		{
 			var user = await _userService.GetUserForMessageAsync(id);
 			return Ok(user);
@@ -89,7 +89,7 @@ namespace webapplication.Controllers
 		
 		//Получаю ИД друга
 		[HttpGet("[action]/{id}")]
-		public async Task AddFriend(int id)		
+		public async Task AddFriend(int id)///////////////////////FINISH		
 		{
 			string UserIdentityName = User.Identity.Name;
 			await _friendService.AddFriendAsync(id, UserIdentityName);
@@ -104,7 +104,7 @@ namespace webapplication.Controllers
 
 
 	[HttpGet("[action]"), Authorize(Roles = "Manager")]
-		public async Task<IActionResult> GetIdentity()
+		public async Task<IActionResult> GetIdentity()///////////////////////FINISH
 		{
 			string name = User.Identity.Name;
 			var user = await _userService.GetIdentityAsync(name);

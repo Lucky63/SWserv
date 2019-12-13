@@ -16,7 +16,7 @@ namespace webapplication.Services
 			_db = context;
 		}
 
-		public async Task AddFriendAsync(int id, string UserIdentityName)
+		public async Task AddFriendAsync(int id, string UserIdentityName)///////////////////////FINISH
 		{
 			var Friend= await _db.Users.FirstOrDefaultAsync(x => x.Id == id);
 			User currentUser = await _db.Users.FirstOrDefaultAsync(x => x.UserName == UserIdentityName);
