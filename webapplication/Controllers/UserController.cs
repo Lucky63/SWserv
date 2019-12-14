@@ -103,7 +103,7 @@ namespace webapplication.Controllers
 		}
 
 
-	[HttpGet("[action]"), Authorize(Roles = "Manager")]
+		[HttpGet("[action]"), Authorize(Roles = "Manager")]
 		public async Task<IActionResult> GetIdentity()
 		{
 			string name = User.Identity.Name;

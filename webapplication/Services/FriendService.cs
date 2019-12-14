@@ -16,16 +16,25 @@ namespace webapplication.Services
 			_db = context;
 		}
 
-		public async Task AddFriendAsync(int id, string UserIdentityName)///////////////////////FINISH
+		public async Task AddFriendAsync(int id, string UserIdentityName)
 		{
 			var Friend= await _db.Users.FirstOrDefaultAsync(x => x.Id == id);
-			User currentUser = await _db.Users.FirstOrDefaultAsync(x => x.UserName == UserIdentityName);
+			var currentUser = await _db.Users.FirstOrDefaultAsync(x => x.UserName == UserIdentityName);
 
-			Friend.UserFriends.Add(new Friends { UserId = Friend.Id, FriendId = currentUser.Id });								
-			currentUser.UserFriends.Add(new Friends { UserId = currentUser.Id, FriendId = Friend.Id });
-			_db.Update(currentUser);
-			_db.Update(Friend);
-			_db.SaveChanges();
+			var data = _db.Friendships.Where(x => 
+			(x.FriendId == id && x.UserId== currentUser.Id)
+			|| (x.FriendId==currentUser.Id && x.UserId==id)).Count();
+
+			if (data == 0)
+			{
+				Friend.UserFriends.Add(new Friends { UserId = Friend.Id, FriendId = currentUser.Id });
+				currentUser.UserFriends.Add(new Friends { UserId = currentUser.Id, FriendId = Friend.Id });
+				_db.Update(currentUser);
+				_db.Update(Friend);
+				_db.SaveChanges();
+			}
+
+			
 
 		}		
 	}

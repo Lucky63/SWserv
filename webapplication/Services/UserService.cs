@@ -22,8 +22,8 @@ namespace webapplication.Services
 		{
 			if (currentUserId != 0 && id !=0)
 			{
-				var UserToBeDeleted = await db.Friendships.FirstOrDefaultAsync(x => x.FriendId == id);
-				var delete = await db.Friendships.FirstOrDefaultAsync(x => x.FriendId == currentUserId);
+				var UserToBeDeleted = await db.Friendships.FirstOrDefaultAsync(x => x.FriendId == id && x.UserId==currentUserId);
+				var delete = await db.Friendships.FirstOrDefaultAsync(x => x.FriendId == currentUserId && x.UserId == id);
 				if (UserToBeDeleted != null)
 				{
 					db.Friendships.Remove(UserToBeDeleted);					
