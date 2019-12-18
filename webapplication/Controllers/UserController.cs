@@ -43,22 +43,31 @@ namespace webapplication.Controllers
 		[HttpGet("[action]/{id}")]
 		public async Task<IActionResult>GetUserForMessage(int id)
 		{
-			var user = await _userService.GetUserForAsync(id);
-			return Ok(user);
+			if (id != 0)
+			{
+				var user = await _userService.GetUserForAsync(id);
+				return Ok(user);
+			}
+			else
+			{
+				return Ok();//Обработать исключение
+			}
+			
 		}
 
 		[HttpPut, Route("edit")]
 		public async Task <IActionResult>Edit([FromBody]User user)
 		{
-			User updatedUser = await _userService.EditAsync(user);
-			updatedUser.UserName = user.UserName;
-			updatedUser.LastName = user.LastName;
-			updatedUser.Age = user.Age;
-			updatedUser.City = user.City;
-			updatedUser.AvatarImgPath = user.AvatarImgPath;
-
 			if (user != null)
 			{
+
+				User updatedUser = await _userService.EditAsync(user);
+				updatedUser.UserName = user.UserName;
+				updatedUser.LastName = user.LastName;
+				updatedUser.Age = user.Age;
+				updatedUser.City = user.City;
+				updatedUser.AvatarImgPath = user.AvatarImgPath;
+			
 				await _userService.EditSaveAsync(updatedUser);
 				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
 				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);

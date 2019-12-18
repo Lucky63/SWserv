@@ -94,6 +94,10 @@ namespace webapplication.Services
 						User = currentUser });				
 				await db.SaveChangesAsync();
 			}
+			else
+			{
+				//Обработать исключение
+			}
 		}
 
 		public async Task<PostsViewModel> GetAllPostsAsync(int id, int page, int size)
