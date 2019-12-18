@@ -51,9 +51,9 @@ namespace webapplication.Services
 			return await db.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
 		}
 
-		public async Task EditSaveAsync(User userdb)
+		public async Task EditSaveAsync(User updatedUser)
 		{
-			db.Update(userdb);
+			db.Update(updatedUser);
 			await db.SaveChangesAsync();
 		}
 

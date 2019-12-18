@@ -50,23 +50,24 @@ namespace webapplication.Controllers
 		[HttpPut, Route("edit")]
 		public async Task <IActionResult>Edit([FromBody]User user)
 		{
-			User userdb = await _userService.EditAsync(user);
-			userdb.UserName = user.UserName;
-			userdb.LastName = user.LastName;
-			userdb.Age = user.Age;
-			userdb.City = user.City;
-			userdb.AvatarImgPath = user.AvatarImgPath;
+			User updatedUser = await _userService.EditAsync(user);
+			updatedUser.UserName = user.UserName;
+			updatedUser.LastName = user.LastName;
+			updatedUser.Age = user.Age;
+			updatedUser.City = user.City;
+			updatedUser.AvatarImgPath = user.AvatarImgPath;
 
 			if (user != null)
 			{
-				await _userService.EditSaveAsync(userdb);
+				await _userService.EditSaveAsync(updatedUser);
 				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
 				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
 				var claims = new List<Claim>
 				{
 					new Claim(ClaimTypes.Name, user.UserName),
-					new Claim(ClaimTypes.Role, "Manager")
+					new Claim(ClaimTypes.Role, "Manager"),
+					new Claim(ClaimTypes.NameIdentifier, updatedUser.Id.ToString())
 				};
 
 				var tokeOptions = new JwtSecurityToken(

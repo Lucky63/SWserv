@@ -13,7 +13,7 @@ namespace webapplication.Services
 		Task DeleteFriendAsync(int userId, int friendId);
 		Task<User> GetUserForAsync(int id);
 		Task <User>EditAsync(User user);
-		Task EditSaveAsync(User userdb);
+		Task EditSaveAsync(User updatedUser);
 		Task SaveUserPostAsync(string name, PostModel postText);
 		Task<PostsViewModel> GetAllPostsAsync(int id, int page, int size);
 		Task LikeAsync(int id, int likeid);
