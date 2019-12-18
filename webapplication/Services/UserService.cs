@@ -18,18 +18,31 @@ namespace webapplication.Services
 			db = context;			
 		}
 
-		public async Task DeleteFriendAsync(int currentUserId, int id)
+		public async Task DeleteFriendAsync(int userId, int friendId)
 		{
-			if (currentUserId != 0 && id !=0)
+			if (userId != 0 && friendId != 0)
 			{
-				var UserToBeDeleted = await db.Friendships.FirstOrDefaultAsync(x => x.FriendId == id && x.UserId==currentUserId);
-				var delete = await db.Friendships.FirstOrDefaultAsync(x => x.FriendId == currentUserId && x.UserId == id);
-				if (UserToBeDeleted != null)
+				var currentUser = await db.Friendships
+					.FirstOrDefaultAsync(x => x.FriendId == friendId 
+					&& x.UserId== userId);
+
+				var friend = await db.Friendships
+					.FirstOrDefaultAsync(x => x.FriendId == userId 
+					&& x.UserId == friendId);
+
+				if (currentUser != null && friend != null)
 				{
-					db.Friendships.Remove(UserToBeDeleted);					
-					db.Friendships.Remove(delete);					
+					db.Friendships.RemoveRange(currentUser, friend);
+					await db.SaveChangesAsync();
 				}
-				await db.SaveChangesAsync();
+				else
+				{
+					//Обработать исключение
+				}				
+			}
+			else
+			{
+				//Обработать исключение
 			}
 		}
 

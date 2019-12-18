@@ -10,7 +10,7 @@ namespace webapplication.Services
 	{
 		Task<GetUserFriendsViewModel> GetAllAsync(int page, int size);
 		Task<User> GetIdentityAsync(string name);
-		Task DeleteFriendAsync(int currentUserId, int id);
+		Task DeleteFriendAsync(int userId, int friendId);
 		Task<User> GetUserForAsync(int id);
 		Task <User>EditAsync(User user);
 		Task EditSaveAsync(User userdb);

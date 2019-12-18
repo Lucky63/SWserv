@@ -95,11 +95,11 @@ namespace webapplication.Controllers
 			await _friendService.AddFriendAsync(userId, friendId);
 		}		
 
-		[HttpDelete("[action]/{id}")]
-		public async Task DeleteFriend(int id)
+		[HttpDelete("[action]/{friendId}")]
+		public async Task DeleteFriend(int friendId)
 		{
-			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);			
-			await _userService.DeleteFriendAsync(currentUserId, id);
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);			
+			await _userService.DeleteFriendAsync(userId, friendId);
 		}
 
 
