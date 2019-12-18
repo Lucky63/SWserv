@@ -72,7 +72,7 @@ namespace webapplication.Services
 			return getUsers;
 		}		
 
-		public async Task<User> GetIdentityAsync(string name)
+		public async Task<User> GetIdentityUserAsync(string name)
 		{
 			return await  db.Users.FirstOrDefaultAsync(x => x.UserName == name);			
 		}

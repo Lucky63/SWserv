@@ -105,12 +105,12 @@ namespace webapplication.Controllers
 
 
 		[HttpGet("[action]"), Authorize(Roles = "Manager")]
-		public async Task<IActionResult> GetIdentity()
+		public async Task<IActionResult> GetIdentityUser()
 		{
 			string name = User.Identity.Name;
-			var user = await _userService.GetIdentityAsync(name);
+			var user = await _userService.GetIdentityUserAsync(name);
 			
-			var userdb = new UserViewModel()
+			var identityUser = new UserViewModel()
 			{
 				Id = user.Id,
 				UserName = user.UserName,
@@ -118,10 +118,9 @@ namespace webapplication.Controllers
 				Password = user.Password,
 				Age = user.Age,
 				City = user.City,
-				AvatarImgPath =user.AvatarImgPath,				
-				Friends = user.UserFriends.Select(x => new UserFriendsViewModel(x)).ToList()				
+				AvatarImgPath =user.AvatarImgPath
 			};
-			return Ok (userdb);
+			return Ok (identityUser);
 		}
 
 		[HttpGet("[action]/{page}/{size}")]
