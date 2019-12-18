@@ -88,11 +88,11 @@ namespace webapplication.Controllers
 
 		
 		//Получаю ИД друга
-		[HttpGet("[action]/{id}")]
-		public async Task AddFriend(int id)
+		[HttpGet("[action]/{friendId}")]
+		public async Task AddFriend(int friendId)
 		{
 			var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			await _friendService.AddFriendAsync(userId, id);
+			await _friendService.AddFriendAsync(userId, friendId);
 		}		
 
 		[HttpDelete("[action]/{id}")]
