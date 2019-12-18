@@ -17,7 +17,7 @@ namespace webapplication.Services
 		Task SaveUserPostAsync(string name, PostModel postText);
 		Task<PostsViewModel> GetAllPostsAsync(int id, int page, int size);
 		Task LikeAsync(int currentUserId, int likeid);
-		Task<GetPhotosViewModel> GetUserPhotosAsync(int id, int page = 1, int size = 5);
+		Task<GetPhotosViewModel> GetUserPhotosAsync(int userId, int page = 1, int size = 5);
 		Task<GetUserFriendsViewModel> GetFriendsAsync(int id, int page, int size);
 
 

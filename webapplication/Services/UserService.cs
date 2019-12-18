@@ -157,13 +157,13 @@ namespace webapplication.Services
 			}
 		}
 
-		public async Task<GetPhotosViewModel> GetUserPhotosAsync(int id, int page = 1, int size = 5)
+		public async Task<GetPhotosViewModel> GetUserPhotosAsync(int userId, int page = 1, int size = 5)
 		{			
-			var photos = await db.Photos.Where(x => x.UserId == id).Skip((page - 1) * size)
+			var photos = await db.Photos.Where(x => x.UserId == userId).Skip((page - 1) * size)
 				.Take(size).ToListAsync();
 
 			var count = db.Photos
-					.Where(p => p.UserId == id).Count();
+					.Where(p => p.UserId == userId).Count();
 
 			var album = new GetPhotosViewModel
 			{
@@ -174,12 +174,12 @@ namespace webapplication.Services
 			return album;
 		}
 
-		public async Task<GetUserFriendsViewModel> GetFriendsAsync(int id, int page, int size)
+		public async Task<GetUserFriendsViewModel> GetFriendsAsync(int userId, int page, int size)
 		{
-			var friendsList = await db.Users.Where(x => x.UserFriends.Any(z => z.FriendId == id)).Skip((page - 1) * size)
+			var friendsList = await db.Users.Where(x => x.UserFriends.Any(z => z.FriendId == userId)).Skip((page - 1) * size)
 				.Take(size).ToListAsync();
 
-			var count = db.Friendships.Where(x => x.UserId == id).Select(x => x.FriendId)
+			var count = db.Friendships.Where(x => x.UserId == userId).Select(x => x.FriendId)
 				.Count();
 
 			var list = new GetUserFriendsViewModel
