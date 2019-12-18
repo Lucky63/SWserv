@@ -128,29 +128,32 @@ namespace webapplication.Services
 			}
 		}
 
-		public async Task LikeAsync(int id, int likeid)
+		public async Task LikeAsync(int currentUserId, int likeid)
 		{
-			if (id != 0 && likeid != 0)
+			if (currentUserId != 0 && likeid != 0)
 			{
 				var likeCounter = db.Likes.Where(x => x.PostAndPhotoId == likeid).Count();
 				var postForLike = await db.PostAndPhotos.FirstOrDefaultAsync(x => x.Id == likeid);
 
 				var likeForData = await db.Likes
-					.Where(x => x.UserId == id && x.PostAndPhotoId == likeid)
+					.Where(x => x.UserId == currentUserId && x.PostAndPhotoId == likeid)
 					.Select(x => x.PostAndPhotoId).FirstOrDefaultAsync();
 
 				if (likeForData == 0)
 				{
-					await db.Likes.AddAsync(new Like { PostAndPhotoId = likeid, UserId = id });
+					await db.Likes.AddAsync(new Like { PostAndPhotoId = likeid, UserId = currentUserId });
 					postForLike.LikeCounter = likeCounter + 1;
 				}
 				else
 				{
-					db.Likes.Remove(new Like { UserId = id, PostAndPhotoId = likeid });
+					db.Likes.Remove(new Like { UserId = currentUserId, PostAndPhotoId = likeid });
 					postForLike.LikeCounter = likeCounter - 1;
-				}
-				db.Update(postForLike);
+				}				
 				await db.SaveChangesAsync();
+			}
+			else
+			{
+				//Обработать исключение
 			}
 		}
 
