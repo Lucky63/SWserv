@@ -91,8 +91,8 @@ namespace webapplication.Controllers
 		[HttpGet("[action]/{id}")]
 		public async Task AddFriend(int id)
 		{
-			string UserIdentityName = User.Identity.Name;
-			await _friendService.AddFriendAsync(id, UserIdentityName);
+			var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			await _friendService.AddFriendAsync(userId, id);
 		}		
 
 		[HttpDelete("[action]/{id}")]

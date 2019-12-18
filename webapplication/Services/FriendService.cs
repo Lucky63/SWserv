@@ -16,26 +16,32 @@ namespace webapplication.Services
 			_db = context;
 		}
 
-		public async Task AddFriendAsync(int id, string UserIdentityName)
+		public async Task AddFriendAsync(int userId, int friendId)
 		{
-			var Friend= await _db.Users.FirstOrDefaultAsync(x => x.Id == id);
-			var currentUser = await _db.Users.FirstOrDefaultAsync(x => x.UserName == UserIdentityName);
+			var friend= await _db.Users.FirstOrDefaultAsync(x => x.Id == friendId);
+			var currentUser = await _db.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
 			var data = _db.Friendships.Where(x => 
-			(x.FriendId == id && x.UserId== currentUser.Id)
-			|| (x.FriendId==currentUser.Id && x.UserId==id)).Count();
+			(x.FriendId == friendId && x.UserId== currentUser.Id)
+			|| (x.FriendId==currentUser.Id && x.UserId== friendId)).Count();
 
 			if (data == 0)
 			{
-				Friend.UserFriends.Add(new Friends { UserId = Friend.Id, FriendId = currentUser.Id });
-				currentUser.UserFriends.Add(new Friends { UserId = currentUser.Id, FriendId = Friend.Id });
-				_db.Update(currentUser);
-				_db.Update(Friend);
-				_db.SaveChanges();
+				if (friend != null && currentUser != null)
+				{
+					friend.UserFriends.Add(new Friends { UserId = friendId, FriendId = userId });
+					currentUser.UserFriends.Add(new Friends { UserId = userId, FriendId = friendId });					
+					_db.SaveChanges();
+				}
+				else
+				{
+					//обработать ошибку отсутствующего юзера					
+				}
 			}
-
-			
-
+			else
+			{
+				//обработать ошибку если юзер уже добавлен
+			}
 		}		
 	}
 }

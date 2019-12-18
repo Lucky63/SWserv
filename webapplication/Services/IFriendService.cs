@@ -8,6 +8,6 @@ namespace webapplication.Services
 {
 	public interface IFriendService
 	{
-		Task AddFriendAsync(int id, string UserIdentityName);		
+		Task AddFriendAsync(int userId, int friendId);		
 	}
 }
