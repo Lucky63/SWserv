@@ -135,7 +135,7 @@ namespace webapplication.Controllers
 		{
 			var user = await _userService.GetUserForAsync(id);
 
-			var userdb = new UserViewModel()
+			var userForProfile = new UserViewModel()
 			{
 				Id = user.Id,
 				UserName = user.UserName,
@@ -145,7 +145,7 @@ namespace webapplication.Controllers
 				City = user.City,
 				AvatarImgPath = user.AvatarImgPath,				
 			};
-			return Ok(userdb);
+			return Ok(userForProfile);
 		}
 
 		
