@@ -88,8 +88,10 @@ namespace webapplication.Services
 			if (currentUser != null)
 			{
 				currentUser.UserPosts
-					.Add(new UserPost { AuthorPost = currentUser.UserName, Post = postText.Text, TimeOfPublication = DateTime.Now, User = currentUser });
-				db.Update(currentUser);
+					.Add(new UserPost { AuthorPost = currentUser.UserName,
+						Post = postText.Text,
+						TimeOfPublication = DateTime.Now,
+						User = currentUser });				
 				await db.SaveChangesAsync();
 			}
 		}
