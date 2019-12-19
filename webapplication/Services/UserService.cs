@@ -57,19 +57,19 @@ namespace webapplication.Services
 			await db.SaveChangesAsync();
 		}
 
-		public async Task<GetUserFriendsViewModel> GetAllAsync(int page, int size)
+		public async Task<GetUserFriendsViewModel> GetAllUsersAsync(int page, int size)
 		{
 			var allUsers = await db.Users
 				.Skip((page - 1) * size)
 				.Take(size)
 				.ToListAsync();
 			var count = db.Users.Count();
-			var getUsers = new GetUserFriendsViewModel
+			var users = new GetUserFriendsViewModel
 			{
 				friends = allUsers,
 				Count=count
 			};
-			return getUsers;
+			return users;
 		}		
 
 		public async Task<User> GetIdentityUserAsync(string name)
@@ -77,7 +77,7 @@ namespace webapplication.Services
 			return await  db.Users.FirstOrDefaultAsync(x => x.UserName == name);			
 		}
 
-		public async Task<User> GetUserForAsync(int id)
+		public async Task<User> GetUserAsync(int id)
 		{
 			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
 		}
@@ -128,25 +128,25 @@ namespace webapplication.Services
 			}
 		}
 
-		public async Task LikeAsync(int currentUserId, int likeid)
+		public async Task LikeAsync(int userId, int likeid)
 		{
-			if (currentUserId != 0 && likeid != 0)
+			if (userId != 0 && likeid != 0)
 			{
 				var likeCounter = db.Likes.Where(x => x.PostAndPhotoId == likeid).Count();
 				var postForLike = await db.PostAndPhotos.FirstOrDefaultAsync(x => x.Id == likeid);
 
 				var likeForData = await db.Likes
-					.Where(x => x.UserId == currentUserId && x.PostAndPhotoId == likeid)
+					.Where(x => x.UserId == userId && x.PostAndPhotoId == likeid)
 					.Select(x => x.PostAndPhotoId).FirstOrDefaultAsync();
 
 				if (likeForData == 0)
 				{
-					await db.Likes.AddAsync(new Like { PostAndPhotoId = likeid, UserId = currentUserId });
+					await db.Likes.AddAsync(new Like { PostAndPhotoId = likeid, UserId = userId });
 					postForLike.LikeCounter = likeCounter + 1;
 				}
 				else
 				{
-					db.Likes.Remove(new Like { UserId = currentUserId, PostAndPhotoId = likeid });
+					db.Likes.Remove(new Like { UserId = userId, PostAndPhotoId = likeid });
 					postForLike.LikeCounter = likeCounter - 1;
 				}				
 				await db.SaveChangesAsync();
@@ -182,13 +182,13 @@ namespace webapplication.Services
 			var count = db.Friendships.Where(x => x.UserId == userId).Select(x => x.FriendId)
 				.Count();
 
-			var list = new GetUserFriendsViewModel
+			var friends = new GetUserFriendsViewModel
 			{
 				friends = friendsList,
 				Count = count
 			};
 
-			return list;
+			return friends;
 		}
 	}
 }

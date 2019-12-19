@@ -45,7 +45,7 @@ namespace webapplication.Controllers
 		{
 			if (id != 0)
 			{
-				var user = await _userService.GetUserForAsync(id);
+				var user = await _userService.GetUserAsync(id);
 				return Ok(user);
 			}
 			else
@@ -133,16 +133,16 @@ namespace webapplication.Controllers
 		}
 
 		[HttpGet("[action]/{page}/{size}")]
-		public async Task<GetUserFriendsViewModel> GetAll(int page, int size)
+		public async Task<GetUserFriendsViewModel> GetAllUsers(int page, int size)
 		{
-			var allUsers=  await _userService.GetAllAsync(page, size);			
-			return allUsers;
+			return await _userService.GetAllUsersAsync(page, size);			
+			
 		}
 
 		[HttpGet("[action]/{id}")]
 		public async Task<IActionResult> GetUserForProfile(int id)
 		{
-			var user = await _userService.GetUserForAsync(id);
+			var user = await _userService.GetUserAsync(id);
 
 			var userForProfile = new UserViewModel()
 			{
