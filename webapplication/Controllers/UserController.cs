@@ -33,9 +33,9 @@ namespace webapplication.Controllers
 			_httpContextAccessor = httpContextAccessor;
 			if (!db.Users.Any())
 			{
-				db.Users.Add(new User { UserName = "Allan1", Password = "123"});
-				db.Users.Add(new User { UserName = "Allan2", Password = "123" });
-				db.Users.Add(new User { UserName = "Allan3", Password = "123" });
+				db.Users.Add(new User { UserName = "Bill", Password = "123", AvatarImgPath= @"Resources\Images\AnonimPage.jpg"});
+				db.Users.Add(new User { UserName = "Bob", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg"});
+				db.Users.Add(new User { UserName = "Sam", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg"});
 				db.SaveChanges();
 			}
 		}		
