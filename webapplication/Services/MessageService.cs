@@ -35,6 +35,7 @@ namespace webapplication.Services
 			  .OrderByDescending(x=>x.dateTime)
 			  .Skip((page - 1) * size)
 			  .Take(size)
+			  .OrderBy(x => x.dateTime)
 			  .ToListAsync();
 
 			foreach (var i in usermessages)
@@ -61,11 +62,9 @@ namespace webapplication.Services
 			return messagesList;
 		}
 
-		public async Task SeveMessageAsync(string currentUserName, int id, string message)
+		public async Task SeveMessageAsync(int userId, int id, string message)
 		{
-			User currentUser = await _db.Users.FirstOrDefaultAsync(x => x.UserName == currentUserName);
-			User recipient = await _db.Users.FirstOrDefaultAsync(x => x.Id == id);
-			_db.Messages.Add(new Message { UserId = currentUser.Id, FriendId = recipient.Id, SentMessage = message, dateTime = DateTime.Now });
+			_db.Messages.Add(new Message { UserId = userId, FriendId = id, SentMessage = message, dateTime = DateTime.Now });
 			await _db.SaveChangesAsync();
 		}
 	}

@@ -21,22 +21,20 @@ namespace webapplication.Controllers
 	[ApiController]
 	public class UserController : ControllerBase
 	{
-		DBUserContext db;
+		DBUserContext _db;
 		IUserService _userService;
-		IFriendService _friendService;
-		IHttpContextAccessor _httpContextAccessor;
+		IFriendService _friendService;		
 		public UserController(DBUserContext context, IUserService userService, IFriendService friendService, IHttpContextAccessor httpContextAccessor)
 		{
-			db = context;
+			_db = context;
 			_userService = userService;
-			_friendService = friendService;
-			_httpContextAccessor = httpContextAccessor;
-			if (!db.Users.Any())
+			_friendService = friendService;			
+			if (!_db.Users.Any())
 			{
-				db.Users.Add(new User { UserName = "Bill", Password = "123", AvatarImgPath= @"Resources\Images\AnonimPage.jpg"});
-				db.Users.Add(new User { UserName = "Bob", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg"});
-				db.Users.Add(new User { UserName = "Sam", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg"});
-				db.SaveChanges();
+				_db.Users.Add(new User { UserName = "Bill", Password = "123", AvatarImgPath= @"Resources\Images\AnonimPage.jpg"});
+				_db.Users.Add(new User { UserName = "Bob", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg"});
+				_db.Users.Add(new User { UserName = "Sam", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg"});
+				_db.SaveChanges();
 			}
 		}		
 
