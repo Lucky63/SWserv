@@ -24,8 +24,8 @@ namespace webapplication.Controllers
 			_fileService = fileService;
 		}
 
-		[HttpPost("[action]"), Route("Upload")]
-		public IActionResult Upload()
+		[HttpPost("[action]")]
+		public IActionResult UploadAvatar()
 		{
 			var file = Request.Form.Files[0];
 			if (file.Length > 0)
@@ -39,8 +39,8 @@ namespace webapplication.Controllers
 			}
 		}
 
-		[HttpPost("[action]/{id}"), Route("UploadPhotoAsync")]
-		public async Task UploadPhotoAsync(int id)
+		[HttpPost("[action]/{id}")]
+		public async Task UploadPhoto(int id)
 		{
 			var file = Request.Form.Files[0];
 			
@@ -49,8 +49,8 @@ namespace webapplication.Controllers
 			await _fileService.SavePhotoAsync(dbPath, id);
 		}
 
-		[HttpDelete("[action]/{id}"), Route("DeletePhotoAsync")]
-		public async Task DeletePhotoAsync(int id)
+		[HttpDelete("[action]/{id}")]
+		public async Task DeletePhoto(int id)
 		{
 			await _fileService.DeletePhotoAsync(id);
 		}

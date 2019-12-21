@@ -53,8 +53,6 @@ namespace webapplication.Services
 				file.CopyTo(stream);
 			}
 			return dbPath;
-
-
 		}
 
 		public async Task<string> UploadPhotoAsync(IFormFile file)

@@ -16,12 +16,10 @@ namespace webapplication.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
-    {
-		DBUserContext db;
+    {		
 		IAuthService _authService;
-		public AuthController(DBUserContext context, IAuthService authService)
+		public AuthController(IAuthService authService)
 		{
-			db = context;
 			_authService = authService;
 		}
 		// GET api/values
