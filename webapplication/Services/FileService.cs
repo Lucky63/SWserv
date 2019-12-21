@@ -23,17 +23,17 @@ namespace webapplication.Services
 
 		public async Task DeletePhotoAsync(int id)
 		{
-			var currentPhoto = await _db.Photos.FirstOrDefaultAsync(x => x.Id == id);
-			string pathOfFile = currentPhoto.PhotoPath;
-			System.IO.File.Delete(pathOfFile);//Удаляю сам файл из папки в файловой системе
-			_db.Remove(currentPhoto);
+			var photo = await _db.Photos.FirstOrDefaultAsync(x => x.Id == id);
+			string path = photo.PhotoPath;
+			System.IO.File.Delete(path);//Удаляю сам файл из папки в файловой системе
+			_db.Remove(photo);
 			await _db.SaveChangesAsync();
 		}
 
 		public async Task SavePhotoAsync(string dbPath, int id)
 		{
-			var currentUserName = await _db.Users.Where(x => x.Id == id).Select(x => x.UserName).FirstOrDefaultAsync();
-			_db.Photos.Add(new Photo { PhotoPath = dbPath, UserId = id, AuthorPost= currentUserName, TimeOfPublication = DateTime.Now });
+			var userName = await _db.Users.Where(x => x.Id == id).Select(x => x.UserName).FirstOrDefaultAsync();
+			_db.Photos.Add(new Photo { PhotoPath = dbPath, UserId = id, AuthorPost = userName, TimeOfPublication = DateTime.Now });
 			await _db.SaveChangesAsync();
 		}
 

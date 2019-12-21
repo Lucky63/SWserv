@@ -16,31 +16,49 @@ namespace webapplication.Services
 			_db = db;
 		}
 
-		public async Task<List<string>> GetMessagesAsync(int id, int FriendId)
+		public async Task<SaveMessageViewModel> GetMessagesAsync(int id, int friendId, int page, int size)
 		{
-			List<string> mesages = new List<string>();
-			User User = await _db.Users.FirstOrDefaultAsync(x => x.Id == id);
-			string username = User.UserName;
-			User Friend = await _db.Users.FirstOrDefaultAsync(x => x.Id == FriendId);
-			string friendname = Friend.UserName;
+			var messages = new List<string>();
+			var username = await _db.Users
+				.Where(x => x.Id == id)
+				.Select(x => x.UserName)
+				.FirstOrDefaultAsync();
+			
+			var friendname = await _db.Users
+				.Where(x => x.Id == friendId)
+				.Select(x=>x.UserName)
+				.FirstOrDefaultAsync();			
 
-			var usermessages = _db.Messages
-			  .Where(x => (x.UserId == id && x.FriendId == FriendId) ||
-						  (x.UserId == FriendId && x.FriendId == id)).ToList();
+			var usermessages = await _db.Messages
+			  .Where(x => (x.UserId == id && x.FriendId == friendId) ||
+						  (x.UserId == friendId && x.FriendId == id))
+			  .OrderByDescending(x=>x.dateTime)
+			  .Skip((page - 1) * size)
+			  .Take(size)
+			  .ToListAsync();
 
 			foreach (var i in usermessages)
 			{
-				if (i.UserId == id && i.FriendId == FriendId)
+				if (i.UserId == id && i.FriendId == friendId)
 				{
-					mesages.Add($"{i.dateTime}:{username}- {i.SentMessage}");
+					messages.Add($"{i.dateTime}:{username}- {i.SentMessage}");
 				}
-				else if (i.FriendId == id && i.UserId == FriendId)
+				else if (i.FriendId == id && i.UserId == friendId)
 				{
-					mesages.Add($"{i.dateTime}:{friendname}- {i.SentMessage}");
+					messages.Add($"{i.dateTime}:{friendname}- {i.SentMessage}");
 				}
 			}
 
-			return mesages;
+			var count = _db.Messages.Where(x => (x.UserId == id && x.FriendId == friendId) ||
+						  (x.UserId == friendId && x.FriendId == id)).Count();
+
+			var messagesList = new SaveMessageViewModel
+			{
+				Messages = messages,
+				Count = count
+			};
+
+			return messagesList;
 		}
 
 		public async Task SeveMessageAsync(string currentUserName, int id, string message)

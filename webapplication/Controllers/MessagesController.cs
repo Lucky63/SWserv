@@ -29,11 +29,11 @@ namespace webapplication.Controllers
 			await _messageService.SeveMessageAsync(currentUserName, id, message);			
 		}
 
-		[HttpGet("[action]/{id}"), Route("getmessagesasync")]
-		[HttpGet("[action]/{id}/{friendid}"), Route("getmessagesasync")]
-		public async Task <List<string>> GetMessagesAsync(int id, int FriendId)
+		//[HttpGet("[action]/{id}"), Route("getmessagesasync")]
+		[HttpGet("[action]/{id}/{friendid}/{page}/{size}")]
+		public async Task <SaveMessageViewModel> GetMessages(int id, int FriendId, int page, int size)
 		{
-			return await _messageService.GetMessagesAsync(id, FriendId);			
+			return await _messageService.GetMessagesAsync(id, FriendId, page, size);
 		}		
 	}
 }
