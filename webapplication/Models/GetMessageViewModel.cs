@@ -7,7 +7,9 @@ namespace webapplication.Models
 {
 	public class GetMessageViewModel
 	{
-		public List<string> Messages { get; set; }
+		public string SenderName { get; set; }
+		public string RecipientName { get; set; }
+		public List<Message> Messages { get; set; }
 		public int Count { get; set; }
 	}
 }

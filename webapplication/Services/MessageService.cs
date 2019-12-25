@@ -16,47 +16,36 @@ namespace webapplication.Services
 			_db = db;
 		}
 
-		public async Task<GetMessageViewModel> GetMessagesAsync(int id, int friendId, int page, int size)
+		public async Task<GetMessageViewModel> GetMessagesAsync(int senderid, int recipientId, int page, int size)
 		{
-			var messages = new List<string>();
-			var username = await _db.Users
-				.Where(x => x.Id == id)
+			var senderName = await _db.Users
+				.Where(x => x.Id == senderid)
 				.Select(x => x.UserName)
 				.FirstOrDefaultAsync();
 			
-			var friendname = await _db.Users
-				.Where(x => x.Id == friendId)
+			var recipientName = await _db.Users
+				.Where(x => x.Id == recipientId)
 				.Select(x=>x.UserName)
 				.FirstOrDefaultAsync();			
 
 			var usermessages = await _db.Messages
-			  .Where(x => (x.UserId == id && x.FriendId == friendId) ||
-						  (x.UserId == friendId && x.FriendId == id))
+			  .Where(x => (x.UserId == senderid && x.FriendId == recipientId) ||
+						  (x.UserId == recipientId && x.FriendId == senderid))
 			  .OrderByDescending(x=>x.dateTime)
 			  .Skip((page - 1) * size)
 			  .Take(size)
 			  .OrderBy(x => x.dateTime)
-			  .ToListAsync();
+			  .ToListAsync();					
 
-			foreach (var i in usermessages)
-			{
-				if (i.UserId == id && i.FriendId == friendId)
-				{
-					messages.Add($"{i.dateTime}:{username}- {i.SentMessage}");
-				}
-				else if (i.FriendId == id && i.UserId == friendId)
-				{
-					messages.Add($"{i.dateTime}:{friendname}- {i.SentMessage}");
-				}
-			}
-
-			var count = _db.Messages.Where(x => (x.UserId == id && x.FriendId == friendId) ||
-						  (x.UserId == friendId && x.FriendId == id)).Count();
+			var count = _db.Messages.Where(x => (x.UserId == senderid && x.FriendId == recipientId) ||
+						  (x.UserId == recipientId && x.FriendId == senderid)).Count();
 
 			var messagesList = new GetMessageViewModel
 			{
-				Messages = messages,
-				Count = count
+				Messages = usermessages,
+				Count = count,
+				SenderName=senderName,
+				RecipientName=recipientName
 			};
 
 			return messagesList;
