@@ -16,7 +16,7 @@ namespace webapplication.Services
 			_db = db;
 		}
 
-		public async Task<SaveMessageViewModel> GetMessagesAsync(int id, int friendId, int page, int size)
+		public async Task<GetMessageViewModel> GetMessagesAsync(int id, int friendId, int page, int size)
 		{
 			var messages = new List<string>();
 			var username = await _db.Users
@@ -53,7 +53,7 @@ namespace webapplication.Services
 			var count = _db.Messages.Where(x => (x.UserId == id && x.FriendId == friendId) ||
 						  (x.UserId == friendId && x.FriendId == id)).Count();
 
-			var messagesList = new SaveMessageViewModel
+			var messagesList = new GetMessageViewModel
 			{
 				Messages = messages,
 				Count = count

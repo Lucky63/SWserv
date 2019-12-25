@@ -29,7 +29,7 @@ namespace webapplication.Controllers
 
 		//[HttpGet("[action]/{id}"), Route("getmessagesasync")]
 		[HttpGet("[action]/{id}/{friendid}/{page}/{size}")]
-		public async Task <SaveMessageViewModel> GetMessages(int id, int FriendId, int page, int size)
+		public async Task <GetMessageViewModel> GetMessages(int id, int FriendId, int page, int size)
 		{
 			return await _messageService.GetMessagesAsync(id, FriendId, page, size);
 		}		
