@@ -57,13 +57,17 @@ namespace webapplication.Services
 			await db.SaveChangesAsync();
 		}
 
-		public async Task<GetUserFriendsViewModel> GetAllUsersAsync(int page, int size)
-		{
-			var allUsers = await db.Users
+		public async Task<GetUserFriendsViewModel> GetAllUsersAsync(int page, int size, int id)
+		{	
+
+			var allUsers = await db.Users.Except(db.Users.Where(x=>x.Id==id)).Except(db.Users
+				.Where(x => x.UserFriends.Any(z => z.FriendId == id)))
 				.Skip((page - 1) * size)
 				.Take(size)
 				.ToListAsync();
-			var count = db.Users.Count();
+
+			var count = db.Users.Except(db.Users
+				.Where(x => x.UserFriends.Any(z => z.FriendId == id))).Count();
 			var users = new GetUserFriendsViewModel
 			{
 				friends = allUsers,

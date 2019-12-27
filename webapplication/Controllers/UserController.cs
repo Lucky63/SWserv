@@ -133,7 +133,8 @@ namespace webapplication.Controllers
 		[HttpGet("[action]/{page}/{size}")]
 		public async Task<GetUserFriendsViewModel> GetAllUsers(int page, int size)
 		{
-			return await _userService.GetAllUsersAsync(page, size);			
+			var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+			return await _userService.GetAllUsersAsync(page, size, id);
 			
 		}
 
