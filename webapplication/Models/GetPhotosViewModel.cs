@@ -7,7 +7,7 @@ namespace webapplication.Models
 {
 	public class GetPhotosViewModel
 	{
-		public List<Photo> photos { get; set; }
+		public List<Photo> Photos { get; set; }
 		public int Count { get; set; }
 	}
 }

@@ -15,10 +15,12 @@ namespace webapplication.Services
 	{
 
 		DBUserContext _db;
+		IUserService _userService;
 
-		public FileService(DBUserContext context)
+		public FileService(DBUserContext context, IUserService userService)
 		{
 			_db = context;
+			_userService = userService;
 		}
 
 		public async Task DeletePhotoAsync(int id)
@@ -32,8 +34,8 @@ namespace webapplication.Services
 
 		public async Task SavePhotoAsync(string dbPath, int id)
 		{
-			var userName = await _db.Users.Where(x => x.Id == id).Select(x => x.UserName).FirstOrDefaultAsync();
-			_db.Photos.Add(new Photo { PhotoPath = dbPath, UserId = id, AuthorPost = userName, TimeOfPublication = DateTime.Now });
+			var user = await _userService.GetById(id);
+			_db.Photos.Add(new Photo { PhotoPath = dbPath, UserId = id, AuthorPost = user.UserName, TimeOfPublication = DateTime.Now });
 			await _db.SaveChangesAsync();
 		}
 

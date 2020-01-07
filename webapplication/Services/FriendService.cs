@@ -21,11 +21,11 @@ namespace webapplication.Services
 			var friend= await _db.Users.FirstOrDefaultAsync(x => x.Id == friendId);
 			var currentUser = await _db.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
-			var data = _db.Friendships.Where(x => 
-			(x.FriendId == friendId && x.UserId== currentUser.Id)
-			|| (x.FriendId==currentUser.Id && x.UserId== friendId)).Count();
+			var friendshipsCount = _db.Friendships.Where(x => 
+			x.FriendId == friendId && x.UserId == currentUser.Id
+			|| (x.FriendId == currentUser.Id && x.UserId == friendId)).Count();
 
-			if (data == 0)
+			if (friendshipsCount == 0)
 			{
 				if (friend != null && currentUser != null)
 				{

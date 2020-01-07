@@ -166,7 +166,7 @@ namespace webapplication.Services
 
 			var album = new GetPhotosViewModel
 			{
-				photos = photos,
+				Photos = photos,
 				Count = count
 			};
 
