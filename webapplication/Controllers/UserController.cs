@@ -22,13 +22,11 @@ namespace webapplication.Controllers
 	public class UserController : ControllerBase
 	{
 		DBUserContext _db;
-		IUserService _userService;
-		IFriendService _friendService;		
-		public UserController(DBUserContext context, IUserService userService, IFriendService friendService, IHttpContextAccessor httpContextAccessor)
+		IUserService _userService;			
+		public UserController(DBUserContext context, IUserService userService, IHttpContextAccessor httpContextAccessor)
 		{
 			_db = context;
-			_userService = userService;
-			_friendService = friendService;			
+			_userService = userService;						
 			if (!_db.Users.Any())
 			{
 				_db.Users.Add(new User { UserName = "Bill", Password = "123", AvatarImgPath= @"Resources\Images\AnonimPage.jpg"});
@@ -100,7 +98,7 @@ namespace webapplication.Controllers
 		public async Task AddFriend(int friendId)
 		{
 			var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			await _friendService.AddFriendAsync(userId, friendId);
+			await _userService.AddFriendAsync(userId, friendId);
 		}		
 
 		[HttpDelete("[action]/{friendId}")]

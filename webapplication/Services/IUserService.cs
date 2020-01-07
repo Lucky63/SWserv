@@ -19,6 +19,7 @@ namespace webapplication.Services
 		Task<GetPhotosViewModel> GetUserPhotosAsync(int userId, int page = 1, int size = 5);
 		Task<GetUserFriendsViewModel> GetFriendsAsync(int id, int page, int size);
 		Task RegistrationSaveAsync(string userName, string password);
+		Task AddFriendAsync(int userId, int friendId);
 
 
 	}

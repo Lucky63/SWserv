@@ -196,5 +196,33 @@ namespace webapplication.Services
 			db.Users.Add(new User { UserName = userName, Password = password, AvatarImgPath = anonim });
 			await db.SaveChangesAsync();
 		}
+
+		public async Task AddFriendAsync(int userId, int friendId)
+		{
+			var friend = await GetById(friendId);
+			var currentUser = await GetById(userId);
+
+			var friendshipsCount = db.Friendships.Where(x =>
+			x.FriendId == friendId && x.UserId == currentUser.Id
+			|| (x.FriendId == currentUser.Id && x.UserId == friendId)).Count();
+
+			if (friendshipsCount == 0)
+			{
+				if (friend != null && currentUser != null)
+				{
+					friend.UserFriends.Add(new Friends { UserId = friendId, FriendId = userId });
+					currentUser.UserFriends.Add(new Friends { UserId = userId, FriendId = friendId });
+					db.SaveChanges();
+				}
+				else
+				{
+					//обработать ошибку отсутствующего юзера					
+				}
+			}
+			else
+			{
+				//обработать ошибку если юзер уже добавлен
+			}
+		}
 	}
 }

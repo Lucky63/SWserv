@@ -10,23 +10,19 @@ namespace webapplication.Services
 	public class MessageService : IMessageService
 	{
 		DBUserContext _db;
+		IUserService _userService;
 
-		public MessageService(DBUserContext db)
+		public MessageService(DBUserContext db, IUserService userService)
 		{
 			_db = db;
+			_userService = userService;
 		}
 
 		public async Task<GetMessageViewModel> GetMessagesAsync(int senderid, int recipientId, int page, int size)
 		{
-			var senderName = await _db.Users
-				.Where(x => x.Id == senderid)
-				.Select(x => x.UserName)
-				.FirstOrDefaultAsync();
+			var sender = await _userService.GetById(senderid);
 			
-			var recipientName = await _db.Users
-				.Where(x => x.Id == recipientId)
-				.Select(x=>x.UserName)
-				.FirstOrDefaultAsync();			
+			var recipient = await _userService.GetById(recipientId);
 
 			var usermessages = await _db.Messages
 			  .Where(x => (x.UserId == senderid && x.FriendId == recipientId) ||
@@ -44,8 +40,8 @@ namespace webapplication.Services
 			{
 				Messages = usermessages,
 				Count = count,
-				SenderName=senderName,
-				RecipientName=recipientName
+				SenderName=sender.UserName,
+				RecipientName=recipient.UserName
 			};
 
 			return messagesList;
