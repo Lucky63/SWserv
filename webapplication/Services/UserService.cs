@@ -46,9 +46,9 @@ namespace webapplication.Services
 			}
 		}
 
-		public async Task<User> EditAsync(User user)
+		public async Task<User> GetById(int id)
 		{
-			return await db.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
 		}
 
 		public async Task EditSaveAsync(User updatedUser)
@@ -76,15 +76,10 @@ namespace webapplication.Services
 			return users;
 		}		
 
-		public async Task<User> GetIdentityUserAsync(string name)
+		public async Task<User> GetUserByNameAsync(string name)
 		{
 			return await  db.Users.FirstOrDefaultAsync(x => x.UserName == name);			
-		}
-
-		public async Task<User> GetUserAsync(int id)
-		{
-			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
-		}
+		}	
 
 		public async Task SaveUserPostAsync(string name, PostModel postText)
 		{

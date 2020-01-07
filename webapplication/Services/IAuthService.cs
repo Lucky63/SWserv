@@ -8,8 +8,8 @@ namespace webapplication.Services
 {
 	public interface IAuthService
 	{
-		Task<User> LoginAsync(string userName);
-		Task<User> RegistrationAsync(string userName);
+		Task<User> GetUserAsync(string userName);
+		
 		Task RegistrationAsyncSave(string userName, string password);
 	}
 }

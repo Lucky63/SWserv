@@ -43,7 +43,7 @@ namespace webapplication.Controllers
 		{
 			if (id != 0)
 			{
-				var user = await _userService.GetUserAsync(id);
+				var user = await _userService.GetById(id);
 				return Ok(user);
 			}
 			else
@@ -59,7 +59,7 @@ namespace webapplication.Controllers
 			if (user != null)
 			{
 
-				User updatedUser = await _userService.EditAsync(user);
+				User updatedUser = await _userService.GetById(user.Id);
 				updatedUser.UserName = user.UserName;
 				updatedUser.LastName = user.LastName;
 				updatedUser.Age = user.Age;
@@ -115,7 +115,7 @@ namespace webapplication.Controllers
 		public async Task<IActionResult> GetIdentityUser()
 		{
 			string name = User.Identity.Name;
-			var user = await _userService.GetIdentityUserAsync(name);
+			var user = await _userService.GetUserByNameAsync(name);
 			
 			var identityUser = new UserViewModel()
 			{
@@ -141,7 +141,7 @@ namespace webapplication.Controllers
 		[HttpGet("[action]/{id}")]
 		public async Task<IActionResult> GetUserForProfile(int id)
 		{
-			var user = await _userService.GetUserAsync(id);
+			var user = await _userService.GetById(id);
 
 			var userForProfile = new UserViewModel()
 			{

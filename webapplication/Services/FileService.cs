@@ -25,7 +25,7 @@ namespace webapplication.Services
 		{
 			var photo = await _db.Photos.FirstOrDefaultAsync(x => x.Id == id);
 			string path = photo.PhotoPath;
-			System.IO.File.Delete(path);//Удаляю сам файл из папки в файловой системе
+			System.IO.File.Delete(path);
 			_db.Remove(photo);
 			await _db.SaveChangesAsync();
 		}

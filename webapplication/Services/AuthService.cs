@@ -15,15 +15,10 @@ namespace webapplication.Services
 			_db = context;
 		}
 
-		public async Task<User> LoginAsync(string userName)
+		public async Task<User> GetUserAsync(string userName)
 		{
 			return await _db.Users.FirstOrDefaultAsync(x => x.UserName == userName);
-		}
-
-		public async Task<User> RegistrationAsync(string userName)
-		{
-			return await _db.Users.FirstOrDefaultAsync(x => x.UserName == userName);
-		}
+		}	
 
 		public async Task RegistrationAsyncSave(string userName, string password)
 		{

@@ -27,7 +27,7 @@ namespace webapplication.Controllers
         public async Task <IActionResult> LoginAsync([FromBody]LoginModel user)
         {
 			
-			User userdb = await _authService.LoginAsync(user.UserName);
+			User userdb = await _authService.GetUserAsync(user.UserName);
 			if (user == null || userdb==null)
 			{
 				return BadRequest("Invalid client request");
@@ -65,7 +65,7 @@ namespace webapplication.Controllers
 		[HttpPost, Route("registrationasync")]
 		public async Task<IActionResult> RegistrationAsync([FromBody]LoginModel user)
 		{
-			User userdb = await _authService.RegistrationAsync(user.UserName);
+			User userdb = await _authService.GetUserAsync(user.UserName);
 			if (user == null)
 			{
 				return BadRequest("Invalid client request");
