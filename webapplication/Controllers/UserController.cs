@@ -64,7 +64,7 @@ namespace webapplication.Controllers
 				updatedUser.City = user.City;
 				updatedUser.AvatarImgPath = user.AvatarImgPath;
 			
-				await _userService.EditSaveAsync(updatedUser);
+				await _userService.UpdateUserAsync(updatedUser);
 				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
 				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 

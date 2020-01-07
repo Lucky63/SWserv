@@ -51,7 +51,7 @@ namespace webapplication.Services
 			return await db.Users.FirstOrDefaultAsync(x => x.Id == id);
 		}
 
-		public async Task EditSaveAsync(User updatedUser)
+		public async Task UpdateUserAsync(User updatedUser)
 		{
 			db.Update(updatedUser);
 			await db.SaveChangesAsync();
@@ -83,7 +83,7 @@ namespace webapplication.Services
 
 		public async Task SaveUserPostAsync(string name, PostModel postText)
 		{
-			var currentUser = await db.Users.FirstOrDefaultAsync(x => x.UserName == name);
+			var currentUser = await GetUserByNameAsync(name);
 			if (currentUser != null)
 			{
 				currentUser.UserPosts

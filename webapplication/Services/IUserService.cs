@@ -12,7 +12,7 @@ namespace webapplication.Services
 		Task<User> GetUserByNameAsync(string name);
 		Task DeleteFriendAsync(int userId, int friendId);		
 		Task <User> GetById(int id);
-		Task EditSaveAsync(User updatedUser);
+		Task UpdateUserAsync(User updatedUser);
 		Task SaveUserPostAsync(string name, PostModel postText);
 		Task<PostsViewModel> GetAllPostsAsync(int id, int page, int size);
 		Task LikeAsync(int userId, int likeid);
