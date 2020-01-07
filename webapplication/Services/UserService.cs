@@ -189,5 +189,12 @@ namespace webapplication.Services
 
 			return friends;
 		}
+
+		public async Task RegistrationSaveAsync(string userName, string password)
+		{
+			const string anonim = @"Resources\Images\AnonimPage.jpg";
+			db.Users.Add(new User { UserName = userName, Password = password, AvatarImgPath = anonim });
+			await db.SaveChangesAsync();
+		}
 	}
 }

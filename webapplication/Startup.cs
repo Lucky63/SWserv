@@ -27,12 +27,10 @@ namespace webapplication
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-			//Создаю и Подключаю сервисы - каждое подключение клиента - новое подключение
+        {			
 			services.AddTransient<IUserService, UserService>();
 			services.AddTransient<IFriendService, FriendService>();
-			services.AddTransient<IMessageService, MessageService>();
-			services.AddTransient<IAuthService, AuthService>();
+			services.AddTransient<IMessageService, MessageService>();			
 			services.AddTransient<IFileService, FileService>();
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

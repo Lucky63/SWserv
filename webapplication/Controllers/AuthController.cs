@@ -17,17 +17,17 @@ namespace webapplication.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {		
-		IAuthService _authService;
-		public AuthController(IAuthService authService)
-		{
-			_authService = authService;
+		IUserService _userService;
+		public AuthController(IUserService userService)
+		{			
+			_userService = userService;
 		}
 		// GET api/values
 		[HttpPost, Route("loginasync")]
         public async Task <IActionResult> LoginAsync([FromBody]LoginModel user)
         {
 			
-			User userdb = await _authService.GetUserAsync(user.UserName);
+			User userdb = await _userService.GetUserByNameAsync(user.UserName);
 			if (user == null || userdb==null)
 			{
 				return BadRequest("Invalid client request");
@@ -65,7 +65,7 @@ namespace webapplication.Controllers
 		[HttpPost, Route("registrationasync")]
 		public async Task<IActionResult> RegistrationAsync([FromBody]LoginModel user)
 		{
-			User userdb = await _authService.GetUserAsync(user.UserName);
+			User userdb = await _userService.GetUserByNameAsync(user.UserName);
 			if (user == null)
 			{
 				return BadRequest("Invalid client request");
@@ -73,7 +73,7 @@ namespace webapplication.Controllers
 
 			if (userdb == null)
 			{
-				await _authService.RegistrationAsyncSave(user.UserName, user.Password);
+				await _userService.RegistrationSaveAsync(user.UserName, user.Password);
 				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
 				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 

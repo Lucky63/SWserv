@@ -18,6 +18,7 @@ namespace webapplication.Services
 		Task LikeAsync(int userId, int likeid);
 		Task<GetPhotosViewModel> GetUserPhotosAsync(int userId, int page = 1, int size = 5);
 		Task<GetUserFriendsViewModel> GetFriendsAsync(int id, int page, int size);
+		Task RegistrationSaveAsync(string userName, string password);
 
 
 	}
