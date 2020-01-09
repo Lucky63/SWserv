@@ -8,7 +8,7 @@ namespace webapplication.Services
 {
 	public interface IMessageService
 	{
-		Task SeveMessageAsync(int userId, int id, string message);
-		Task<GetMessageViewModel> GetMessagesAsync(int id, int FriendId, int page, int size);
+		Task SeveMessageAsync(int senderid, int recipientId, string message);
+		Task<GetMessageViewModel> GetMessagesAsync(int senderid, int recipientId, int page, int size);
 	}
 }

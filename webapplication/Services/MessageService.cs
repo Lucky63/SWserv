@@ -25,16 +25,16 @@ namespace webapplication.Services
 			var recipient = await _userService.GetById(recipientId);
 
 			var usermessages = await _db.Messages
-			  .Where(x => (x.UserId == senderid && x.FriendId == recipientId) ||
-						  (x.UserId == recipientId && x.FriendId == senderid))
-			  .OrderByDescending(x=>x.dateTime)
+			  .Where(x => (x.Sender == senderid && x.Recipient == recipientId) ||
+						  (x.Sender == recipientId && x.Recipient == senderid))
+			  .OrderByDescending(x=>x.DateSent)
 			  .Skip((page - 1) * size)
 			  .Take(size)
-			  .OrderBy(x => x.dateTime)
+			  .OrderBy(x => x.DateSent)
 			  .ToListAsync();					
 
-			var count = _db.Messages.Where(x => (x.UserId == senderid && x.FriendId == recipientId) ||
-						  (x.UserId == recipientId && x.FriendId == senderid)).Count();
+			var count = _db.Messages.Where(x => (x.Sender == senderid && x.Recipient == recipientId) ||
+						  (x.Sender == recipientId && x.Recipient == senderid)).Count();
 
 			var messagesList = new GetMessageViewModel
 			{
@@ -47,9 +47,9 @@ namespace webapplication.Services
 			return messagesList;
 		}
 
-		public async Task SeveMessageAsync(int userId, int id, string message)
+		public async Task SeveMessageAsync(int senderid, int recipientId, string message)
 		{
-			_db.Messages.Add(new Message { UserId = userId, FriendId = id, SentMessage = message, dateTime = DateTime.Now });
+			_db.Messages.Add(new Message { Sender = senderid, Recipient = recipientId, SentMessage = message, DateSent = DateTime.Now });
 			await _db.SaveChangesAsync();
 		}
 	}
