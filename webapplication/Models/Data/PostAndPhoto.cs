@@ -15,7 +15,7 @@ namespace webapplication.Models.Data
 		public int Id { get; set; }
 		public string AuthorPost { get; set; }
 
-		
+
 
 		public List<Like> Likes { get; set; }
 		public DateTime TimeOfPublication { get; set; }

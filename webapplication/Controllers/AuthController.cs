@@ -13,25 +13,25 @@ using webapplication.Services;
 
 namespace webapplication.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
-    {		
+	[Route("api/[controller]")]
+	[ApiController]
+	public class AuthController : ControllerBase
+	{
 		IUserService _userService;
 		public AuthController(IUserService userService)
-		{			
+		{
 			_userService = userService;
 		}
 		// GET api/values
 		[HttpPost, Route("loginasync")]
-        public async Task <IActionResult> LoginAsync([FromBody]LoginModel user)
-        {
-			
+		public async Task<IActionResult> LoginAsync([FromBody]LoginModel user)
+		{
+
 			User userdb = await _userService.GetUserByNameAsync(user.UserName);
-			if (user == null || userdb==null)
+			if (user == null || userdb == null)
 			{
 				return BadRequest("Invalid client request");
-			}			
+			}
 
 			if (user.UserName == userdb.UserName && user.Password == userdb.Password)
 			{
@@ -57,10 +57,10 @@ namespace webapplication.Controllers
 				return Ok(new { Token = tokenString });
 			}
 			else
-            {
-                return Unauthorized();
-            }
-        }
+			{
+				return Unauthorized();
+			}
+		}
 
 		[HttpPost, Route("registrationasync")]
 		public async Task<IActionResult> RegistrationAsync([FromBody]LoginModel user)

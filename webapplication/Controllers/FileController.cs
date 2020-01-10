@@ -16,11 +16,11 @@ namespace webapplication.Controllers
 	[Route("api/[controller]")]
 	[ApiController]
 	public class FileController : ControllerBase
-	{			
+	{
 		IFileService _fileService;
 
 		public FileController(IFileService fileService)
-		{			
+		{
 			_fileService = fileService;
 		}
 
@@ -43,9 +43,9 @@ namespace webapplication.Controllers
 		public async Task UploadPhoto(int id)
 		{
 			var file = Request.Form.Files[0];
-			
+
 			var dbPath = _fileService.UploadPhotoAsync(file).Result;
-				
+
 			await _fileService.SavePhotoAsync(dbPath, id);
 		}
 

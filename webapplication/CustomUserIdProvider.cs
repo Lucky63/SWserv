@@ -10,7 +10,7 @@ namespace webapplication
 	{
 		public virtual string GetUserId(HubConnectionContext connection)
 		{
-			return connection.User?.Identity.Name;			
+			return connection.User?.Identity.Name;
 		}
 	}
 }

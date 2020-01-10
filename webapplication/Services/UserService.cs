@@ -12,10 +12,10 @@ namespace webapplication.Services
 	public class UserService : IUserService
 	{
 		DBUserContext db;
-		
+
 		public UserService(DBUserContext context)
 		{
-			db = context;			
+			db = context;
 		}
 
 		public async Task DeleteFriendAsync(int userId, int friendId)
@@ -23,11 +23,11 @@ namespace webapplication.Services
 			if (userId != 0 && friendId != 0)
 			{
 				var currentUser = await db.Friendships
-					.FirstOrDefaultAsync(x => x.FriendId == friendId 
-					&& x.UserId== userId);
+					.FirstOrDefaultAsync(x => x.FriendId == friendId
+					&& x.UserId == userId);
 
 				var friend = await db.Friendships
-					.FirstOrDefaultAsync(x => x.FriendId == userId 
+					.FirstOrDefaultAsync(x => x.FriendId == userId
 					&& x.UserId == friendId);
 
 				if (currentUser != null && friend != null)
@@ -38,7 +38,7 @@ namespace webapplication.Services
 				else
 				{
 					//Обработать исключение
-				}				
+				}
 			}
 			else
 			{
@@ -58,9 +58,9 @@ namespace webapplication.Services
 		}
 
 		public async Task<GetUserFriendsViewModel> GetAllUsersAsync(int page, int size, int id)
-		{	
+		{
 
-			var allUsers = await db.Users.Except(db.Users.Where(x=>x.Id==id)).Except(db.Users
+			var allUsers = await db.Users.Except(db.Users.Where(x => x.Id == id)).Except(db.Users
 				.Where(x => x.UserFriends.Any(z => z.FriendId == id)))
 				.Skip((page - 1) * size)
 				.Take(size)
@@ -71,15 +71,15 @@ namespace webapplication.Services
 			var users = new GetUserFriendsViewModel
 			{
 				friends = allUsers,
-				Count=count
+				Count = count
 			};
 			return users;
-		}		
+		}
 
 		public async Task<User> GetUserByNameAsync(string name)
 		{
-			return await  db.Users.FirstOrDefaultAsync(x => x.UserName == name);			
-		}	
+			return await db.Users.FirstOrDefaultAsync(x => x.UserName == name);
+		}
 
 		public async Task SaveUserPostAsync(string name, PostModel postText)
 		{
@@ -87,10 +87,13 @@ namespace webapplication.Services
 			if (currentUser != null)
 			{
 				currentUser.UserPosts
-					.Add(new UserPost { AuthorPost = currentUser.UserName,
+					.Add(new UserPost
+					{
+						AuthorPost = currentUser.UserName,
 						Post = postText.Text,
 						TimeOfPublication = DateTime.Now,
-						User = currentUser });				
+						User = currentUser
+					});
 				await db.SaveChangesAsync();
 			}
 			else
@@ -147,7 +150,7 @@ namespace webapplication.Services
 				{
 					db.Likes.Remove(new Like { UserId = userId, PostAndPhotoId = likeid });
 					postForLike.LikeCounter = likeCounter - 1;
-				}				
+				}
 				await db.SaveChangesAsync();
 			}
 			else
@@ -157,7 +160,7 @@ namespace webapplication.Services
 		}
 
 		public async Task<GetPhotosViewModel> GetUserPhotosAsync(int userId, int page = 1, int size = 5)
-		{			
+		{
 			var photos = await db.Photos.Where(x => x.UserId == userId).Skip((page - 1) * size)
 				.Take(size).ToListAsync();
 

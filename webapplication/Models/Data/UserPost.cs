@@ -8,10 +8,6 @@ namespace webapplication.Models
 {
 	public class UserPost : PostAndPhoto
 	{
-			
-		
 		public string Post { get; set; }
-		
-		
 	}
 }

@@ -7,22 +7,22 @@ namespace webapplication.Models
 {
 	public class UserFriendsViewModel
 	{
-		
+
 		public UserFriendsViewModel(Friends friends)
 		{
 			UserId = friends.UserId;
-			FriendId = friends.FriendId;			
+			FriendId = friends.FriendId;
 			UserName = friends.Friend.UserName;
 			Password = friends.Friend.Password;
 			LastName = friends.Friend.LastName;
 			Age = friends.Friend.Age;
 			City = friends.Friend.City;
 			AvatarImgPath = friends.Friend.AvatarImgPath;
-			
+
 			Id = friends.FriendId;
-		}		
+		}
 		public UserFriendsViewModel()
-		{			
+		{
 		}
 		public int UserId { get; set; }
 		public int FriendId { get; set; }

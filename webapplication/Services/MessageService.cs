@@ -21,17 +21,17 @@ namespace webapplication.Services
 		public async Task<GetMessageViewModel> GetMessagesAsync(int senderid, int recipientId, int page, int size)
 		{
 			var sender = await _userService.GetById(senderid);
-			
+
 			var recipient = await _userService.GetById(recipientId);
 
 			var usermessages = await _db.Messages
 			  .Where(x => (x.Sender == senderid && x.Recipient == recipientId) ||
 						  (x.Sender == recipientId && x.Recipient == senderid))
-			  .OrderByDescending(x=>x.DateSent)
+			  .OrderByDescending(x => x.DateSent)
 			  .Skip((page - 1) * size)
 			  .Take(size)
 			  .OrderBy(x => x.DateSent)
-			  .ToListAsync();					
+			  .ToListAsync();
 
 			var count = _db.Messages.Where(x => (x.Sender == senderid && x.Recipient == recipientId) ||
 						  (x.Sender == recipientId && x.Recipient == senderid)).Count();
@@ -40,8 +40,8 @@ namespace webapplication.Services
 			{
 				Messages = usermessages,
 				Count = count,
-				SenderName=sender.UserName,
-				RecipientName=recipient.UserName
+				SenderName = sender.UserName,
+				RecipientName = recipient.UserName
 			};
 
 			return messagesList;

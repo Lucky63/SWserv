@@ -7,8 +7,8 @@ using webapplication.Models.Data;
 namespace webapplication.Models
 {
 	public class Photo : PostAndPhoto
-	{		
-		public string PhotoPath { get; set; }	
-		
+	{
+		public string PhotoPath { get; set; }
+
 	}
 }

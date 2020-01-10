@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace webapplication.Models
 {
 	public class Message
-	{		
+	{
 		public int Id { get; set; }
 		public int Sender { get; set; }
 		public int Recipient { get; set; }

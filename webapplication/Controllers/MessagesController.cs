@@ -12,8 +12,8 @@ namespace webapplication.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class MessagesController: Controller
-	{		
+	public class MessagesController : Controller
+	{
 		IMessageService _messageService;
 		public MessagesController(IMessageService messageService)
 		{
@@ -24,14 +24,14 @@ namespace webapplication.Controllers
 		public async Task SeveMessage(int id, string message)
 		{
 			var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			await _messageService.SeveMessageAsync(userId, id, message);			
+			await _messageService.SeveMessageAsync(userId, id, message);
 		}
 
 		//[HttpGet("[action]/{id}"), Route("getmessagesasync")]
 		[HttpGet("[action]/{id}/{friendid}/{page}/{size}")]
-		public async Task <GetMessageViewModel> GetMessages(int id, int FriendId, int page, int size)
+		public async Task<GetMessageViewModel> GetMessages(int id, int FriendId, int page, int size)
 		{
 			return await _messageService.GetMessagesAsync(id, FriendId, page, size);
-		}		
+		}
 	}
 }

@@ -42,7 +42,7 @@ namespace webapplication.Models
 				.HasOne(sc => sc.Friend)
 				.WithMany(s => s.WhoAddMe)
 				.HasForeignKey(sc => sc.FriendId);
-				
+
 
 			modelBuilder.Entity<Like>()
 				.HasKey(t => new { t.UserId, t.PostAndPhotoId });
@@ -50,15 +50,15 @@ namespace webapplication.Models
 			modelBuilder.Entity<Like>()
 				.HasOne(sc => sc.PostAndPhoto)
 				.WithMany(c => c.Likes)
-				.HasForeignKey(sc => sc.PostAndPhotoId);				
+				.HasForeignKey(sc => sc.PostAndPhotoId);
 
 			modelBuilder.Entity<Like>()
 				.HasOne(sc => sc.User)
 				.WithMany(s => s.Likes)
 				.HasForeignKey(sc => sc.UserId)
-				.OnDelete(DeleteBehavior.Restrict); 
+				.OnDelete(DeleteBehavior.Restrict);
 
-			
+
 		}
 
 

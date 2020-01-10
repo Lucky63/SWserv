@@ -22,22 +22,22 @@ namespace webapplication.Controllers
 	public class UserController : ControllerBase
 	{
 		DBUserContext _db;
-		IUserService _userService;			
+		IUserService _userService;
 		public UserController(DBUserContext context, IUserService userService, IHttpContextAccessor httpContextAccessor)
 		{
 			_db = context;
-			_userService = userService;						
+			_userService = userService;
 			if (!_db.Users.Any())
 			{
-				_db.Users.Add(new User { UserName = "Bill", Password = "123", AvatarImgPath= @"Resources\Images\AnonimPage.jpg"});
-				_db.Users.Add(new User { UserName = "Bob", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg"});
-				_db.Users.Add(new User { UserName = "Sam", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg"});
+				_db.Users.Add(new User { UserName = "Bill", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg" });
+				_db.Users.Add(new User { UserName = "Bob", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg" });
+				_db.Users.Add(new User { UserName = "Sam", Password = "123", AvatarImgPath = @"Resources\Images\AnonimPage.jpg" });
 				_db.SaveChanges();
 			}
-		}		
+		}
 
 		[HttpGet("[action]/{id}")]
-		public async Task<IActionResult>GetUserForMessage(int id)
+		public async Task<IActionResult> GetUserForMessage(int id)
 		{
 			if (id != 0)
 			{
@@ -48,11 +48,11 @@ namespace webapplication.Controllers
 			{
 				return Ok();//Обработать исключение
 			}
-			
+
 		}
 
 		[HttpPut, Route("edit")]
-		public async Task <IActionResult>Edit([FromBody]User user)
+		public async Task<IActionResult> Edit([FromBody]User user)
 		{
 			if (user != null)
 			{
@@ -63,7 +63,7 @@ namespace webapplication.Controllers
 				updatedUser.Age = user.Age;
 				updatedUser.City = user.City;
 				updatedUser.AvatarImgPath = user.AvatarImgPath;
-			
+
 				await _userService.UpdateUserAsync(updatedUser);
 				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"));
 				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -92,19 +92,19 @@ namespace webapplication.Controllers
 			}
 		}
 
-		
+
 		//Получаю ИД друга
 		[HttpGet("[action]/{friendId}")]
 		public async Task AddFriend(int friendId)
 		{
 			var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 			await _userService.AddFriendAsync(userId, friendId);
-		}		
+		}
 
 		[HttpDelete("[action]/{friendId}")]
 		public async Task DeleteFriend(int friendId)
 		{
-			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);			
+			int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 			await _userService.DeleteFriendAsync(userId, friendId);
 		}
 
@@ -114,7 +114,7 @@ namespace webapplication.Controllers
 		{
 			string name = User.Identity.Name;
 			var user = await _userService.GetUserByNameAsync(name);
-			
+
 			var identityUser = new UserViewModel()
 			{
 				Id = user.Id,
@@ -123,9 +123,9 @@ namespace webapplication.Controllers
 				Password = user.Password,
 				Age = user.Age,
 				City = user.City,
-				AvatarImgPath =user.AvatarImgPath
+				AvatarImgPath = user.AvatarImgPath
 			};
-			return Ok (identityUser);
+			return Ok(identityUser);
 		}
 
 		[HttpGet("[action]/{page}/{size}")]
@@ -133,7 +133,7 @@ namespace webapplication.Controllers
 		{
 			var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 			return await _userService.GetAllUsersAsync(page, size, id);
-			
+
 		}
 
 		[HttpGet("[action]/{id}")]
@@ -149,12 +149,12 @@ namespace webapplication.Controllers
 				Password = user.Password,
 				Age = user.Age,
 				City = user.City,
-				AvatarImgPath = user.AvatarImgPath,				
+				AvatarImgPath = user.AvatarImgPath,
 			};
 			return Ok(userForProfile);
 		}
 
-		
+
 		[HttpPost("[action]")]
 		public async Task SaveUserPost([FromBody] PostModel postText)
 		{
@@ -162,26 +162,26 @@ namespace webapplication.Controllers
 			await _userService.SaveUserPostAsync(name, postText);
 		}
 
-		
+
 		[HttpGet("[action]/{page}")]
 		[HttpGet("[action]/{page}/{size}")]
-		public async Task <PostsViewModel> GetAllPosts(int page, int size)
-		{		
+		public async Task<PostsViewModel> GetAllPosts(int page, int size)
+		{
 			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			return await _userService.GetAllPostsAsync(currentUserId, page, size);			
+			return await _userService.GetAllPostsAsync(currentUserId, page, size);
 		}
 
 		[HttpPost("[action]")]
 		public async Task Like([FromBody]int likeid)
-		{			
+		{
 			int currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-			await _userService.LikeAsync(currentUserId, likeid);			
+			await _userService.LikeAsync(currentUserId, likeid);
 		}
 
 		[HttpGet("[action]/{id}/{page}/{size}"), Authorize(Roles = "Manager")]
-		public async Task<GetPhotosViewModel> GetUserPhotos(int id, int page=1, int size=5)
+		public async Task<GetPhotosViewModel> GetUserPhotos(int id, int page = 1, int size = 5)
 		{
-			return await _userService.GetUserPhotosAsync(id, page, size);			
+			return await _userService.GetUserPhotosAsync(id, page, size);
 		}
 
 		[HttpGet("[action]"), Authorize(Roles = "Manager")]
@@ -191,9 +191,9 @@ namespace webapplication.Controllers
 		}
 
 		[HttpGet("[action]/{id}/{page}/{size}"), Authorize(Roles = "Manager")]
-		public async Task <GetUserFriendsViewModel> GetFriends(int id, int page, int size)
+		public async Task<GetUserFriendsViewModel> GetFriends(int id, int page, int size)
 		{
-			return await _userService.GetFriendsAsync(id, page, size);	
+			return await _userService.GetFriendsAsync(id, page, size);
 		}
-	}	
+	}
 }

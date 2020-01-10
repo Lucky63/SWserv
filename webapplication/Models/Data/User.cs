@@ -19,7 +19,7 @@ namespace webapplication.Models
 		public string Password { get; set; }
 		public string LastName { get; set; }
 		public int Age { get; set; }
-		public string City { get; set; }		
+		public string City { get; set; }
 
 		public string AvatarImgPath { get; set; }
 		public List<UserPost> UserPosts { get; set; }
